@@ -1,5 +1,5 @@
 const express = require("express")
-const DAO = require("../../DAO")
+const DAO = require("../../database/Data")
 const { body, query } = require('express-validator')
 
 module.exports = class Controller {

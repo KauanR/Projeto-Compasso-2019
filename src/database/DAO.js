@@ -1,4 +1,4 @@
-const db = require("./config/Data")
+const db = require("./Data")
 
 module.exports = class DAO {
     constructor(table) {
