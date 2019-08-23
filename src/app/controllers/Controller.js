@@ -48,8 +48,6 @@ module.exports = class Controller {
 
         this.validationSchemaWithoutNullChecker = this.gerarVSWNC()
 
-        this.validationSchemaQuery = this.gerarVSWNC()
-
         if(!naoGerarTodasRotas){
             this.gerarRotaBusca()
             this.gerarRotaDeleta()
@@ -71,7 +69,7 @@ module.exports = class Controller {
     }
 
     gerarRotaBusca(){
-        this.router.get(`${this.proxy}/${this.nomePlural}`, this.validacao.query, async (req, res) => {
+        this.router.get(`${this.proxy}/${this.nomePlural}`, this.validationSchemaWithoutNullChecker, async (req, res) => {
             try {
                 await this.inicio(req, res, `buscando ${this.nomePlural}...`)
 
@@ -86,7 +84,7 @@ module.exports = class Controller {
     }
 
     gerarRotaDeleta(){
-        this.router.delete(`${this.proxy}/${this.nomePlural}`, this.validacao.query, async (req, res) => {
+        this.router.delete(`${this.proxy}/${this.nomePlural}`, this.validationSchemaWithoutNullChecker, async (req, res) => {
             try {
                 await this.inicio(req, res, `deletando ${this.nomePlural}...`)
 
@@ -101,7 +99,7 @@ module.exports = class Controller {
     }
 
     gerarRotaAtualiza(){
-        this.router.post(`${this.proxy}/${this.nomePlural}`, this.validacao.queryAndBody, async (req, res) => {
+        this.router.post(`${this.proxy}/${this.nomePlural}`, this.validationSchemaWithoutNullChecker, async (req, res) => {
             try {
                 await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
 
@@ -116,7 +114,7 @@ module.exports = class Controller {
     }
 
     gerarRotaAdicionaUm() {
-        this.router.post(`${this.proxy}/${this.nomePlural}/${this.nomeSingular}`, this.validacao.body, async (req, res) => {
+        this.router.post(`${this.proxy}/${this.nomePlural}/${this.nomeSingular}`, this.validationSchema, async (req, res) => {
             try {
                 await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
 
