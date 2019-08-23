@@ -11,13 +11,41 @@ module.exports = class Controller {
         this.nomePlural = nomePlural
         this.DAO = new DAO(tabela)
 
-        this.validacao = validacao
+        this.validationSchema = validationSchema
 
-        this.validacao.query.push(query("id", "O valor deve ser inteiro maior que 0.").isInt({min: 1}))
-        this.validacao.query.push(query("limite", "O valor deve ser inteiro maior que 0.").isInt({min: 1}))
-        this.validacao.query.push(query("ordem", "O valor deve ser ASC ou DESC.").isIn(["ASC", "DESC"]))
+        this.attrs = Object.keys(this.validationSchema)
 
-        this.validacao.body.push(body("id").not().exists())
+        Object.assign(this.validationSchema, {
+            id: {
+                isInt: {
+                    options: {
+                        min: 1
+                    }
+                },
+                errorMessage: "O valor deve ser inteiro maior que 0."
+            },
+            limite: {
+                isInt:{
+                    options: {
+                        min: 1
+                    }
+                },
+                errorMessage: "O valor deve ser inteiro maior que 0."
+            },
+            ordem: {
+                inIn: ["ASC", "DESC"],
+                errorMessage: "O valor deve ser ASC ou DESC."
+            },
+            ordenarPor: {
+                isIn: this.attrs,
+                errorMessage: "O valor deve ser um atributo válido."
+            }
+        })
+
+        this.VSWNC = this.gerarVSWNC()
+
+        this.validationSchemaQuery = this.gerarVSWNC()
+
 
         this.validacao.queryAndBody = validacao.body.concat(validacao.query)
 
@@ -27,6 +55,18 @@ module.exports = class Controller {
             this.gerarRotaAtualiza()
             this.gerarRotaAdicionaUm()
         }
+    }
+
+    gerarVSWNC(){
+        const copyWithoutNullChecker = JSON.parse(JSON.stringify(this.validationSchema))
+        const keys = Object.keys(copyWithoutNullChecker)
+        for(let i = 0; i < keys.length; i++){
+            const k = keys[i]
+            if(copyWithoutNullChecker[k].exists){
+                delete copyWithoutNullChecker[k].exists
+            }
+        }
+        return copyWithoutNullChecker
     }
 
     gerarRotaBusca(){
