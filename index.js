@@ -11,6 +11,9 @@ connection.connect(function(err){
 
 app.use('/', router);
 
+
+
+
 app.listen(3000, function() {
     console.log('Rodando na porta 3000');
 });
