@@ -17,6 +17,7 @@ module.exports = class Controller {
 
         Object.assign(this.validationSchema, {
             id: {
+                in: ["query"],
                 isInt: {
                     options: {
                         min: 1
@@ -25,6 +26,7 @@ module.exports = class Controller {
                 errorMessage: "O valor deve ser inteiro maior que 0."
             },
             limite: {
+                in: ["query"],
                 isInt:{
                     options: {
                         min: 1
@@ -33,10 +35,12 @@ module.exports = class Controller {
                 errorMessage: "O valor deve ser inteiro maior que 0."
             },
             ordem: {
+                in: ["query"],
                 inIn: ["ASC", "DESC"],
                 errorMessage: "O valor deve ser ASC ou DESC."
             },
             ordenarPor: {
+                in: ["query"],
                 isIn: this.attrs,
                 errorMessage: "O valor deve ser um atributo válido."
             }
@@ -45,9 +49,6 @@ module.exports = class Controller {
         this.VSWNC = this.gerarVSWNC()
 
         this.validationSchemaQuery = this.gerarVSWNC()
-
-
-        this.validacao.queryAndBody = validacao.body.concat(validacao.query)
 
         if(!naoGerarTodasRotas){
             this.gerarRotaBusca()
