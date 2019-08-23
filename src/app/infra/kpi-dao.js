@@ -1,10 +1,12 @@
+//classe e metodos para chamar nas rotas
 class KpiDao {
 
     constructor(mysql) {
         this._mysql = mysql;
     }
 
-    adiciona(kpi) {
+    //metodo para adicionar nova kpi
+    adicionaKPI(kpi) {
 
         return new Promise((resolve, reject) => {
          
@@ -27,7 +29,6 @@ class KpiDao {
             )
         });
     }
-
 
 }
 
