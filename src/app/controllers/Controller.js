@@ -182,7 +182,7 @@ module.exports = class Controller {
     }
 
     async inicio(req, res, mensagem) {
-        console.log(`${mensagem}`)
+        console.log(`request id: ${req.id} -> ${mensagem}`)
         if (validationResult(req).errors.length > 0) {
             throw new Error("Validation Errors.")
         }
@@ -190,7 +190,7 @@ module.exports = class Controller {
 
     async fim(req, res) {
         res.end()
-        console.log(`fim`)
+        console.log(`request id: ${req.id} -> fim`)
     }
 
 }
