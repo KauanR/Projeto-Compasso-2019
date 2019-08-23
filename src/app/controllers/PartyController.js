@@ -2,7 +2,7 @@ const Controller = require("./Controller")
 
 module.exports = class PartyController extends Controller {
     constructor() {
-        super("party", "parties", "PARTY", {
+        super("party", "parties", "party", {
             name: {
                 isString: true,
                 isLength: {
@@ -36,6 +36,6 @@ module.exports = class PartyController extends Controller {
                 escape: true,
                 errorMessage: "O valor deve ser uma string."
             }
-        }, false)
+        })
     }
 }
