@@ -36,6 +36,6 @@ module.exports = class PartyController extends Controller {
                 escape: true,
                 errorMessage: "O valor deve ser uma string."
             }
-        })
+        }, false)
     }
 }

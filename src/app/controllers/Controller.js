@@ -6,16 +6,11 @@ module.exports = class Controller {
     constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas) {
         this.router = express.Router()
 
-        this.proxy = `api`
         this.nomeSingular = nomeSingular
         this.nomePlural = nomePlural
         this.DAO = new DAO(tabela)
 
-        this.validationSchema = validationSchema
-
-        this.attrs = Object.keys(this.validationSchema)
-
-        Object.assign(this.validationSchema, {
+        Object.assign(validationSchema, {
             id: {
                 in: ["query"],
                 isInt: {
@@ -46,6 +41,7 @@ module.exports = class Controller {
             }
         })
 
+        this.validationSchema = validationSchema
         this.validationSchemaWithoutNullChecker = this.gerarVSWNC()
 
         if(!naoGerarTodasRotas){
@@ -69,7 +65,7 @@ module.exports = class Controller {
     }
 
     gerarRotaBusca(){
-        this.router.get(`${this.proxy}/${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
+        this.router.get(`${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
             try {
                 await this.inicio(req, res, `buscando ${this.nomePlural}...`)
 
@@ -84,7 +80,7 @@ module.exports = class Controller {
     }
 
     gerarRotaDeleta(){
-        this.router.delete(`${this.proxy}/${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
+        this.router.delete(`${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
             try {
                 await this.inicio(req, res, `deletando ${this.nomePlural}...`)
 
@@ -99,7 +95,7 @@ module.exports = class Controller {
     }
 
     gerarRotaAtualiza(){
-        this.router.post(`${this.proxy}/${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
+        this.router.post(`${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
             try {
                 await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
 
@@ -114,7 +110,7 @@ module.exports = class Controller {
     }
 
     gerarRotaAdicionaUm() {
-        this.router.post(`${this.proxy}/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), async (req, res) => {
+        this.router.post(`${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), async (req, res) => {
             try {
                 await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
 

@@ -1,13 +1,11 @@
-var express = require('express')
-var app = express()
-var bodyParser = require('body-parser')
+const express = require('express')
+const bodyParser = require('body-parser')
 
 // BODY PARSER - receber JSON
+const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-const PartyController = require("../app/controllers/PartyController")
-const partyController = new PartyController()
-app.use(partyController.router)
+app.use((new(require("../app/controllers/PartyController"))).router)
 
 module.exports = app
