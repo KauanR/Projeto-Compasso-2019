@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 var app = require('./src/config/CustomExpress');
 var connection = require('./src/config/Data');
 var router = require('./src/app/router/Router');
@@ -11,6 +13,7 @@ connection.connect(function(err){
 
 app.use('/', router);
 
-app.listen(3000, function() {
-    console.log('Rodando na porta 3000');
-});
+const porta = process.env.PORT
+app.listen(porta, () => {
+    console.log(`ouvindo na porta ${porta}`)
+})
