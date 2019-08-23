@@ -3,7 +3,7 @@ const DAO = require("../../database/Data")
 const { body, query } = require('express-validator')
 
 module.exports = class Controller {
-    constructor(nomeSingular, nomePlural, tabela, validacao, naoGerarTodasRotas) {
+    constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas) {
         this.router = express.Router()
 
         this.proxy = ``
@@ -46,7 +46,7 @@ module.exports = class Controller {
             }
         })
 
-        this.VSWNC = this.gerarVSWNC()
+        this.validationSchemaWithoutNullChecker = this.gerarVSWNC()
 
         this.validationSchemaQuery = this.gerarVSWNC()
 
