@@ -169,18 +169,13 @@ module.exports = class Controller {
             const attr = attrs[i]
             const value = req[location][attr]
 
-            if(obligatory && obligatory.includes(attr)){
-                if(value === undefined && allObligatory){
-                    errors.push(await this.formatError(attr, value, "O valor não pode ser nulo.", location))
-                }
-                else if(value === null){
-                    errors.push(await this.formatError(attr, value, "O valor não pode ser nulo.", location))
-                }
-                else {
-                    o[attr] = value
-                }
+            if(value === undefined && allObligatory){
+                errors.push(await this.formatError(attr, value, "O valor deve ser informado.", location))
             }
-            else if(value){
+            else if(value === null && obligatory && obligatory.includes(attr)){
+                errors.push(await this.formatError(attr, value, "O valor não pode ser nulo.", location))
+            }
+            else if(value !== undefined){
                 o[attr] = value
             }
         }
@@ -216,21 +211,20 @@ module.exports = class Controller {
         console.log(erro)
         const ok = erro.message.includes("Validation Errors.") || erro.message.includes("Empty object.") || erro.message.includes("Not Null error.")
         if (!ok) {
-            res.status(500).json(await this.formatError(undefined, undefined, "Erro no servidor."))
+            res.status(500).json({
+                errors: [await this.formatError(undefined, undefined, "Erro no servidor.")]
+            })
         }
         this.fim(req, res)
     }
 
     async formatError(param, value, msg, location) {
-        const ef = {
+        return {
             location,
             msg,
             param,
             value
         }
-        const errors = [ef]
-
-        return errors
     }
 
     async inicio(req, res, mensagem) {
