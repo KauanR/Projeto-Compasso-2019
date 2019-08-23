@@ -1,14 +1,6 @@
 require('dotenv').config()
 
-var app = require('./src/config/CustomExpress');
-var connection = require('./src/database/Data');
-
-connection.connect(function(err){
-    if(err) {
-        return console.log(err);
-    }
-    console.log('conectou!');
-});
+const app = require('./src/config/CustomExpress')
 
 const porta = process.env.PORT
 app.listen(porta, () => {
