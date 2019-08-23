@@ -1,6 +1,9 @@
 const express = require("express")
-const DAO = require("../../database/DAO")
-const { checkSchema } = require('express-validator')
+const DAO = require("../DAO")
+const {
+    checkSchema,
+    validationResult
+} = require('express-validator')
 
 module.exports = class Controller {
     constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas) {
@@ -10,7 +13,7 @@ module.exports = class Controller {
         this.nomePlural = nomePlural
         this.DAO = new DAO(tabela)
 
-        Object.assign(validationSchema, {
+        this.validationSchema = {
             id: {
                 in: ["query"],
                 isInt: {
@@ -18,13 +21,23 @@ module.exports = class Controller {
                         min: 1
                     }
                 },
+                optional: {
+                    options: {
+                        nullable: true
+                    }
+                },
                 errorMessage: "O valor deve ser inteiro maior que 0."
             },
             limite: {
                 in: ["query"],
-                isInt:{
+                isInt: {
                     options: {
                         min: 1
+                    }
+                },
+                optional: {
+                    options: {
+                        nullable: true
                     }
                 },
                 errorMessage: "O valor deve ser inteiro maior que 0."
@@ -32,19 +45,34 @@ module.exports = class Controller {
             ordem: {
                 in: ["query"],
                 isIn: ["ASC", "DESC"],
+                optional: {
+                    options: {
+                        nullable: true
+                    }
+                },
                 errorMessage: "O valor deve ser ASC ou DESC."
             },
             ordenarPor: {
                 in: ["query"],
-                isIn: this.attrs,
+                isIn: ["id"].concat(Object.keys(validationSchema)),
+                optional: {
+                    options: {
+                        nullable: true
+                    }
+                },
                 errorMessage: "O valor deve ser um atributo válido."
             }
-        })
+        }
 
-        this.validationSchema = validationSchema
-        this.validationSchemaWithoutNullChecker = this.gerarVSWNC()
+        this.validationSchemaWithoutNullChecker = {}
 
-        if(!naoGerarTodasRotas){
+        Object.assign(this.validationSchemaWithoutNullChecker, this.validationSchema)
+
+        Object.assign(this.validationSchemaWithoutNullChecker, this.gerarValidationSchema(validationSchema, true))
+
+        Object.assign(this.validationSchema, this.gerarValidationSchema(validationSchema, false))
+
+        if (!naoGerarTodasRotas) {
             this.gerarRotaBusca()
             this.gerarRotaDeleta()
             this.gerarRotaAtualiza()
@@ -52,20 +80,27 @@ module.exports = class Controller {
         }
     }
 
-    gerarVSWNC(){
-        const copyWithoutNullChecker = JSON.parse(JSON.stringify(this.validationSchema))
+    gerarValidationSchema(validationSchema, withoutNullChecker) {
+        const copyWithoutNullChecker = JSON.parse(JSON.stringify(validationSchema))
         const keys = Object.keys(copyWithoutNullChecker)
-        for(let i = 0; i < keys.length; i++){
+        for (let i = 0; i < keys.length; i++) {
             const k = keys[i]
-            if(copyWithoutNullChecker[k].exists){
-                delete copyWithoutNullChecker[k].exists
+
+            copyWithoutNullChecker[k].in = ["query", "body"]
+
+            if (withoutNullChecker || copyWithoutNullChecker[k].optional) {
+                copyWithoutNullChecker[k].optional = {
+                    options: {
+                        nullable: true
+                    }
+                }
             }
         }
         return copyWithoutNullChecker
     }
 
-    gerarRotaBusca(){
-        this.router.get(`${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
+    gerarRotaBusca() {
+        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
             try {
                 await this.inicio(req, res, `buscando ${this.nomePlural}...`)
 
@@ -79,8 +114,8 @@ module.exports = class Controller {
         })
     }
 
-    gerarRotaDeleta(){
-        this.router.delete(`${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
+    gerarRotaDeleta() {
+        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
             try {
                 await this.inicio(req, res, `deletando ${this.nomePlural}...`)
 
@@ -94,8 +129,8 @@ module.exports = class Controller {
         })
     }
 
-    gerarRotaAtualiza(){
-        this.router.post(`${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
+    gerarRotaAtualiza() {
+        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchemaWithoutNullChecker), async (req, res) => {
             try {
                 await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
 
@@ -110,7 +145,7 @@ module.exports = class Controller {
     }
 
     gerarRotaAdicionaUm() {
-        this.router.post(`${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), async (req, res) => {
+        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), async (req, res) => {
             try {
                 await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
 
@@ -125,8 +160,8 @@ module.exports = class Controller {
     }
 
     async errorHandler(erro, req, res) {
-        if (erro.menssage.includes("Validation Errors.")) {
-            res.status(400).json(await req.validationErrors())
+        if (erro.message.includes("Validation Errors.")) {
+            res.status(400).json(validationResult(req))
         } else {
             console.log(erro)
             res.status(500).json(await this.formatError(undefined, undefined, "Erro no servidor"))
@@ -148,7 +183,7 @@ module.exports = class Controller {
 
     async inicio(req, res, mensagem) {
         console.log(`${mensagem}`)
-        if(await req.validationErrors()){
+        if (validationResult(req).errors.length > 0) {
             throw new Error("Validation Errors.")
         }
     }
