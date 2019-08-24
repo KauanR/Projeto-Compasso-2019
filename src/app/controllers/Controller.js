@@ -40,6 +40,11 @@ module.exports = class Controller {
             const k = keys[i]
 
             copy[k].in = ["query", "body"]
+            copy[k].optional = {
+                options: {
+                    nullable: true
+                }
+            }
 
             if (copy[k].notNull) {
                 this.attrNotNull.push(k)
@@ -55,6 +60,11 @@ module.exports = class Controller {
                         min: 1
                     }
                 },
+                optional: {
+                    options: {
+                        nullable: true
+                    }
+                },
                 errorMessage: "O valor deve ser inteiro maior que 0."
             },
             limite: {
@@ -64,24 +74,32 @@ module.exports = class Controller {
                         min: 1
                     }
                 },
+                optional: {
+                    options: {
+                        nullable: true
+                    }
+                },
                 errorMessage: "O valor deve ser inteiro maior que 0."
             },
             ordem: {
                 in: ["query"],
                 isIn: ["ASC", "DESC"],
+                optional: {
+                    options: {
+                        nullable: true
+                    }
+                },
                 errorMessage: "O valor deve ser ASC ou DESC."
             },
             ordenarPor: {
                 in: ["query"],
                 isIn: ["id"].concat(keys),
-                errorMessage: "O valor deve ser um atributo válido."
-            },
-            "*": {
                 optional: {
                     options: {
                         nullable: true
                     }
-                }
+                },
+                errorMessage: "O valor deve ser um atributo válido."
             }
         })
 
