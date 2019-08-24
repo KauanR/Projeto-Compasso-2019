@@ -5,7 +5,7 @@ DBHOST="localhost"
 DBUSER="root"
 DBPASSWORD="adminadmin" 
 DBNAME="my_db"
-PORT=6663.
+PORT=6663
 ```
 É necessário também rodar o comando "nmp install".
 
