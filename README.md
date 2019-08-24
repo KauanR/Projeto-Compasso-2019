@@ -75,7 +75,7 @@ Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exe
 -> Atualiza dados com base na query e no JSON enviado: "POST /parties?id=1";
 -> Adiciona uma linha para a tabela do banco com base no JSON enviado: "POST /parties/party".
 ```
-A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem um atributo que seja igual ao atributo da query, por exemplo a query "?nome=igor" executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A query também tem atributos especiais:
+A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query "?nome=igor" executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A query também tem atributos especiais:
 ```
 -> "limite": Determina quantas linhas vão ser pegadas do banco de dados;
 -> "ordenarPor": Determina o atributo pelo qual as linhas buscadas vão ser ordenadas;
