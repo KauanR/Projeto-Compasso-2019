@@ -8,6 +8,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(expressRequestId())
 
-app.use((new(require("../app/controllers/PartyController"))).router)
+const PartyController = require("../app/controllers/PartyController")
+const partyController = new PartyController()
+app.use(partyController.router)
 
 module.exports = app
