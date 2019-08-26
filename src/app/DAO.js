@@ -108,8 +108,8 @@ module.exports = class DAO {
 
             let sqlLimit = ""
             if (q.limit) {
-                values.push(q.limit.offset)
-                values.push(q.limit.count)
+                values.push(parseInt(q.limit.offset))
+                values.push(parseInt(q.limit.count))
                 sqlLimit = ` LIMIT ?, ?`
             }
 

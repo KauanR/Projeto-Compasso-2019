@@ -57,12 +57,11 @@ module.exports = class Controller {
                 }
 
                 copy[k].in = ["body"]
-                
+
                 copy[`${k}.$eq`] = {}
                 Object.assign(copy[`${k}.$eq`], copy[k])
                 copy[`${k}.$eq`].in = ["query"]
-            }
-            else{
+            } else {
                 copy[`${k}.$eq`] = {
                     in: ["query"],
                     isInt: {
@@ -134,11 +133,23 @@ module.exports = class Controller {
             errorMessage: "O valor deve ser inteiro maior que 0."
         }
 
-        copy["limit.offset"] = {}
-        Object.assign(copy["limit.offset"], copy["limit.count"])
+        copy["limit.offset"] = {
+            in: ["query"],
+            isInt: {
+                options: {
+                    min: 0
+                }
+            },
+            optional: {
+                options: {
+                    nullable: true
+                }
+            },
+            errorMessage: "O valor deve ser inteiro maior que -1."
+        }
 
         this.attrs = keys
-        this.attrsQuery = Object.keys(copy)
+        this.attrsQuery = keys.concat(["limit", "sort"])
 
         return copy
     }
@@ -256,8 +267,8 @@ module.exports = class Controller {
             } else if (!req.query.sort.order) {
                 errors.push(await this.formatError("order", "O valor deve ser informado.", "query.sort"))
             } else {
-                o.sort.by = req.query.sort.by
-                o.sort.order = req.query.sort.order
+                o.sort = {}
+                Object.assign(o.sort, req.query.sort)
             }
         }
 
@@ -267,33 +278,39 @@ module.exports = class Controller {
             } else if (!req.query.limit.offset) {
                 errors.push(await this.formatError("offset", "O valor deve ser informado.", "query.limit"))
             } else {
-                o.limit.count = req.query.limit.count
-                o.limit.offset = req.query.limit.offset
+                o.limit = {}
+                Object.assign(o.limit, req.query.limit)
             }
         }
 
-        for (let i = 0; i < this.attrs.length; i++) {
-            const attr = this.attrs[i]
-            if (req.query[attr].$eq) {
-                o[attr].$eq = req.query[attr].$eq
-            }
-            if (req.query[attr].$dif) {
-                o[attr].$dif = req.query[attr].$dif
-            }
-            if (req.query[attr].$ls) {
-                o[attr].$ls = req.query[attr].$ls
-            }
-            if (req.query[attr].$lse) {
-                o[attr].$lse = req.query[attr].$lse
-            }
-            if (req.query[attr].$gr) {
-                o[attr].$gr = req.query[attr].$gr
-            }
-            if (req.query[attr].$gre) {
-                o[attr].$gre = req.query[attr].$gre
-            }
-            if (req.query[attr].$in) {
-                o[attr].$in = req.query[attr].$in
+        for (let i = 0; i < this.attrsQuery.length; i++) {
+            const attr = this.attrsQuery[i]
+            if (req.query[attr] && attr !== "limit" && attr !== "sort") {
+                o[attr] = {}
+                if (req.query[attr].$eq) {
+                    o[attr].$eq = req.query[attr].$eq
+                }
+                if (req.query[attr].$dif) {
+                    o[attr].$dif = req.query[attr].$dif
+                }
+                if (req.query[attr].$ls) {
+                    o[attr].$ls = req.query[attr].$ls
+                }
+                if (req.query[attr].$lse) {
+                    o[attr].$lse = req.query[attr].$lse
+                }
+                if (req.query[attr].$gr) {
+                    o[attr].$gr = req.query[attr].$gr
+                }
+                if (req.query[attr].$gre) {
+                    o[attr].$gre = req.query[attr].$gre
+                }
+                if (req.query[attr].$in) {
+                    o[attr].$in = req.query[attr].$in
+                }
+                if (Object.keys(o[attr]).length === 0) {
+                    delete o[attr]
+                }
             }
         }
 
