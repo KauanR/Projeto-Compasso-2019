@@ -35,6 +35,9 @@ module.exports = class Controller {
         const copy = JSON.parse(JSON.stringify(validationSchema))
 
         const keys = Object.keys(copy)
+
+        this.attrs = keys
+
         keys.push("id")
 
         for (let i = 0; i < keys.length; i++) {
@@ -112,7 +115,9 @@ module.exports = class Controller {
 
         copy["sort.$by"] = {
             in: ["query"],
-            isIn: keys,
+            custom: {
+                options: value => keys.includes(value) 
+            },
             optional: {
                 options: {
                     nullable: true
@@ -123,7 +128,9 @@ module.exports = class Controller {
 
         copy["sort.$order"] = {
             in: ["query"],
-            isIn: ["asc", "desc"],
+            custom: {
+                options: value => ["asc", "desc"].includes(value) 
+            },
             optional: {
                 options: {
                     nullable: true
@@ -162,7 +169,6 @@ module.exports = class Controller {
             errorMessage: "O valor deve ser inteiro maior que -1."
         }
 
-        this.attrs = keys
         this.attrsQuery = keys.concat(["limit", "sort"])
 
         return copy
