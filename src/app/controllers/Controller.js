@@ -374,9 +374,16 @@ module.exports = class Controller {
         console.log(erro)
         const ok = erro.message.includes("Validation Errors.") || erro.message.includes("Empty object.") || erro.message.includes("Not Null error.")
         if (!ok) {
-            res.status(500).json({
-                errors: [await this.formatError(undefined, undefined, "Erro no servidor.")]
-            })
+            if(erro.errno === 1452){
+                res.status(404).json({
+                    errors: [await this.formatError(undefined, erro.sql, "Foreign Key não cadastrada.")]
+                })
+            }
+            else{
+                res.status(500).json({
+                    errors: [await this.formatError(undefined, undefined, "Erro no servidor.")]
+                })
+            }
         }
         this.fim(req, res)
     }
