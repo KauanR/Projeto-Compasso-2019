@@ -36,7 +36,7 @@ module.exports = class Controller {
 
         const keys = Object.keys(copy)
 
-        this.attrs = keys
+        this.attrs = [].concat(keys)
 
         keys.push("id")
 
@@ -46,6 +46,18 @@ module.exports = class Controller {
             if (k !== "id") {
                 if (copy[k].isString === true) {
                     copy[k].escape = true
+                }
+
+                if(copy[k].isInt){
+                    copy[k].customSanitizer = {
+                        options: value => parseInt(value)
+                    }
+                }
+
+                if(copy[k].isFloat){
+                    copy[k].customSanitizer = {
+                        options: value => parseFloat(value)
+                    }
                 }
 
                 if (copy[k].notNull) {
@@ -71,6 +83,9 @@ module.exports = class Controller {
                         options: {
                             min: 1
                         }
+                    },
+                    customSanitizer: {
+                        options: value => parseInt(value)
                     },
                     optional: {
                         options: {
@@ -146,6 +161,9 @@ module.exports = class Controller {
                     min: 1
                 }
             },
+            customSanitizer: {
+                options: value => parseInt(value)
+            },
             optional: {
                 options: {
                     nullable: true
@@ -160,6 +178,9 @@ module.exports = class Controller {
                 options: {
                     min: 0
                 }
+            },
+            customSanitizer: {
+                options: value => parseInt(value)
             },
             optional: {
                 options: {
@@ -282,10 +303,10 @@ module.exports = class Controller {
         let errors = []
 
         if (req.query.sort) {
-            if (!req.query.sort.$by) {
-                errors.push(await this.formatError("$by", "O valor deve ser informado.", "query.sort"))
-            } else if (!req.query.sort.$order) {
-                errors.push(await this.formatError("$order", "O valor deve ser informado.", "query.sort"))
+            if (req.query.sort.$by === undefined) {
+                errors.push(await this.formatError("$by", undefined, "O valor deve ser informado.", "query.sort"))
+            } else if (req.query.sort.$order === undefined) {
+                errors.push(await this.formatError("$order", undefined, "O valor deve ser informado.", "query.sort"))
             } else {
                 o.sort = {}
                 Object.assign(o.sort, req.query.sort)
@@ -293,14 +314,20 @@ module.exports = class Controller {
         }
 
         if (req.query.limit) {
-            if (!req.query.limit.$count) {
-                errors.push(await this.formatError("$count", "O valor deve ser informado.", "query.limit"))
-            } else if (!req.query.limit.$offset) {
-                errors.push(await this.formatError("$offset", "O valor deve ser informado.", "query.limit"))
+            if (req.query.limit.$count === undefined) {
+                errors.push(await this.formatError("$count", undefined, "O valor deve ser informado.", "query.limit"))
+            } else if (req.query.limit.$offset === undefined) {
+                errors.push(await this.formatError("$offset", undefined, "O valor deve ser informado.", "query.limit"))
             } else {
                 o.limit = {}
                 Object.assign(o.limit, req.query.limit)
             }
+        }
+
+        if (errors.length > 0) {
+            res.status(400).json(errors)
+
+            throw new Error("Not Null error.")
         }
 
         for (let i = 0; i < this.attrsQuery.length; i++) {
@@ -338,12 +365,6 @@ module.exports = class Controller {
             res.status(400).json(await this.formatError(undefined, undefined, `O request query está vazio ou não possue algum atributo válido.`))
 
             throw new Error("Empty object.")
-        }
-
-        if (errors.length > 0) {
-            res.status(400).json(errors)
-
-            throw new Error("Not Null error.")
         }
 
         return o

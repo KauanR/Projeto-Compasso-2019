@@ -42,6 +42,9 @@ module.exports = class DAO {
     }
 
     async update(json, query) {
+        delete query.limit
+        delete query.sort
+
         const colunas = Object.keys(json).join(',')
 
         const valores = Object.values(json)
@@ -89,7 +92,6 @@ module.exports = class DAO {
                             sqls.push(`${attrName} IN (${attr[k].map(v => "?").join(",")})`)
                         } else {
                             values.push(attr[k])
-                            console.log(k)
                             sqls.push(`${attrName} ${libOps[k]} ?`)
                         }
                     }
@@ -98,7 +100,7 @@ module.exports = class DAO {
                 }
             }
             if(sqlWhere.length > 0){
-                sqlWhere = ` WHERE ${sqlWhere}`
+                sqlWhere = ` WHERE${sqlWhere}`
             }
 
             let sqlSort = ""
@@ -108,8 +110,8 @@ module.exports = class DAO {
 
             let sqlLimit = ""
             if (q.limit) {
-                values.push(parseInt(q.limit.$offset))
-                values.push(parseInt(q.limit.$count))
+                values.push(q.limit.$offset)
+                values.push(q.limit.$count)
                 sqlLimit = ` LIMIT ?, ?`
             }
 
