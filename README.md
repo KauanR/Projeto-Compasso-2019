@@ -32,7 +32,6 @@ module.exports = class PartyController extends Controller {
                     }
                 },
                 notNull: true,
-                escape: true,
                 errorMessage: "O valor deve ser uma string e deve ter entre 1 e 255 caractéres."
             },
             type: {
@@ -44,7 +43,6 @@ module.exports = class PartyController extends Controller {
                     }
                 },
                 notNull: true,
-                escape: true,
                 errorMessage: "O valor deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
             last_assessment: {
@@ -55,13 +53,25 @@ module.exports = class PartyController extends Controller {
             observations: {
                 isString: true,
                 notNull: true,
-                escape: true,
                 errorMessage: "O valor deve ser uma string."
             }
         })
     }
 }
 ```
+A validação foi feita com base no código em SQL para a tabela:
+``` SQL
+CREATE TABLE IF NOT EXISTS `mydb`.`PARTY` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(255) NOT NULL,
+  `type` VARCHAR(100) NOT NULL,
+  `last_assessment` DATE NULL,
+  `observations` TEXT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+```
+Não é necessário definir uma validação para o atributo "id", pois ela já acontece na classe Controller.
+
 Para que as rotas criadas nesse controller possam ser acessadas é necessário ir até o arquivo config/custom-express.js, instanciar um novo objeto da classe desse controller e chamar a função app.use() mandando como parâmetro o atributo "router" do objeto instanciado. Exemplo:
 ```javascript
 const PartyController = require("../app/controllers/PartyController")
@@ -70,10 +80,10 @@ app.use(partyController.router)
 ```
 Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exemplos:
 ```
--> Pega dados com base na query: "GET /parties?id=1";
--> Apaga dados com base na query: "DELETE /parties?id=1";
--> Atualiza dados com base na query e no JSON enviado: "POST /parties?id=1";
--> Adiciona uma linha para a tabela do banco com base no JSON enviado: "POST /parties/party".
+-> "GET /parties?id=1": Pega dados com base na query;
+-> "DELETE /parties?id=1": Apaga dados com base na query;
+-> "POST /parties?id=1": Atualiza dados com base na query e no JSON enviado;
+-> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
 A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query "?nome=igor" executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A query também tem atributos especiais:
 ```
