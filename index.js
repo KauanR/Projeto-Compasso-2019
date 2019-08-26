@@ -1,6 +1,6 @@
 var app = require('./src/config/CustomExpress');
 var connection = require('./src/config/Data');
-var router = require('./src/app/router/Router');
+var kpiRouter = require('./src/app/router/kpi-router');
 
 connection.connect(function(err){
     if(err) {
@@ -9,7 +9,7 @@ connection.connect(function(err){
     console.log('Conexão com o banco realizada!');
 });
 
-app.use('/', router);
+app.use('/kpi', kpiRouter);
 
 app.listen(3000, function() {
     console.log('Rodando na porta 3000');

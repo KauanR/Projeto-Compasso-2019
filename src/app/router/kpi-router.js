@@ -3,22 +3,10 @@ var express = require('express');
 var KpiDao = require('../infra/kpi-dao');
 var mysql = require('../../config/Data');
 
-
-const router = express.Router();
-
-// 404 not found
-router.all('*', (req, res) => {
-
-    const response = {
-        data: null,
-        message: "route not found"
-    };
-    res.status(404).send(response);
-});
-
+const KpiRouter = express.Router();
 
 //Mostra todas as KPIs
-router.get('/kpi', (req, res) => {
+KpiRouter.get('/', (req, res) => {
     
     mysql.query(
         "SELECT * FROM `mydb`.`KPIS`", 
@@ -33,7 +21,7 @@ router.get('/kpi', (req, res) => {
 
 
 //Busca nas KPIs por ID
-router.get('/kpi/:id', (req, res) => {
+KpiRouter.get('/:id', (req, res) => {
 
     mysql.query(
         "SELECT * FROM `mydb`.`KPIS` WHERE ID = ?",
@@ -49,19 +37,19 @@ router.get('/kpi/:id', (req, res) => {
 
 
 //Adiciona nova KPI
-router.post('/kpi', (req, res) => {
+KpiRouter.post('/adiciona', (req, res) => {
 
     console.log(req.body);
     const kpiDao = new KpiDao(mysql);
 
     kpiDao.adicionaKPI(req.body)
-        .then(res.redirect('/'))
+        .then(res.redirect('/kpi'))
         .catch(erro => console.log(erro));
 });
 
 
 //Remove uma KPI
-router.delete('/kpi/:id', (req, res) => {
+KpiRouter.delete('/remove/:id', (req, res) => {
 
     const id = req.params.id;
     const kpiDao = new KpiDao(mysql);
@@ -73,7 +61,7 @@ router.delete('/kpi/:id', (req, res) => {
 
 
 //Atualiza uma KPI
-router.put('/kpi', (req, res) => {
+KpiRouter.put('/atualiza', (req, res) => {
 
     console.log(req.body);
     const kpiDao = new KpiDao(mysql);
@@ -84,4 +72,15 @@ router.put('/kpi', (req, res) => {
 });
 
 
-module.exports = router;
+
+// 404 not found
+KpiRouter.all('*', (req, res) => {
+
+    const response = {
+        data: null,
+        message: "route not found"
+    };
+    res.status(404).send(response);
+});
+
+module.exports = KpiRouter;
