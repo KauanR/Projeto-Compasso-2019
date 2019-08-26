@@ -12,4 +12,12 @@ const PartyController = require("../app/controllers/PartyController")
 const partyController = new PartyController()
 app.use(partyController.router)
 
+const PartyAdditionalInfoController = require("../app/controllers/PartyAdditionalInfoController")
+const partyAdditionalInfoController = new PartyAdditionalInfoController()
+app.use(partyAdditionalInfoController.router)
+
+const PartyRelationshipsController = require("../app/controllers/PartyRelationshipsController")
+const partyRelationshipsController = new PartyRelationshipsController()
+app.use(partyRelationshipsController.router)
+
 module.exports = app
