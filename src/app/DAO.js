@@ -1,5 +1,7 @@
 const db = require("../config/Data")
 
+const _ = require("lodash")
+
 module.exports = class DAO {
     constructor(table) {
         this.db = db
@@ -57,29 +59,63 @@ module.exports = class DAO {
     async gerarQuery(sql, query) {
         if (query) {
             const q = JSON.parse(JSON.stringify(query))
-    
-            let sqlOrdem = ""
-            if (q.ordem && q.ordenarPor) {
-                sqlOrdem = ` ORDER BY ${q.ordenarPor} ${q.ordem}`
-                delete q.ordenarPor
-                delete q.ordem
-            }
 
-            let sqlLimite = ""
-            if (q.limite) {
-                sqlLimite = ` LIMIT ${q.limite}`
-                delete q.limite
+            let values = []
+
+            const libOps = {
+                eq: "=",
+                dif: "!=",
+                ls: "<",
+                lse: "<=",
+                gr: ">",
+                gre: ">=",
+                isIn: "IN"
             }
 
             let sqlWhere = ""
             const keys = Object.keys(q)
-            if (keys.length > 0) {
-                sqlWhere = ` WHERE ${keys.map(k => `${k} = ?`).join(" AND ")}`
+            for (let i = 0; i < keys.length; i++) {
+                const attrName = keys[i]
+                if (attrName !== "sort" && attrName !== "limit") {
+                    const attr = q[attrName]
+                    let sqls = []
+
+                    const keysAttr = Object.keys(attr)
+                    for (let j = 0; j < keysAttr.length; j++) {
+                        const k = keysAttr[j]
+
+                        if (libOps[k] === "IN") {
+                            values = values.concat(attr[k])
+                            sqls.push(`${attrName} IN (${attr[k].map(v => "?").join(",")})`)
+                        } else {
+                            values.push(attr[k])
+                            console.log(k)
+                            sqls.push(`${attrName} ${libOps[k]} ?`)
+                        }
+                    }
+
+                    sqlWhere = `${sqlWhere} ${sqls.join(" AND ")}`
+                }
+            }
+            if(sqlWhere.length > 0){
+                sqlWhere = ` WHERE ${sqlWhere}`
+            }
+
+            let sqlSort = ""
+            if (q.sort) {
+                sqlSort = ` ORDER BY ${q.sort.by} ${_.toUpper(q.sort.order)}`
+            }
+
+            let sqlLimit = ""
+            if (q.limit) {
+                values.push(q.limit.offset)
+                values.push(q.limit.count)
+                sqlLimit = ` LIMIT ?, ?`
             }
 
             return {
-                sql: `${sql}${sqlWhere}${sqlOrdem}${sqlLimite}`,
-                values: Object.values(q)
+                sql: `${sql}${sqlWhere}${sqlSort}${sqlLimit}`,
+                values
             }
         }
         return {
