@@ -95,11 +95,24 @@ module.exports = class Controller {
 
             copy[`${k}.$in.*`] = {}
             Object.assign(copy[`${k}.$in.*`], copy[`${k}.$eq`])
+
+            copy[`${k}.$in`] = {
+                in: ["query"],
+                optional: {
+                    options: {
+                        nullable: true
+                    }
+                },
+                custom: {
+                    options: value => value instanceof Array
+                },
+                errorMessage: "O valor deve ser um array."
+            }
         }
 
         copy["sort.by"] = {
             in: ["query"],
-            isIn: ["id"].concat(keys),
+            isIn: keys,
             optional: {
                 options: {
                     nullable: true
@@ -107,6 +120,7 @@ module.exports = class Controller {
             },
             errorMessage: "O valor deve ser um atributo válido."
         }
+
         copy["sort.order"] = {
             in: ["query"],
             isIn: ["asc", "desc"],
