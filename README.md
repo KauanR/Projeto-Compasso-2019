@@ -89,20 +89,20 @@ A query precisa informar um atributo válido da tabela do banco de dados, a oper
 ```Javascript
 {
 
-limit: {
-    count: /*<int maior ou igual a 0>*/,
-    offset: /*<int maior ou igual a 0>*/
-},
+    limit: {
+        count: /*<int maior ou igual a 0>*/,
+        offset: /*<int maior ou igual a 0>*/
+    },
 
-sort: {
-    by: /*<atributo válido>*/,
-    order: /*<"asc" ou "desc">*/
-},
+    sort: {
+        by: /*<atributo válido>*/,
+        order: /*<"asc" ou "desc">*/
+    },
 
-/*<atributo válido>*/: {
-    /*<"$eq", "$dif", "$ls", "$lse", "$gr" ou "$gre">*/: /*<valor válido para o atributo>*/,
-    $in: /*<array de valores válidos para o atributo>*/
-},
+    /*<atributo válido>*/: {
+        /*<"$eq", "$dif", "$ls", "$lse", "$gr" ou "$gre">*/: /*<valor válido para o atributo>*/,
+        $in: /*<array de valores válidos para o atributo>*/
+    },
 
 }
 ```
