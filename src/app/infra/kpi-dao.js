@@ -52,7 +52,7 @@ class KpiDao {
 
     };
 
-    atualizaKPI(kpi) {
+    atualizaKPI(kpi) { // METODO DANDO ERRADO
 
         return new Promise((resolve, reject) => {
 
