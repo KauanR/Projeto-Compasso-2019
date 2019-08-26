@@ -39,7 +39,7 @@ module.exports = class Controller {
         for (let i = 0; i < keys.length; i++) {
             const k = keys[i]
 
-            copy[k].in = ["query", "body"]
+            copy[k].in = ["body"]
             copy[k].optional = {
                 options: {
                     nullable: true
@@ -88,13 +88,13 @@ module.exports = class Controller {
         }
         copy.sort.order = {
             in: ["query"],
-            isIn: ["ASC", "DESC"],
+            isIn: ["asc", "desc"],
             optional: {
                 options: {
                     nullable: true
                 }
             },
-            errorMessage: "O valor deve ser ASC ou DESC."
+            errorMessage: "O valor deve ser asc ou desc."
         }
 
         copy.limit.count = {
@@ -211,7 +211,7 @@ module.exports = class Controller {
     async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {
         let o = {}
 
-        const errors = []
+        let errors = []
 
         for (let i = 0; i < attrs.length; i++) {
             const attr = attrs[i]
@@ -250,7 +250,70 @@ module.exports = class Controller {
     }
 
     async gerarQuery(req, res) {
-        return this.gerarJSON(req, res, "query", this.attrsQuery)
+        let o = {}
+
+        let errors = []
+
+        if (req.query.sort) {
+            if (!req.query.sort.by) {
+                errors.push(await this.formatError("by", "O valor deve ser informado.", "query.sort"))
+            } else if (!req.query.sort.order) {
+                errors.push(await this.formatError("order", "O valor deve ser informado.", "query.sort"))
+            } else {
+                o.sort.by = req.query.sort.by
+                o.sort.order = req.query.sort.order
+            }
+        }
+
+        if (req.query.limit) {
+            if (!req.query.limit.count) {
+                errors.push(await this.formatError("count", "O valor deve ser informado.", "query.limit"))
+            } else if (!req.query.limit.offset) {
+                errors.push(await this.formatError("offset", "O valor deve ser informado.", "query.limit"))
+            } else {
+                o.limit.count = req.query.limit.count
+                o.limit.offset = req.query.limit.offset
+            }
+        }
+
+        for (let i = 0; i < this.attrs.length; i++) {
+            const attr = this.attrs[i]
+            if (req.query[attr].$eq) {
+                o[attr].$eq = req.query[attr].$eq
+            }
+            if (req.query[attr].$dif) {
+                o[attr].$dif = req.query[attr].$dif
+            }
+            if (req.query[attr].$ls) {
+                o[attr].$ls = req.query[attr].$ls
+            }
+            if (req.query[attr].$lse) {
+                o[attr].$lse = req.query[attr].$lse
+            }
+            if (req.query[attr].$gr) {
+                o[attr].$gr = req.query[attr].$gr
+            }
+            if (req.query[attr].$gre) {
+                o[attr].$gre = req.query[attr].$gre
+            }
+            if (req.query[attr].$in) {
+                o[attr].$in = req.query[attr].$in
+            }
+        }
+
+        if (Object.keys(o).length === 0) {
+            res.status(400).json(await this.formatError(undefined, undefined, `O request query está vazio ou não possue algum atributo válido.`))
+
+            throw new Error("Empty object.")
+        }
+
+        if (errors.length > 0) {
+            res.status(400).json(errors)
+
+            throw new Error("Not Null error.")
+        }
+
+        return o
     }
 
     async errorHandler(erro, req, res) {
