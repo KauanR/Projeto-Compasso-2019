@@ -6,7 +6,7 @@ connection.connect(function(err){
     if(err) {
         return console.log(err);
     }
-    console.log('conectou!');
+    console.log('Conexão com o banco realizada!');
 });
 
 app.use('/', router);

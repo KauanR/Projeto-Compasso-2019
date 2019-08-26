@@ -57,23 +57,23 @@ class KpiDao {
         return new Promise((resolve, reject) => {
 
             this._mysql.query(
-                "UPDATE `mydb`.`KPIS` SET name = ?, description = ?, details = ?, category = ? WHERE id = ?"
-            ),
-            [
-                kpi.name,
-                kpi.description,
-                kpi.details,
-                kpi.category,
-                kpi.id
-            ],
-            err => {
-                if(err) {
-                    console.log(err);
-                    return reject('Não foi possivel atualizar');
+                "UPDATE `mydb`.`KPIS` SET name = ?, description = ?, details = ?, category = ? WHERE id = ?",
+                [
+                    kpi.name,
+                    kpi.description,
+                    kpi.details,
+                    kpi.category,
+                    kpi.id
+                ],
+                err => {
+                    if(err) {
+                        console.log(err);
+                        return reject('Não foi possivel excluir');
+                    }
+        
+                    resolve();
                 }
-    
-                resolve();
-            }
+            )
         })
     }
 

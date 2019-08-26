@@ -6,7 +6,15 @@ var mysql = require('../../config/Data');
 
 const router = express.Router();
 
-router.get('/', (req, res) =>  res.json({ message: 'Funcionando!' }));
+// 404 not found
+router.all('*', (req, res) => {
+
+    const response = {
+        data: null,
+        message: "route not found"
+    };
+    res.status(404).send(response);
+});
 
 
 //Mostra todas as KPIs
@@ -23,6 +31,7 @@ router.get('/kpi', (req, res) => {
     );
 });
 
+
 //Busca nas KPIs por ID
 router.get('/kpi/:id', (req, res) => {
 
@@ -38,8 +47,10 @@ router.get('/kpi/:id', (req, res) => {
     )
 });
 
+
 //Adiciona nova KPI
 router.post('/kpi', (req, res) => {
+
     console.log(req.body);
     const kpiDao = new KpiDao(mysql);
 
@@ -60,6 +71,7 @@ router.delete('/kpi/:id', (req, res) => {
         .catch(erro => console.log(erro));
 });
 
+
 //Atualiza uma KPI
 router.put('/kpi', (req, res) => {
 
@@ -69,6 +81,7 @@ router.put('/kpi', (req, res) => {
     kpiDao.atualizaKPI(req.body)
         .then(res.redirect('/kpi'))
         .catch(erro => console.log(erro));
-})
+});
+
 
 module.exports = router;
