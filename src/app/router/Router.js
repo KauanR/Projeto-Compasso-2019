@@ -48,4 +48,27 @@ router.post('/kpi', (req, res) => {
         .catch(erro => console.log(erro));
 });
 
+
+//Remove uma KPI
+router.delete('/kpi/:id', (req, res) => {
+
+    const id = req.params.id;
+    const kpiDao = new KpiDao(mysql);
+
+    kpiDao.removeKPI(id)
+        .then(() => res.status(200).end())
+        .catch(erro => console.log(erro));
+});
+
+//Atualiza uma KPI
+router.put('/kpi', (req, res) => {
+
+    console.log(req.body);
+    const kpiDao = new KpiDao(mysql);
+
+    kpiDao.atualizaKPI(req.body)
+        .then(res.redirect('/kpi'))
+        .catch(erro => console.log(erro));
+})
+
 module.exports = router;
