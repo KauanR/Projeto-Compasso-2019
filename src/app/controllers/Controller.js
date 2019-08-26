@@ -110,7 +110,7 @@ module.exports = class Controller {
             }
         }
 
-        copy["sort.by"] = {
+        copy["sort.$by"] = {
             in: ["query"],
             isIn: keys,
             optional: {
@@ -121,7 +121,7 @@ module.exports = class Controller {
             errorMessage: "O valor deve ser um atributo válido."
         }
 
-        copy["sort.order"] = {
+        copy["sort.$order"] = {
             in: ["query"],
             isIn: ["asc", "desc"],
             optional: {
@@ -132,7 +132,7 @@ module.exports = class Controller {
             errorMessage: "O valor deve ser asc ou desc."
         }
 
-        copy["limit.count"] = {
+        copy["limit.$count"] = {
             in: ["query"],
             isInt: {
                 options: {
@@ -147,7 +147,7 @@ module.exports = class Controller {
             errorMessage: "O valor deve ser inteiro maior que 0."
         }
 
-        copy["limit.offset"] = {
+        copy["limit.$offset"] = {
             in: ["query"],
             isInt: {
                 options: {
@@ -276,10 +276,10 @@ module.exports = class Controller {
         let errors = []
 
         if (req.query.sort) {
-            if (!req.query.sort.by) {
-                errors.push(await this.formatError("by", "O valor deve ser informado.", "query.sort"))
-            } else if (!req.query.sort.order) {
-                errors.push(await this.formatError("order", "O valor deve ser informado.", "query.sort"))
+            if (!req.query.sort.$by) {
+                errors.push(await this.formatError("$by", "O valor deve ser informado.", "query.sort"))
+            } else if (!req.query.sort.$order) {
+                errors.push(await this.formatError("$order", "O valor deve ser informado.", "query.sort"))
             } else {
                 o.sort = {}
                 Object.assign(o.sort, req.query.sort)
@@ -287,10 +287,10 @@ module.exports = class Controller {
         }
 
         if (req.query.limit) {
-            if (!req.query.limit.count) {
-                errors.push(await this.formatError("count", "O valor deve ser informado.", "query.limit"))
-            } else if (!req.query.limit.offset) {
-                errors.push(await this.formatError("offset", "O valor deve ser informado.", "query.limit"))
+            if (!req.query.limit.$count) {
+                errors.push(await this.formatError("$count", "O valor deve ser informado.", "query.limit"))
+            } else if (!req.query.limit.$offset) {
+                errors.push(await this.formatError("$offset", "O valor deve ser informado.", "query.limit"))
             } else {
                 o.limit = {}
                 Object.assign(o.limit, req.query.limit)

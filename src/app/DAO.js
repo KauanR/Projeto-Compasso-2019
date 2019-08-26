@@ -103,13 +103,13 @@ module.exports = class DAO {
 
             let sqlSort = ""
             if (q.sort) {
-                sqlSort = ` ORDER BY ${q.sort.by} ${_.toUpper(q.sort.order)}`
+                sqlSort = ` ORDER BY ${q.sort.$by} ${_.toUpper(q.sort.$order)}`
             }
 
             let sqlLimit = ""
             if (q.limit) {
-                values.push(parseInt(q.limit.offset))
-                values.push(parseInt(q.limit.count))
+                values.push(parseInt(q.limit.$offset))
+                values.push(parseInt(q.limit.$count))
                 sqlLimit = ` LIMIT ?, ?`
             }
 
