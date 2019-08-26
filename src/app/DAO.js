@@ -63,13 +63,13 @@ module.exports = class DAO {
             let values = []
 
             const libOps = {
-                eq: "=",
-                dif: "!=",
-                ls: "<",
-                lse: "<=",
-                gr: ">",
-                gre: ">=",
-                isIn: "IN"
+                $eq: "=",
+                $dif: "!=",
+                $ls: "<",
+                $lse: "<=",
+                $gr: ">",
+                $gre: ">=",
+                $in: "IN"
             }
 
             let sqlWhere = ""

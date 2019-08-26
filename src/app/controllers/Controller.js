@@ -54,6 +54,27 @@ module.exports = class Controller {
                 this.attrNotNull.push(k)
                 delete copy[k].notNull
             }
+
+            copy[k].$eq = copy[k]
+            copy[k].$eq.in = ["query"]
+
+            copy[k].$dif = copy[k]
+            copy[k].$dif.in = ["query"]
+
+            copy[k].$ls = copy[k]
+            copy[k].$ls.in = ["query"]
+
+            copy[k].$lse = copy[k]
+            copy[k].$lse.in = ["query"]
+
+            copy[k].$gr = copy[k]
+            copy[k].$gr.in = ["query"]
+
+            copy[k].$gre = copy[k]
+            copy[k].$gre.in = ["query"]
+
+            copy[k].$in["*"] = copy[k]
+            copy[k].$in.in = ["query"]
         }
 
         Object.assign(copy, {
