@@ -76,57 +76,70 @@ module.exports = class Controller {
             copy[k].$in["*"] = copy[k]
             copy[k].$in.in = ["query"]
         }
+        copy.sort.by = {
+            in: ["query"],
+            isIn: ["id"].concat(keys),
+            optional: {
+                options: {
+                    nullable: true
+                }
+            },
+            errorMessage: "O valor deve ser um atributo válido."
+        }
+        copy.sort.order = {
+            in: ["query"],
+            isIn: ["ASC", "DESC"],
+            optional: {
+                options: {
+                    nullable: true
+                }
+            },
+            errorMessage: "O valor deve ser ASC ou DESC."
+        }
 
-        Object.assign(copy, {
-            id: {
-                in: ["query"],
-                isInt: {
-                    options: {
-                        min: 1
-                    }
-                },
-                optional: {
-                    options: {
-                        nullable: true
-                    }
-                },
-                errorMessage: "O valor deve ser inteiro maior que 0."
+        copy.limit.count = {
+            in: ["query"],
+            isInt: {
+                options: {
+                    min: 1
+                }
             },
-            limite: {
-                in: ["query"],
-                isInt: {
-                    options: {
-                        min: 1
-                    }
-                },
-                optional: {
-                    options: {
-                        nullable: true
-                    }
-                },
-                errorMessage: "O valor deve ser inteiro maior que 0."
+            optional: {
+                options: {
+                    nullable: true
+                }
             },
-            ordem: {
-                in: ["query"],
-                isIn: ["ASC", "DESC"],
-                optional: {
-                    options: {
-                        nullable: true
-                    }
-                },
-                errorMessage: "O valor deve ser ASC ou DESC."
+            errorMessage: "O valor deve ser inteiro maior que 0."
+        }
+
+        Object.assign(copy.limit.offset, copy.limit.count)
+
+        copy.id.$eq = {
+            in: ["query"],
+            isInt: {
+                options: {
+                    min: 1
+                }
             },
-            ordenarPor: {
-                in: ["query"],
-                isIn: ["id"].concat(keys),
-                optional: {
-                    options: {
-                        nullable: true
-                    }
-                },
-                errorMessage: "O valor deve ser um atributo válido."
-            }
-        })
+            optional: {
+                options: {
+                    nullable: true
+                }
+            },
+            errorMessage: "O valor deve ser inteiro maior que 0."
+        }
+
+        Object.assign(copy.id.$dif, copy.id.$eq)
+
+        Object.assign(copy.id.$ls, copy.id.$eq)
+
+        Object.assign(copy.id.$lse, copy.id.$eq)
+
+        Object.assign(copy.id.$gr, copy.id.$eq)
+
+        Object.assign(copy.id.$gre, copy.id.$eq)
+
+        Object.assign(copy.id.$in["*"], copy.id.$eq)
 
         this.attrs = keys
         this.attrsQuery = Object.keys(copy)
