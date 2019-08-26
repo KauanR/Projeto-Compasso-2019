@@ -35,48 +35,70 @@ module.exports = class Controller {
         const copy = JSON.parse(JSON.stringify(validationSchema))
 
         const keys = Object.keys(copy)
+        keys.push("id")
 
         for (let i = 0; i < keys.length; i++) {
             const k = keys[i]
 
-            copy[k].in = ["body"]
-            copy[k].optional = {
-                options: {
-                    nullable: true
+            if (k !== "id") {
+                if (copy[k].isString === true) {
+                    copy[k].escape = true
+                }
+
+                if (copy[k].notNull) {
+                    this.attrNotNull.push(k)
+                    delete copy[k].notNull
+                }
+
+                copy[k].optional = {
+                    options: {
+                        nullable: true
+                    }
+                }
+
+                copy[k].in = ["body"]
+                
+                copy[`${k}.$eq`] = {}
+                Object.assign(copy[`${k}.$eq`], copy[k])
+                copy[`${k}.$eq`].in = ["query"]
+            }
+            else{
+                copy[`${k}.$eq`] = {
+                    in: ["query"],
+                    isInt: {
+                        options: {
+                            min: 1
+                        }
+                    },
+                    optional: {
+                        options: {
+                            nullable: true
+                        }
+                    },
+                    errorMessage: "O valor deve ser inteiro maior que 0."
                 }
             }
 
-            if (copy[k].isString === true) {
-                copy[k].escape = true
-            }
+            copy[`${k}.$dif`] = {}
+            Object.assign(copy[`${k}.$dif`], copy[`${k}.$eq`])
 
-            if (copy[k].notNull) {
-                this.attrNotNull.push(k)
-                delete copy[k].notNull
-            }
+            copy[`${k}.$ls`] = {}
+            Object.assign(copy[`${k}.$ls`], copy[`${k}.$eq`])
 
-            copy[k].$eq = copy[k]
-            copy[k].$eq.in = ["query"]
+            copy[`${k}.$lse`] = {}
+            Object.assign(copy[`${k}.$lse`], copy[`${k}.$eq`])
 
-            copy[k].$dif = copy[k]
-            copy[k].$dif.in = ["query"]
+            copy[`${k}.$gr`] = {}
+            Object.assign(copy[`${k}.$gr`], copy[`${k}.$eq`])
 
-            copy[k].$ls = copy[k]
-            copy[k].$ls.in = ["query"]
+            copy[`${k}.$gre`] = {}
+            Object.assign(copy[`${k}.$gre`], copy[`${k}.$eq`])
 
-            copy[k].$lse = copy[k]
-            copy[k].$lse.in = ["query"]
-
-            copy[k].$gr = copy[k]
-            copy[k].$gr.in = ["query"]
-
-            copy[k].$gre = copy[k]
-            copy[k].$gre.in = ["query"]
-
-            copy[k].$in["*"] = copy[k]
-            copy[k].$in.in = ["query"]
+            copy[`${k}.$in.*`] = {}
+            Object.assign(copy[`${k}.$in.*`], copy[`${k}.$eq`])
         }
-        copy.sort.by = {
+
+        copy["sort.by"] = {
             in: ["query"],
             isIn: ["id"].concat(keys),
             optional: {
@@ -86,7 +108,7 @@ module.exports = class Controller {
             },
             errorMessage: "O valor deve ser um atributo válido."
         }
-        copy.sort.order = {
+        copy["sort.order"] = {
             in: ["query"],
             isIn: ["asc", "desc"],
             optional: {
@@ -97,7 +119,7 @@ module.exports = class Controller {
             errorMessage: "O valor deve ser asc ou desc."
         }
 
-        copy.limit.count = {
+        copy["limit.count"] = {
             in: ["query"],
             isInt: {
                 options: {
@@ -112,34 +134,8 @@ module.exports = class Controller {
             errorMessage: "O valor deve ser inteiro maior que 0."
         }
 
-        Object.assign(copy.limit.offset, copy.limit.count)
-
-        copy.id.$eq = {
-            in: ["query"],
-            isInt: {
-                options: {
-                    min: 1
-                }
-            },
-            optional: {
-                options: {
-                    nullable: true
-                }
-            },
-            errorMessage: "O valor deve ser inteiro maior que 0."
-        }
-
-        Object.assign(copy.id.$dif, copy.id.$eq)
-
-        Object.assign(copy.id.$ls, copy.id.$eq)
-
-        Object.assign(copy.id.$lse, copy.id.$eq)
-
-        Object.assign(copy.id.$gr, copy.id.$eq)
-
-        Object.assign(copy.id.$gre, copy.id.$eq)
-
-        Object.assign(copy.id.$in["*"], copy.id.$eq)
+        copy["limit.offset"] = {}
+        Object.assign(copy["limit.offset"], copy["limit.count"])
 
         this.attrs = keys
         this.attrsQuery = Object.keys(copy)
