@@ -12,7 +12,6 @@ module.exports = class PartyController extends Controller {
                     }
                 },
                 notNull: true,
-                escape: true,
                 errorMessage: "O valor deve ser uma string e deve ter entre 1 e 255 caractéres."
             },
             type: {
@@ -24,7 +23,6 @@ module.exports = class PartyController extends Controller {
                     }
                 },
                 notNull: true,
-                escape: true,
                 errorMessage: "O valor deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
             last_assessment: {
@@ -35,7 +33,6 @@ module.exports = class PartyController extends Controller {
             observations: {
                 isString: true,
                 notNull: true,
-                escape: true,
                 errorMessage: "O valor deve ser uma string."
             }
         })

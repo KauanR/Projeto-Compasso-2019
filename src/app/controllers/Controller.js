@@ -24,10 +24,10 @@ module.exports = class Controller {
         Object.assign(this.validationSchema, this.gerarValidationSchema(validationSchema))
 
         if (!naoGerarTodasRotas) {
-            this.gerarRotaBusca()
-            this.gerarRotaDeleta()
-            this.gerarRotaAtualiza()
-            this.gerarRotaAdicionaUm()
+            this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
+            this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
+            this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
+            this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
         }
     }
 
@@ -44,6 +44,10 @@ module.exports = class Controller {
                 options: {
                     nullable: true
                 }
+            }
+
+            if (copy[k].isString === true) {
+                copy[k].escape = true
             }
 
             if (copy[k].notNull) {
@@ -109,73 +113,65 @@ module.exports = class Controller {
         return copy
     }
 
-    gerarRotaBusca() {
-        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => {
-            try {
-                await this.inicio(req, res, `buscando ${this.nomePlural}...`)
+    async busca(req, res) {
+        try {
+            await this.inicio(req, res, `buscando ${this.nomePlural}...`)
 
-                const query = await this.gerarQuery(req, res)
+            const query = await this.gerarQuery(req, res)
 
-                const resultado = await this.DAO.get(query)
-                res.status(200).json(resultado)
+            const resultado = await this.DAO.get(query)
+            res.status(200).json(resultado)
 
-                this.fim(req, res)
-            } catch (error) {
-                this.errorHandler(error, req, res)
-            }
-        })
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
     }
 
-    gerarRotaDeleta() {
-        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => {
-            try {
-                await this.inicio(req, res, `deletando ${this.nomePlural}...`)
+    async deleta(req, res) {
+        try {
+            await this.inicio(req, res, `deletando ${this.nomePlural}...`)
 
-                const query = await this.gerarQuery(req, res)
+            const query = await this.gerarQuery(req, res)
 
-                const resultado = await this.DAO.delete(query)
-                res.status(202).json(resultado)
+            const resultado = await this.DAO.delete(query)
+            res.status(202).json(resultado)
 
-                this.fim(req, res)
-            } catch (error) {
-                this.errorHandler(error, req, res)
-            }
-        })
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
     }
 
-    gerarRotaAtualiza() {
-        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => {
-            try {
-                await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
+    async atualiza(req, res) {
+        try {
+            await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
 
-                const body = await this.gerarBodyUpdate(req, res)
-                const query = await this.gerarQuery(req, res)
+            const body = await this.gerarBodyUpdate(req, res)
+            const query = await this.gerarQuery(req, res)
 
-                const resultado = await this.DAO.update(body, query)
-                res.status(202).json(resultado)
+            const resultado = await this.DAO.update(body, query)
+            res.status(202).json(resultado)
 
-                this.fim(req, res)
-            } catch (error) {
-                this.errorHandler(error, req, res)
-            }
-        })
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
     }
 
-    gerarRotaAdicionaUm() {
-        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), async (req, res) => {
-            try {
-                await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
+    async adicionaUm(req, res) {
+        try {
+            await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
 
-                const body = await this.gerarBodyAdd(req, res)
+            const body = await this.gerarBodyAdd(req, res)
 
-                const resultado = await this.DAO.add(body)
-                res.status(201).json(resultado)
+            const resultado = await this.DAO.add(body)
+            res.status(201).json(resultado)
 
-                this.fim(req, res)
-            } catch (error) {
-                this.errorHandler(error, req, res)
-            }
-        })
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
     }
 
     async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {
@@ -187,13 +183,11 @@ module.exports = class Controller {
             const attr = attrs[i]
             const value = req[location][attr]
 
-            if(value === undefined && allObligatory){
+            if (value === undefined && allObligatory) {
                 errors.push(await this.formatError(attr, value, "O valor deve ser informado.", location))
-            }
-            else if(value === null && obligatory && obligatory.includes(attr)){
+            } else if (value === null && obligatory && obligatory.includes(attr)) {
                 errors.push(await this.formatError(attr, value, "O valor não pode ser nulo.", location))
-            }
-            else if(value !== undefined){
+            } else if (value !== undefined) {
                 o[attr] = value
             }
         }
