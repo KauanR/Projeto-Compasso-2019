@@ -42,7 +42,7 @@ KpiRouter.post('/adiciona', (req, res) => {
     console.log(req.body);
     const kpiDao = new KpiDao(mysql);
 
-    kpiDao.adicionaKPI(req.body)
+    kpiDao.adiciona(req.body)
         .then(res.redirect('/kpi'))
         .catch(erro => console.log(erro));
 });
@@ -54,7 +54,7 @@ KpiRouter.delete('/remove/:id', (req, res) => {
     const id = req.params.id;
     const kpiDao = new KpiDao(mysql);
 
-    kpiDao.removeKPI(id)
+    kpiDao.remove(id)
         .then(() => res.status(200).end())
         .catch(erro => console.log(erro));
 });
@@ -66,21 +66,9 @@ KpiRouter.put('/atualiza', (req, res) => {
     console.log(req.body);
     const kpiDao = new KpiDao(mysql);
 
-    kpiDao.atualizaKPI(req.body)
+    kpiDao.atualiza(req.body)
         .then(res.redirect('/kpi'))
         .catch(erro => console.log(erro));
-});
-
-
-
-// 404 not found
-KpiRouter.all('*', (req, res) => {
-
-    const response = {
-        data: null,
-        message: "route not found"
-    };
-    res.status(404).send(response);
 });
 
 module.exports = KpiRouter;

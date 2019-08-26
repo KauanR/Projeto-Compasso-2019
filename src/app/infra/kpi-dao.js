@@ -6,7 +6,7 @@ class KpiDao {
     }
 
     //metodo para adicionar nova kpi
-    adicionaKPI(kpi) {
+    adiciona(kpi) {
 
         return new Promise((resolve, reject) => {
          
@@ -30,7 +30,7 @@ class KpiDao {
         });
     }
 
-    removeKPI(id) {
+    remove(id) {
 
         return new Promise((resolve, reject) => {
 
@@ -52,7 +52,7 @@ class KpiDao {
 
     };
 
-    atualizaKPI(kpi) { // METODO DANDO ERRADO
+    atualiza(kpi) { // METODO DANDO ERRADO
 
         return new Promise((resolve, reject) => {
 
@@ -68,7 +68,7 @@ class KpiDao {
                 err => {
                     if(err) {
                         console.log(err);
-                        return reject('Não foi possivel excluir');
+                        return reject('Não foi possivel atualizar');
                     }
         
                     resolve();

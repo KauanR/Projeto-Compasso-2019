@@ -5,8 +5,7 @@ class CriteriaDao {
         this._mysql = mysql;
     }
 
-    //metodo para adicionar nova kpi
-    adicionaCriteria(criteria) {
+    adiciona(criteria) {
 
         return new Promise((resolve, reject) => {
          
@@ -30,7 +29,7 @@ class CriteriaDao {
         });
     }
 
-    removeCriteria(id) {
+    remove(id) {
 
         return new Promise((resolve, reject) => {
 
@@ -52,23 +51,23 @@ class CriteriaDao {
 
     };
 
-    atualizaCriteria(kpi) { // METODO DANDO ERRADO
+    atualiza(criteria) { 
 
         return new Promise((resolve, reject) => {
 
             this._mysql.query(
-                "UPDATE `mydb`.`CRITERIA` SET name = ?, description = ?, details = ?, category = ? WHERE id = ?",
+                "UPDATE `mydb`.`CRITERIA` SET type = ?, value = ?, description = ?, kpi_id = ? WHERE id = ?",
                 [
-                    kpi.name,
-                    kpi.description,
-                    kpi.details,
-                    kpi.category,
-                    kpi.id
+                    criteria.type,
+                    criteria.value,
+                    criteria.description,
+                    criteria.kpi_id,
+                    criteria.id
                 ],
                 err => {
                     if(err) {
                         console.log(err);
-                        return reject('Não foi possivel excluir');
+                        return reject('Não foi possivel atualizar');
                     }
         
                     resolve();
