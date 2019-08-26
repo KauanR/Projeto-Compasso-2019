@@ -80,14 +80,29 @@ app.use(partyController.router)
 ```
 Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exemplos:
 ```
--> "GET /parties?id=1": Pega dados com base na query;
--> "DELETE /parties?id=1": Apaga dados com base na query;
--> "POST /parties?id=1": Atualiza dados com base na query e no JSON enviado;
+-> "GET /parties?id[eq]=1": Pega dados com base na query;
+-> "DELETE /parties?id[eq]=1": Apaga dados com base na query;
+-> "POST /parties?id[eq]=1": Atualiza dados com base na query e no JSON enviado;
 -> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
-A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query "?nome=igor" executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A query também tem atributos especiais:
-```
--> "limite": Determina quantas linhas vão ser pegadas do banco de dados;
--> "ordenarPor": Determina o atributo pelo qual as linhas buscadas vão ser ordenadas;
--> "ordem": Determina a ordem em que as linhas ordenadas vão ser exibidas ("ASC" ou "DESC"), esse atributo não pode ser usado sem o "ordenarPor".
+A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query "?nome[eq]=igor" executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A estrutura da query em JSON é basicamente:
+```Javascript
+{
+
+limit: {
+    count: /*<int maior ou igual a 0>*/,
+    offset: /*<int maior ou igual a 0>*/
+},
+
+sort: {
+    by: /*<atributo válido>*/,
+    order: /*<"asc" ou "desc">*/
+},
+
+/*<atributo válido>*/: {
+    /*<"$eq", "$dif", "$ls", "$lse", "$gr" ou "$gre">*/: /*<valor válido para o atributo>*/,
+    $in: /*<array de valores válidos para o atributo>*/
+},
+
+}
 ```
