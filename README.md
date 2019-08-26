@@ -86,7 +86,15 @@ Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exe
 -> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
 # Query em JSON:
-A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query "?nome[eq]=igor" executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A estrutura da query em JSON é basicamente:
+A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query:
+```Javascript
+{
+    nome: {
+        eq:"igor"
+    }
+}
+``` 
+executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A estrutura da query em JSON é basicamente:
 ```Javascript
 {
 
@@ -107,4 +115,4 @@ A query precisa informar um atributo válido da tabela do banco de dados, a oper
 
 }
 ```
-A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery".
+A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery". A opção "limit" define quantas linhas vão ser buscadas e a opção "sort" define o ordenamento das linhas buscadas, essas opções não podem ser usadas na operação "update" por causa de limitações do mysql.
