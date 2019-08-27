@@ -48,19 +48,19 @@ module.exports = class Controller {
                     copy[k].escape = true
                 }
 
-                if(copy[k].isInt){
+                if(copy[k].isInt === true){
                     copy[k].customSanitizer = {
                         options: value => parseInt(value)
                     }
                 }
 
-                if(copy[k].isFloat){
+                if(copy[k].isFloat === true){
                     copy[k].customSanitizer = {
                         options: value => parseFloat(value)
                     }
                 }
 
-                if (copy[k].notNull) {
+                if (copy[k].notNull === true) {
                     this.attrNotNull.push(k)
                     delete copy[k].notNull
                 }
