@@ -12,7 +12,7 @@ module.exports = class KpiController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O valor deve ser uma string e deve ter entre 1 e 100 caractéres."
+                errorMessage: "O campo Category deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
             description: {
                 isString: true,
@@ -23,7 +23,7 @@ module.exports = class KpiController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O valor deve ser uma string e deve ter entre 1 e 255 caractéres."
+                errorMessage: "O campo Description deve ser uma string e deve ter entre 1 e 255 caractéres."
             },
             details: {
                 isString: true,
@@ -33,7 +33,7 @@ module.exports = class KpiController extends Controller {
                         max: 65535
                     }
                 },
-                errorMessage: "O valor deve ser uma string e deve ter entre 1 e 65535 caractéres."
+                errorMessage: "O campo Details deve ser uma string e deve ter entre 1 e 65535 caractéres."
             },
             name: {
                 isString: true,
@@ -44,7 +44,7 @@ module.exports = class KpiController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O valor deve ser uma string e deve ter entre 1 e 255 caractéres."
+                errorMessage: "O campo Name deve ser uma string e deve ter entre 1 e 255 caractéres."
             }
         })
     }

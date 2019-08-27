@@ -20,4 +20,12 @@ const PartyRelationshipsController = require("../app/controllers/PartyRelationsh
 const partyRelationshipsController = new PartyRelationshipsController()
 app.use(partyRelationshipsController.router)
 
+const KpiController = require("../app/controllers/KpiController")
+const kpiController = new KpiController()
+app.use(kpiController.router)
+
+const CriteriaController = require("../app/controllers/CriteriaController")
+const criteriaController = new CriteriaController()
+app.use(criteriaController.router)
+
 module.exports = app
