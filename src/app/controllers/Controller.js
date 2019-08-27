@@ -52,12 +52,10 @@ module.exports = class Controller {
                 }
 
                 if(copy[k].isInt === true){
-                    copy[k].customSanitizer = {
-                        options: value => parseInt(value)
-                    }
+                    copy[k].toInt = true
                 }
 
-                if(copy[k].isFloat === true){
+                if(copy[k].isDecimal === true){
                     copy[k].customSanitizer = {
                         options: value => parseFloat(value)
                     }
