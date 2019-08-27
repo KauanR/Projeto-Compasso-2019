@@ -70,9 +70,20 @@ CREATE TABLE IF NOT EXISTS `mydb`.`PARTY` (
   PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 ```
-Não é necessário definir uma validação para o atributo "id", pois ela já acontece na classe Controller.
-
-Para que as rotas criadas nesse controller possam ser acessadas é necessário ir até o arquivo config/custom-express.js, instanciar um novo objeto da classe desse controller e chamar a função app.use() mandando como parâmetro o atributo "router" do objeto instanciado. Exemplo:
+Não é necessário definir uma validação para o atributo "id", pois ela já acontece na classe Controller. Um atributo que seja foreign key precisa ter no seu schema de validação o atributo "fk" com nome em plural da rota para acessar a tabela que essa foreign key referencia, exemplo:
+```Javascript
+party_id: {
+    isInt: {
+    options: {
+            min: 1
+        }
+    },
+    notNull: true,
+    fk: "parties",
+    errorMessage: "O valor de party_id deve ser inteiro maior que 0."
+}
+```
+Para que as rotas criadas nesse controller possam ser acessadas é necessário ir até o arquivo config/custom-express.js, instanciar um novo objeto da classe desse controller e chamar a função app.use() mandando como parâmetro o atributo "router" do objeto instanciado, exemplo:
 ```javascript
 const PartyController = require("../app/controllers/PartyController")
 const partyController = new PartyController()
@@ -111,8 +122,20 @@ executa a operação em todas as linhas que tiverem o atributo "nome" igual ao v
     /*<atributo válido>*/: {
         /*<"$eq", "$dif", "$ls", "$lse", "$gr" ou "$gre">*/: /*<valor válido para o atributo>*/,
         $in: /*<array de valores válidos para o atributo>*/
-    },
+    }
 
 }
 ```
-A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery". A opção "limit" define quantas linhas vão ser buscadas e a opção "sort" define o ordenamento das linhas buscadas, essas opções não podem ser usadas na operação "update" por causa de limitações do mysql.
+A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery". A opção "limit" define quantas linhas vão ser buscadas e a opção "sort" define o ordenamento das linhas buscadas, essas opções não podem ser usadas na operação "update" por causa de limitações do mysql. O significados em SQL dos outros atributos são:
+```Javascript
+{
+    $eq: "=",
+    $dif: "!=",
+    $ls: "<",
+    $lse: "<=",
+    $gr: ">",
+    $gre: ">=",
+    $in: "IN"
+}
+```
+

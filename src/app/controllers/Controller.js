@@ -5,6 +5,7 @@ const {
     validationResult
 } = require('express-validator')
 
+const _ = require("lodash")
 module.exports = class Controller {
     constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas) {
         this.router = express.Router()
@@ -209,11 +210,9 @@ module.exports = class Controller {
             const query = await this.gerarQuery(req, res)
 
             let resultado = await this.DAO.get(query)
-            let arrPromises = []
             for(let i = 0; i < resultado.length; i++){
-                arrPromises.push(this.converterFkEmLink(resultado[i]))
+                resultado[i] = await this.converterFkEmLink(resultado[i])
             }
-            resultado = Promise.all(arrPromises)
 
             res.status(200).json(resultado)
 
@@ -280,7 +279,9 @@ module.exports = class Controller {
         for(let i = 0; i < keys.length; i++){
             const k = keys[i]
             if(this.fkSchema[k] !== undefined){
-                o[k] = {
+                let nomeLink = k.slice(0, -3)
+                nomeLink = `${_.camelCase(k.slice(0, -3))}Link`
+                o[nomeLink] = {
                     rel: "self",
                     href: `/${this.fkSchema[k]}?id[$eq]=${o[k]}` ,
                     type: "GET"
