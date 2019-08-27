@@ -32,6 +32,7 @@ module.exports = class PartyAdditionalInfoController extends Controller {
                     }
                 },
                 notNull: true,
+                fk: "parties",
                 errorMessage: "O valor de party_id deve ser inteiro maior que 0."
             }
         })

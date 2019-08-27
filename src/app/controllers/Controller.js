@@ -21,6 +21,8 @@ module.exports = class Controller {
 
         this.validationSchema = {}
 
+        this.fkSchema = {}
+
         Object.assign(this.validationSchema, this.gerarValidationSchema(validationSchema))
 
         if (!naoGerarTodasRotas) {
@@ -63,6 +65,11 @@ module.exports = class Controller {
                 if (copy[k].notNull === true) {
                     this.attrNotNull.push(k)
                     delete copy[k].notNull
+                }
+
+                if(copy[k].fk){
+                   this.fkSchema[k] = copy[k].fk
+                   delete copy[k].fk
                 }
 
                 copy[k].optional = {
@@ -201,7 +208,13 @@ module.exports = class Controller {
 
             const query = await this.gerarQuery(req, res)
 
-            const resultado = await this.DAO.get(query)
+            let resultado = await this.DAO.get(query)
+            let arrPromises = []
+            for(let i = 0; i < resultado.length; i++){
+                arrPromises.push(this.converterFkEmLink(resultado[i]))
+            }
+            resultado = Promise.all(arrPromises)
+
             res.status(200).json(resultado)
 
             this.fim(req, res)
@@ -229,11 +242,12 @@ module.exports = class Controller {
         try {
             await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
 
-            delete req.query.limit
-            delete req.query.sort
+            const reqCopy = JSON.parse(JSON.stringify(req))
+            delete reqCopy.query.limit
+            delete reqCopy.query.sort
 
-            const body = await this.gerarBodyUpdate(req, res)
-            const query = await this.gerarQuery(req, res)
+            const body = await this.gerarBodyUpdate(reqCopy, res)
+            const query = await this.gerarQuery(reqCopy, res)
 
             const resultado = await this.DAO.update(body, query)
             res.status(202).json(resultado)
@@ -257,6 +271,24 @@ module.exports = class Controller {
         } catch (error) {
             this.errorHandler(error, req, res)
         }
+    }
+
+    async converterFkEmLink(json){
+        const o = JSON.parse(JSON.stringify(json))
+        
+        const keys = Object.keys(o)
+        for(let i = 0; i < keys.length; i++){
+            const k = keys[i]
+            if(this.fkSchema[k] !== undefined){
+                o[k] = {
+                    rel: "self",
+                    href: `/${this.fkSchema[k]}?id[$eq]=${o[k]}` ,
+                    type: "GET"
+                } 
+            }
+        }
+
+        return o
     }
 
     async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {

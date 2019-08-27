@@ -23,6 +23,7 @@ module.exports = class CriteriaController extends Controller {
                     }
                 },
                 notNull: true,
+                fk: "kpis",
                 errorMessage: "O valor de kpi_id deve ser inteiro maior que 0 caracteres e menor que 11 caracteres."
             },
             type: {

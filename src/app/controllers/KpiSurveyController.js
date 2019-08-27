@@ -21,6 +21,7 @@ module.exports = class KpiSurveyController extends Controller {
                     }
                 },
                 notNull: true,
+                fk: "surveys",
                 errorMessage: "O valor de survey_id deve ser inteiro maior que 0."
             },
             kpi_id: {
@@ -30,6 +31,7 @@ module.exports = class KpiSurveyController extends Controller {
                     }
                 },
                 notNull: true,
+                fk: "kpis",
                 errorMessage: "O valor de kpi_id deve ser inteiro maior que 0."
             }
         })
