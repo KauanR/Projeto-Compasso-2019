@@ -12,7 +12,7 @@ module.exports = class PartyRelationships extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O valor deve ser uma string e deve ter entre 1 e 100 caractéres."
+                errorMessage: "O campo Type deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
             source_party_id: {
                 isInt: {
@@ -21,7 +21,7 @@ module.exports = class PartyRelationships extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O valor deve ser inteiro maior que 0."
+                errorMessage: "O campo Source_party_id deve ser inteiro maior que 0."
             },
             target_party_id: {
                 isInt: {
@@ -30,7 +30,7 @@ module.exports = class PartyRelationships extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O valor deve ser inteiro maior que 0."
+                errorMessage: "O campo Target_party_id deve ser inteiro maior que 0."
             }
         })
     }
