@@ -72,17 +72,14 @@ ENGINE = InnoDB;
 ```
 Não é necessário definir uma validação para o atributo "id", pois ela já acontece na classe Controller. Um atributo que seja foreign key precisa ter no seu schema de validação o atributo "fk" com nome em plural da rota para acessar a tabela que essa foreign key referencia, exemplo:
 ```Javascript
-party_id: {
-    isInt: {
-    options: {
-            min: 1
-        }
-    },
+kpi_id: {
     notNull: true,
-    fk: "parties",
-    errorMessage: "O valor de party_id deve ser inteiro maior que 0."
+    fk: "kpis"
 }
 ```
+Não é preciso definir mensagem de erro e nem validação para inteiro maior que 0, pois isso acontece automaticamente na classe Controller.
+
+# Como acessar as rotas:
 Para que as rotas criadas nesse controller possam ser acessadas é necessário ir até o arquivo config/custom-express.js, instanciar um novo objeto da classe desse controller e chamar a função app.use() mandando como parâmetro o atributo "router" do objeto instanciado, exemplo:
 ```javascript
 const PartyController = require("../app/controllers/PartyController")
@@ -96,6 +93,7 @@ Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exe
 -> "POST /parties?id[$eq]=1": Atualiza dados com base na query e no JSON enviado;
 -> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
+
 # Query em JSON:
 A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query:
 ```Javascript

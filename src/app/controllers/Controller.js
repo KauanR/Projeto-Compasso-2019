@@ -69,8 +69,14 @@ module.exports = class Controller {
                 }
 
                 if(copy[k].fk){
-                   this.fkSchema[k] = copy[k].fk
-                   delete copy[k].fk
+                    this.fkSchema[k] = copy[k].fk
+                    delete copy[k].fk
+                    copy[k].isInt = {
+                        options: {
+                            min: 1
+                        }
+                    }
+                    copy[k].errorMessage = `O valor de ${k} deve ser inteiro maior que 0.`
                 }
 
                 copy[k].optional = {

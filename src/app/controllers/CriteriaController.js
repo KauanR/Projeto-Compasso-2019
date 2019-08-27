@@ -15,16 +15,8 @@ module.exports = class CriteriaController extends Controller {
                 errorMessage: "O valor de description deve ser uma string e deve ter entre 1 e 500 caractéres."
             },
             kpi_id: {
-                isInt: true,
-                isLength: {
-                    options: {
-                        min: 1,
-                        max: 11
-                    }
-                },
                 notNull: true,
-                fk: "kpis",
-                errorMessage: "O valor de kpi_id deve ser inteiro maior que 0 caracteres e menor que 11 caracteres."
+                fk: "kpis"
             },
             type: {
                 isString: true,
