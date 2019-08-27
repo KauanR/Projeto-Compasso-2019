@@ -101,7 +101,7 @@ A query precisa informar um atributo válido da tabela do banco de dados, a oper
 ```Javascript
 {
     nome: {
-        eq:"igor"
+        $eq:"igor"
     }
 }
 ``` 
