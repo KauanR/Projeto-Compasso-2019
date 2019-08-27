@@ -110,13 +110,13 @@ executa a operação em todas as linhas que tiverem o atributo "nome" igual ao v
 {
 
     limit: {
-        count: /*<int maior ou igual a 0>*/,
-        offset: /*<int maior ou igual a 0>*/
+        $count: /*<int maior ou igual a 0>*/,
+        $offset: /*<int maior ou igual a 0>*/
     },
 
     sort: {
-        by: /*<atributo válido>*/,
-        order: /*<"asc" ou "desc">*/
+        $by: /*<atributo válido>*/,
+        $order: /*<"asc" ou "desc">*/
     },
 
     /*<atributo válido>*/: {
