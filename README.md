@@ -1,4 +1,4 @@
-# Configuração inicial:
+# Configuração inicial
 É necessário criar um arquivo .env na raíz do repositório com as informações do banco de dados e do port, exemplo de arquivo .env:
 ```
 DBHOST="localhost"
@@ -9,7 +9,7 @@ PORT=6663
 ```
 É necessário também rodar o comando "npm install".
 
-# Como usar a classe Controller:
+# Como usar a classe Controller
 Deve ser informado o nome singular da rota, o nome plural da rota, o nome da tabela do banco de dados e o schema de validação para validar os dados que vão ser registrados nessa tabela, o schema de validação usado é um JSON que contém as validações do do express-validator, documentação: https://express-validator.github.io/docs/schema-validation.html. Para validar atributos que são NOT NULL deve ser colocado no schema de validação um atributo com o nome de "notNull" com o valor "true", exemplo:
 ```javascript
 {
@@ -79,7 +79,7 @@ kpi_id: {
 ```
 Não é preciso definir mensagem de erro e nem validação para inteiro maior que 0, pois isso acontece automaticamente na classe Controller.
 
-# Como acessar as rotas:
+# Como acessar as rotas
 Para que as rotas criadas nesse controller possam ser acessadas é necessário ir até o arquivo config/custom-express.js, instanciar um novo objeto da classe desse controller e chamar a função app.use() mandando como parâmetro o atributo "router" do objeto instanciado, exemplo:
 ```javascript
 const PartyController = require("../app/controllers/PartyController")
@@ -94,7 +94,7 @@ Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exe
 -> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
 
-# Query em JSON:
+# Query em JSON
 A query precisa informar um atributo válido da tabela do banco de dados, a operção (pegar, apagar ou atualizar) vai ser executada nas linhas que tiverem atributos que sejam iguais aos atributos da query, por exemplo a query:
 ```Javascript
 {

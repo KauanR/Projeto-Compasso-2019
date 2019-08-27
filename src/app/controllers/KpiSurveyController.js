@@ -15,24 +15,12 @@ module.exports = class KpiSurveyController extends Controller {
                 errorMessage: "O valor de group deve ser uma string e deve ter entre 1 e 500 caractéres."
             },
             survey_id: {
-                isInt: {
-                    options: {
-                        min: 1
-                    }
-                },
                 notNull: true,
-                fk: "surveys",
-                errorMessage: "O valor de survey_id deve ser inteiro maior que 0."
+                fk: "surveys"
             },
             kpi_id: {
-                isInt: {
-                    options: {
-                        min: 1
-                    }
-                },
                 notNull: true,
-                fk: "kpis",
-                errorMessage: "O valor de kpi_id deve ser inteiro maior que 0."
+                fk: "kpis"
             }
         })
     }
