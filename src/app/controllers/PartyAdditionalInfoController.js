@@ -12,7 +12,7 @@ module.exports = class PartyAdditionalInfoController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo info deve ser uma string e deve ter entre 1 e 255 caractéres."
+                errorMessage: "O valor de info deve ser uma string e deve ter entre 1 e 255 caractéres."
             },
             type: {
                 isString: true,
@@ -23,7 +23,7 @@ module.exports = class PartyAdditionalInfoController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo type deve ser uma string e deve ter entre 1 e 100 caractéres."
+                errorMessage: "O valor de type deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
             party_id: {
                 isInt: {
@@ -32,7 +32,7 @@ module.exports = class PartyAdditionalInfoController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo party_id deve ser inteiro maior que 0."
+                errorMessage: "O valor de party_id deve ser inteiro maior que 0."
             }
         })
     }

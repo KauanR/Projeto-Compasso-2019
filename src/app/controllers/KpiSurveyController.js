@@ -12,7 +12,7 @@ module.exports = class KpiSurveyController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo group deve ser uma string e deve ter entre 1 e 500 caractéres."
+                errorMessage: "O valor de group deve ser uma string e deve ter entre 1 e 500 caractéres."
             },
             survey_id: {
                 isInt: {
@@ -21,7 +21,7 @@ module.exports = class KpiSurveyController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo survey_id deve ser inteiro maior que 0."
+                errorMessage: "O valor de survey_id deve ser inteiro maior que 0."
             },
             kpi_id: {
                 isInt: {
@@ -30,7 +30,7 @@ module.exports = class KpiSurveyController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo kpi_id deve ser inteiro maior que 0."
+                errorMessage: "O valor de kpi_id deve ser inteiro maior que 0."
             }
         })
     }

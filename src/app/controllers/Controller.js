@@ -92,7 +92,7 @@ module.exports = class Controller {
                             nullable: true
                         }
                     },
-                    errorMessage: "O valor deve ser inteiro maior que 0."
+                    errorMessage: "O valor de id deve ser inteiro maior que 0."
                 }
             }
 
@@ -124,7 +124,7 @@ module.exports = class Controller {
                 custom: {
                     options: value => value instanceof Array
                 },
-                errorMessage: "O valor deve ser um array."
+                errorMessage: `O valor de ${k}.$in deve ser um array.`
             }
         }
 
@@ -138,7 +138,7 @@ module.exports = class Controller {
                     nullable: true
                 }
             },
-            errorMessage: "O valor deve ser um atributo válido."
+            errorMessage: "O valor de sort.$by deve ser um atributo válido."
         }
 
         copy["sort.$order"] = {
@@ -151,7 +151,7 @@ module.exports = class Controller {
                     nullable: true
                 }
             },
-            errorMessage: "O valor deve ser asc ou desc."
+            errorMessage: "O valor de sort.$order deve ser asc ou desc."
         }
 
         copy["limit.$count"] = {
@@ -169,7 +169,7 @@ module.exports = class Controller {
                     nullable: true
                 }
             },
-            errorMessage: "O valor deve ser inteiro maior que 0."
+            errorMessage: "O valor de limit.$count deve ser inteiro maior que 0."
         }
 
         copy["limit.$offset"] = {
@@ -187,7 +187,7 @@ module.exports = class Controller {
                     nullable: true
                 }
             },
-            errorMessage: "O valor deve ser inteiro maior que -1."
+            errorMessage: "O valor de limit.$offset deve ser inteiro maior que -1."
         }
 
         this.attrsQuery = keys.concat(["limit", "sort"])

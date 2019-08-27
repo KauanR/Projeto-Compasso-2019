@@ -12,7 +12,7 @@ module.exports = class CriteriaController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo description deve ser uma string e deve ter entre 1 e 500 caractéres."
+                errorMessage: "O valor de description deve ser uma string e deve ter entre 1 e 500 caractéres."
             },
             kpi_id: {
                 isInt: true,
@@ -23,7 +23,7 @@ module.exports = class CriteriaController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo kpi_id deve ser inteiro maior que 0 caracteres e menor que 11 caracteres."
+                errorMessage: "O valor de kpi_id deve ser inteiro maior que 0 caracteres e menor que 11 caracteres."
             },
             type: {
                 isString: true,
@@ -34,7 +34,7 @@ module.exports = class CriteriaController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo type deve ser uma string e deve ter entre 1 e 100 caractéres."
+                errorMessage: "O valor de type deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
             value: {
                 isInt: true,
@@ -45,7 +45,7 @@ module.exports = class CriteriaController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O campo value deve ser uma string e deve ter entre 1 e 11 caractéres."
+                errorMessage: "O valor de value deve ser uma string e deve ter entre 1 e 11 caractéres."
             }
         })
     }
