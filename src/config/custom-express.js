@@ -28,4 +28,12 @@ const CriteriaController = require("../app/controllers/CriteriaController")
 const criteriaController = new CriteriaController()
 app.use(criteriaController.router)
 
+const SurveysController = require("../app/controllers/SurveysController")
+const surveysController = new SurveysController()
+app.use(surveysController.router)
+
+const KpiSurveyController = require("../app/controllers/KpiSurveyController")
+const kpiSurveyController = new KpiSurveyController()
+app.use(kpiSurveyController.router)
+
 module.exports = app

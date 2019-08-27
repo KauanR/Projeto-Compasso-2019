@@ -12,7 +12,7 @@ module.exports = class SurveysController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O name deve ser uma string e deve ter entre 1 e 255 caractéres."
+                errorMessage: "O campo name deve ser uma string e deve ter entre 1 e 255 caractéres."
             },
             description: {
                 isString: true,
@@ -22,7 +22,7 @@ module.exports = class SurveysController extends Controller {
                         max: 255
                     }
                 },
-                errorMessage: "O description deve ser uma string e deve ter entre 1 e 255 caractéres."
+                errorMessage: "O campo description deve ser uma string e deve ter entre 1 e 255 caractéres."
             },
             party_type: {
                 isString: true,
@@ -33,7 +33,7 @@ module.exports = class SurveysController extends Controller {
                     }
                 },
                 notNull: true,
-                errorMessage: "O party_type deve ser uma string e deve ter entre 1 e 50 caractéres."
+                errorMessage: "O campo party_type deve ser uma string e deve ter entre 1 e 50 caractéres."
             }
         })
     }
