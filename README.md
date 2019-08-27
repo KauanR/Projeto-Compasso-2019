@@ -91,9 +91,9 @@ app.use(partyController.router)
 ```
 Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exemplos:
 ```
--> "GET /parties?id[eq]=1": Pega dados com base na query;
--> "DELETE /parties?id[eq]=1": Apaga dados com base na query;
--> "POST /parties?id[eq]=1": Atualiza dados com base na query e no JSON enviado;
+-> "GET /parties?id[$eq]=1": Pega dados com base na query;
+-> "DELETE /parties?id[$eq]=1": Apaga dados com base na query;
+-> "POST /parties?id[$eq]=1": Atualiza dados com base na query e no JSON enviado;
 -> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
 # Query em JSON:
