@@ -229,6 +229,9 @@ module.exports = class Controller {
         try {
             await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
 
+            delete req.query.limit
+            delete req.query.sort
+
             const body = await this.gerarBodyUpdate(req, res)
             const query = await this.gerarQuery(req, res)
 

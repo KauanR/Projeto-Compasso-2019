@@ -42,8 +42,9 @@ module.exports = class DAO {
     }
 
     async update(json, query) {
-        delete query.limit
-        delete query.sort
+        const qr = JSON.parse(JSON.stringify(query))
+        delete qr.limit
+        delete qr.sort
 
         const colunas = Object.keys(json).join(',')
 
@@ -51,7 +52,7 @@ module.exports = class DAO {
 
         const colunasEPlaceholders = colunas.split(",").map(nome => `${nome} = ?`).join(",")
 
-        const q = await this.gerarQuery(`UPDATE ${this.table} SET ${colunasEPlaceholders}`, query)
+        const q = await this.gerarQuery(`UPDATE ${this.table} SET ${colunasEPlaceholders}`, qr)
 
         const valoresJSONeQuery = valores.concat(q.values)
         const sqlJSONeQuery = q.sql
