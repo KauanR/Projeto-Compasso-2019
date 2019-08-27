@@ -289,7 +289,8 @@ module.exports = class Controller {
                     rel: "self",
                     href: `/${this.fkSchema[k]}?id[$eq]=${o[k]}` ,
                     type: "GET"
-                } 
+                }
+                delete o[k] 
             }
         }
 
