@@ -48,7 +48,7 @@ module.exports = class PartyController extends Controller {
 
     async buscaTodosDados(req, res) {
         try {
-            await this.inicio(req, res, `buscando ${this.nomePlural}...`)
+            await this.inicio(req, res, `buscando ${this.nomePlural} todos os dados...`)
 
             const query = await this.gerarQuery(req, res)
 
