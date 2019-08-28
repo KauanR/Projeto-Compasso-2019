@@ -24,9 +24,9 @@ module.exports = class Controller {
 
         this.fkSchema = {}
 
-        Object.assign(this.validationSchema, this.gerarValidationSchema(validationSchema))
+        this.validationSchemaArray = {}
 
-        this.validationSchemaOriginal = validationSchema
+        Object.assign(this.validationSchema, this.gerarValidationSchema(validationSchema))
 
         if (!naoGerarTodasRotas) {
             this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
@@ -86,6 +86,9 @@ module.exports = class Controller {
                 }
 
                 copy[k].in = ["body"]
+
+                this.validationSchemaArray[`*.${k}`] = {}
+                Object.assign(this.validationSchemaArray[`*.${k}`], copy[k])
 
                 copy[`${k}.$eq`] = {}
                 Object.assign(copy[`${k}.$eq`], copy[k])
