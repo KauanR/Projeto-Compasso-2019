@@ -26,6 +26,8 @@ module.exports = class Controller {
 
         Object.assign(this.validationSchema, this.gerarValidationSchema(validationSchema))
 
+        this.validationSchemaOriginal = validationSchema
+
         if (!naoGerarTodasRotas) {
             this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
             this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
