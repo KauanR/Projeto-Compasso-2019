@@ -43,7 +43,7 @@ module.exports = class PartyController extends Controller {
             }
         })
 
-        this.router.get(`/${this.nomePlural}/todosDados`, checkSchema(this.validationSchema), (req, res) => this.buscaTodosDados(req, res))
+        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.buscaTodosDados(req, res))
     }
 
     async buscaTodosDados(req, res) {

@@ -43,10 +43,10 @@ module.exports = class SurveysController extends Controller {
             }
         })
 
-        this.router.get(`/${this.nomePlural}/todosDados`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
+        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.buscaTodosDados(req, res))
     }
 
-    async busca(req, res) {
+    async buscaTodosDados(req, res) {
         try {
             await this.inicio(req, res, `buscando ${this.nomePlural} todos os dados...`)
 
