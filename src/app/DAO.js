@@ -30,6 +30,7 @@ module.exports = class DAO {
     }
 
     async add(json) {
+        delete json.group
         const colunas = Object.keys(json).join(',')
 
         const valores = Object.values(json)
@@ -37,7 +38,7 @@ module.exports = class DAO {
         const placeholders = valores.map(() => '?').join(',')
 
         const sql = `INSERT INTO ${this.table} (${colunas}) VALUES (${placeholders})`
-
+ 
         return this.run(sql, valores)
     }
 
