@@ -3,7 +3,7 @@ const Controller = require("./Controller")
 module.exports = class KpiSurveyController extends Controller {
     constructor() {
         super("kpi-survey", "kpi-surveys", "kpi_survey", {
-            group: {
+            grupo: {
                 isString: true,
                 isLength: {
                     options: {
@@ -24,4 +24,5 @@ module.exports = class KpiSurveyController extends Controller {
             }
         })
     }
+
 }

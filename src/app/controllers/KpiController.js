@@ -47,5 +47,7 @@ module.exports = class KpiController extends Controller {
                 errorMessage: "O valor de name deve ser uma string e deve ter entre 1 e 255 caractéres."
             }
         })
+
     }
+    
 }
