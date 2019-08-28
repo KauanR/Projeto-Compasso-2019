@@ -41,12 +41,15 @@ module.exports = class PartyController extends Controller {
                 notNull: true,
                 errorMessage: "O valor de observations deve ser uma string."
             }
-        })
+        }, false)
 
         this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.buscaTodosDados(req, res))
+        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
+        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
+        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
     }
 
-    async buscaTodosDados(req, res) {
+    async busca(req, res) {
         try {
             await this.inicio(req, res, `buscando ${this.nomePlural} todos os dados...`)
 
@@ -60,13 +63,13 @@ module.exports = class PartyController extends Controller {
                 resultado[i] = await this.converterFkEmLink(resultado[i])
 
                 resultado[i].additional_info = await paiDAO.get({
-                    party_id:{
+                    party_id: {
                         $eq: resultado[i].id
                     }
                 })
 
                 resultado[i].relationships = await prDAO.get({
-                    source_party_id:{
+                    source_party_id: {
                         $eq: resultado[i].id
                     }
                 })

@@ -41,12 +41,15 @@ module.exports = class SurveysController extends Controller {
                 notNull: true,
                 errorMessage: "O valor de party_type deve ser uma string e deve ter entre 1 e 50 caractéres."
             }
-        })
+        }, false)
 
         this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.buscaTodosDados(req, res))
+        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
+        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
+        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
     }
 
-    async buscaTodosDados(req, res) {
+    async busca(req, res) {
         try {
             await this.inicio(req, res, `buscando ${this.nomePlural} todos os dados...`)
 
@@ -61,16 +64,22 @@ module.exports = class SurveysController extends Controller {
                 resultado[i] = await this.converterFkEmLink(resultado[i])
 
                 const ks = await kpiSurveyDAO.get({
-                    survey_id: { $eq: resultado[i].id }
+                    survey_id: {
+                        $eq: resultado[i].id
+                    }
                 })
 
                 resultado[i].kpis = []
                 for (let j = 0; j < ks.length; j++) {
                     let r = (await kpisDAO.get({
-                        id: { $eq: ks[j].kpi_id }
+                        id: {
+                            $eq: ks[j].kpi_id
+                        }
                     }))[0]
                     r.criterias = await criteriasDAO.get({
-                        kpi_id: { $eq: r.id }
+                        kpi_id: {
+                            $eq: r.id
+                        }
                     })
 
                     resultado[i].kpis.push(r)
