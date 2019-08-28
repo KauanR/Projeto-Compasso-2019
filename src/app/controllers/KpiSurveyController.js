@@ -14,7 +14,7 @@ module.exports = class KpiSurveyController extends Controller {
                 notNull: true,
                 errorMessage: "O valor de group deve ser uma string e deve ter entre 1 e 500 caractéres."
             },
-            survey_id: {
+            surveyId: {
                 notNull: true,
                 fk: "surveys"
             },

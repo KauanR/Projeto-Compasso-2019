@@ -30,7 +30,7 @@ module.exports = class SurveysController extends Controller {
                 },
                 errorMessage: "O valor de description deve ser uma string e deve ter entre 1 e 255 caractéres."
             },
-            party_type: {
+            partyType: {
                 isString: true,
                 isLength: {
                     options: {

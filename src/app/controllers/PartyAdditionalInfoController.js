@@ -25,7 +25,7 @@ module.exports = class PartyAdditionalInfoController extends Controller {
                 notNull: true,
                 errorMessage: "O valor de type deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
-            party_id: {
+            partyId: {
                 notNull: true,
                 fk: "parties"
             }
