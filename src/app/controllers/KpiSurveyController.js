@@ -33,11 +33,12 @@ module.exports = class KpiSurveyController extends Controller {
 
         const re = (await this.DAO.get({
             survey_id: { $eq: o.survey_id },
-            kpi_id: { $eq: o.kpi_id }
+            kpi_id: { $eq: o.kpi_id },
+            grupo: { $eq: o.grupo }
         }))[0]
 
         if(re !== undefined){
-            res.status(400).json(await this.formatError("[surveyId, kpiId]", [o.survey_id, o.kpi_id], "A combinação de foreign keys já está cadastrada.", "body"))
+            res.status(400).json(await this.formatError("[surveyId, kpiId, grupo]", [o.survey_id, o.kpi_id, o.grupo], "A combinação de atributos já está cadastrada.", "body"))
             throw new Error("Validation Errors.")
         }
 

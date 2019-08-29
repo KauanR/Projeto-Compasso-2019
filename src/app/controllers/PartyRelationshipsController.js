@@ -31,11 +31,12 @@ module.exports = class PartyRelationships extends Controller {
 
         const re = (await this.DAO.get({
             source_party_id: { $eq: o.source_party_id },
-            target_party_id: { $eq: o.target_party_id }
+            target_party_id: { $eq: o.target_party_id },
+            type: { $eq: o.type }
         }))[0]
 
         if (re !== undefined) {
-            res.status(400).json(await this.formatError("[sourcePartyId, targetPartyId]", [o.source_party_id, o.target_party_id], "A combinação de foreign keys já está cadastrada.", "body"))
+            res.status(400).json(await this.formatError("[sourcePartyId, targetPartyId, type]", [o.source_party_id, o.target_party_id, o.type], "A combinação de atributos já está cadastrada.", "body"))
             throw new Error("Validation Errors.")
         }
 
