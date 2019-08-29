@@ -79,7 +79,7 @@ module.exports = class SurveysController extends Controller {
 
             const ks = await this.kpiSurvey.gerarBusca({
                 query: {
-                    survey_id: {
+                    surveyId: {
                         $eq: resultado[i].id
                     }
                 }
@@ -96,7 +96,7 @@ module.exports = class SurveysController extends Controller {
                 }))[0]
                 r.criterias = await this.criteria.gerarBusca({
                     query: {
-                        kpi_id: {
+                        kpiId: {
                             $eq: r.id
                         }
                     }
