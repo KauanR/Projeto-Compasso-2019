@@ -30,6 +30,7 @@ module.exports = class Controller {
 
         if (!naoGerarTodasRotas) {
             this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
+            this.router.get(`/${this.nomePlural}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
             this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
             this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
             this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
@@ -94,7 +95,7 @@ module.exports = class Controller {
                 this.validationSchema[`${k}.$eq`].in = ["query"]
             } else {
                 this.validationSchema[`${k}.$eq`] = {
-                    in: ["query"],
+                    in: ["query", "params"],
                     isInt: {
                         options: {
                             min: 1
@@ -244,6 +245,32 @@ module.exports = class Controller {
             await this.inicio(req, res, `buscando ${this.nomePlural}...`)
 
             const resultado = await this.gerarBusca(req, res)
+
+            res.status(200).json(resultado)
+
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
+    }
+
+    async buscaUm(req, res) {
+        try {
+            await this.inicio(req, res, `buscando ${this.nomeSingular}...`)
+
+            const resultado = (await this.gerarBusca({
+                query: {
+                    id: {
+                        $eq: req.params.id
+                    }
+                }
+            }, res))[0]
+
+            if(resultado === undefined){
+                res.status(404).json(await this.formatError("id", req.params.id, "O objeto não foi achado.", "params"))
+                throw new Error("Validation Errors.")
+            }
+
 
             res.status(200).json(resultado)
 
