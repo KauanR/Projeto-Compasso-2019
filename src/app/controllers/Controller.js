@@ -95,7 +95,24 @@ module.exports = class Controller {
                 this.validationSchema[`${k}.$eq`].in = ["query"]
             } else {
                 this.validationSchema[`${k}.$eq`] = {
-                    in: ["query", "params"],
+                    in: ["query"],
+                    isInt: {
+                        options: {
+                            min: 1
+                        }
+                    },
+                    customSanitizer: {
+                        options: value => parseInt(value)
+                    },
+                    optional: {
+                        options: {
+                            nullable: true
+                        }
+                    },
+                    errorMessage: "O valor de id deve ser inteiro maior que 0."
+                }
+                this.validationSchema.id = {
+                    in: ["params"],
                     isInt: {
                         options: {
                             min: 1
