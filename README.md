@@ -123,14 +123,16 @@ executa a operação em todas as linhas que tiverem o atributo "nome" igual ao v
         $order: /*<"asc" ou "desc">*/
     },
 
+    except: /*<string de atributos válidos separados por vírgula>*/
+
     /*<atributo válido>*/: {
         /*<"$eq", "$dif", "$ls", "$lse", "$gr" ou "$gre">*/: /*<valor válido para o atributo>*/,
-        $in: /*<array de valores válidos para o atributo>*/
+        $in: /*<string de valores válidos para o atributo separados por vírgula>*/
     }
 
 }
 ```
-A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery". A opção "limit" define quantas linhas vão ser buscadas e a opção "sort" define o ordenamento das linhas buscadas, essas opções não podem ser usadas na operação "update" por causa de limitações do mysql. O significados em SQL dos outros atributos são:
+A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery". A opção "limit" define quantas linhas vão ser buscadas e a opção "sort" define o ordenamento das linhas buscadas, essas opções não podem ser usadas na operação "update" por causa de limitações do mysql. O except define quais atributos não vão ser retornados, só pode ser usado nas rotas de GET. O significados em SQL dos outros atributos são:
 ```Javascript
 {
     $eq: "=",
