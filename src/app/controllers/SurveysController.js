@@ -51,7 +51,7 @@ module.exports = class SurveysController extends Controller {
 
         this.validationSchema.except.custom = {
             options: value => {
-                const arr = ["surveyId", "kpi_id"].concat(this.attrs)
+                const arr = ["kpis"].concat(this.attrs)
                 const arrV = value.split(",")
                 let b = true
                 for (let i = 0; i < arrV.length; i++) {
