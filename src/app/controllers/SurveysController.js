@@ -90,7 +90,7 @@ module.exports = class SurveysController extends Controller {
                 let r = (await this.kpi.gerarBusca({
                     query: {
                         id: {
-                            $eq: ks[j].kpi_id
+                            $eq: ks[j].kpiId
                         }
                     }
                 }))[0]
