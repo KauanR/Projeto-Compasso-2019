@@ -14,11 +14,11 @@ module.exports = class PartyRelationships extends Controller {
                 notNull: true,
                 errorMessage: "O valor de type deve ser uma string e deve ter entre 1 e 100 caractéres."
             },
-            source_party_id: {
+            sourcePartyId: {
                 notNull: true,
                 fk: "parties"
             },
-            target_party_id: {
+            targetPartyId: {
                 notNull: true,
                 fk: "parties"
             }
