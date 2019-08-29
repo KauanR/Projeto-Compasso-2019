@@ -66,12 +66,7 @@ module.exports = class SurveysController extends Controller {
 
         this.gerarBusca = this.gerarBusca.bind(this)
 
-        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.buscaTodosDados(req, res))
-        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
-        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
-        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
-
-
+        this.gerarTodasRotas()
     }
 
 

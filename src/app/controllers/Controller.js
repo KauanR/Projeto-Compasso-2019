@@ -22,19 +22,21 @@ module.exports = class Controller {
 
         this.validationSchema = {}
 
-        this.validationSchemaArray = {}
-
         this.fkSchema = {}
 
         this.gerarValidationSchema(validationSchema)
 
         if (!naoGerarTodasRotas) {
-            this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
-            this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
-            this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
-            this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
-            this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
+            this.gerarTodasRotas()
         }
+    }
+
+    gerarTodasRotas() {
+        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
+        this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
+        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
+        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
+        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
     }
 
     gerarValidationSchema(validationSchema) {
@@ -86,9 +88,6 @@ module.exports = class Controller {
                 }
 
                 this.validationSchema[k].in = ["body"]
-
-                this.validationSchemaArray[`*.${k}`] = {}
-                Object.assign(this.validationSchemaArray, this.validationSchema[k])
 
                 this.validationSchema[`${k}.$eq`] = {}
                 Object.assign(this.validationSchema[`${k}.$eq`], this.validationSchema[k])
@@ -149,6 +148,7 @@ module.exports = class Controller {
             Object.assign(this.validationSchema[`${k}.$in.*`], this.validationSchema[`${k}.$eq`])
 
             this.validationSchema[`${k}.$in`] = {
+                in: ["query"],
                 isString: true,
                 escape: true,
                 customSanitizer: {
@@ -281,7 +281,9 @@ module.exports = class Controller {
             }
 
 
-            const resultado = (await this.gerarBusca({ query }, res))[0]
+            const resultado = (await this.gerarBusca({
+                query
+            }, res))[0]
 
             if (resultado === undefined) {
                 res.status(404).json(await this.formatError("id", req.params.id, "O objeto não foi achado.", "params"))

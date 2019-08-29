@@ -79,11 +79,11 @@ module.exports = class DAO {
 
             let sqlWhere = ""
             const keys = Object.keys(q)
+            let sqls = []
             for (let i = 0; i < keys.length; i++) {
                 const attrName = keys[i]
                 if (attrName !== "sort" && attrName !== "limit") {
                     const attr = q[attrName]
-                    let sqls = []
 
                     const keysAttr = Object.keys(attr)
                     for (let j = 0; j < keysAttr.length; j++) {
@@ -97,12 +97,11 @@ module.exports = class DAO {
                             sqls.push(`${attrName} ${libOps[k]} ?`)
                         }
                     }
-
-                    sqlWhere = `${sqlWhere} ${sqls.join(" AND ")}`
                 }
             }
-            if(sqlWhere.length > 0){
-                sqlWhere = ` WHERE${sqlWhere}`
+            
+            if(sql.length > 0){
+                sqlWhere = ` WHERE ${sqls.join(" AND ")}`
             }
 
             let sqlSort = ""

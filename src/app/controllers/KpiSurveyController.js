@@ -1,5 +1,7 @@
 const Controller = require("./Controller")
 
+const _ = require("lodash")
+
 module.exports = class KpiSurveyController extends Controller {
     constructor() {
         super("kpi-survey", "kpi-surveys", "kpi_survey", {
@@ -31,10 +33,10 @@ module.exports = class KpiSurveyController extends Controller {
 
         let errors = []
 
-        const re = this.DAO.get({
-            survey_id: req.body.surveyId,
-            kpi_id: req.body.kpiId
-        })
+        const re = (await this.DAO.get({
+            survey_id: { $eq: req.body.surveyId },
+            kpi_id: { $eq: req.body.kpiId }
+        }))[0]
 
         if(re !== undefined){
             res.status(400).json(await this.formatError("[surveyId, kpiId]", [req.body.surveyId, req.body.kpiId], "Não é possivel cadastrar diferentes kpis-surveys para mesma kpi"))
