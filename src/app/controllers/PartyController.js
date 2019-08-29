@@ -2,10 +2,6 @@ const Controller = require("./Controller")
 const PartyRelationshipsController = require("./PartyRelationshipsController")
 const PartyAdditionalInfoController = require("./PartyAdditionalInfoController")
 
-const {
-    checkSchema
-} = require('express-validator')
-
 module.exports = class PartyController extends Controller {
     constructor() {
         super("party", "parties", "party", {

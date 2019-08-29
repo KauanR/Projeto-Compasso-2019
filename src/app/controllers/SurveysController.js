@@ -4,10 +4,6 @@ const KpiSurveyController = require("./KpiSurveyController")
 const CriteriaController = require("./CriteriaController")
 const KpiController = require("./KpiController")
 
-const {
-    checkSchema
-} = require('express-validator')
-
 module.exports = class SurveysController extends Controller {
     constructor() {
         super("survey", "surveys", "surveys", {
