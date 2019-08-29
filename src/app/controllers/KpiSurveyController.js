@@ -37,7 +37,7 @@ module.exports = class KpiSurveyController extends Controller {
         })
 
         if(re !== undefined){
-            res.status(400).json(await this.formatError("[surveyId, kpiId]", [req.body.surveyId, req.body.kpiId], "Não é possivel cadastrar diferentes kpis-surveys para mesma kpi"))
+            res.status(400).json(await this.formatError("[surveyId, kpiId]", [req.body.survey_id, req.body.kpi_id], "Não é possivel cadastrar diferentes kpis-surveys para mesma kpi"))
             throw new Error("Validation Errors.")
         }
 
