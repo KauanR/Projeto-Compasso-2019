@@ -30,7 +30,7 @@ module.exports = class Controller {
 
         if (!naoGerarTodasRotas) {
             this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
-            this.router.get(`/${this.nomePlural}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
+            this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
             this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
             this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
             this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
@@ -275,15 +275,15 @@ module.exports = class Controller {
         try {
             await this.inicio(req, res, `buscando ${this.nomeSingular}...`)
 
-            const resultado = (await this.gerarBusca({
-                query: {
-                    id: {
-                        $eq: req.params.id
-                    }
-                }
-            }, res))[0]
+            let query = req.query
+            query.id = {
+                $eq: req.params.id
+            }
 
-            if(resultado === undefined){
+
+            const resultado = (await this.gerarBusca({ query }, res))[0]
+
+            if (resultado === undefined) {
                 res.status(404).json(await this.formatError("id", req.params.id, "O objeto não foi achado.", "params"))
                 throw new Error("Validation Errors.")
             }
