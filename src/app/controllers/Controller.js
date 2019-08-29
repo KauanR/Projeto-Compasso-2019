@@ -18,13 +18,15 @@ module.exports = class Controller {
 
         this.attrsQuery = []
 
-        this.attrNotNull = []
+        this.attrsNotNull = []
 
         this.validationSchema = {}
 
+        this.validationSchemaArray = {}
+
         this.fkSchema = {}
 
-        Object.assign(this.validationSchema, this.gerarValidationSchema(validationSchema))
+        this.gerarValidationSchema(validationSchema)
 
         if (!naoGerarTodasRotas) {
             this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
@@ -35,9 +37,9 @@ module.exports = class Controller {
     }
 
     gerarValidationSchema(validationSchema) {
-        const copy = JSON.parse(JSON.stringify(validationSchema))
+        this.validationSchema = JSON.parse(JSON.stringify(validationSchema))
 
-        const keys = Object.keys(copy)
+        const keys = Object.keys(this.validationSchema)
         keys.push("id")
 
         for (let i = 0; i < keys.length; i++) {
@@ -46,49 +48,52 @@ module.exports = class Controller {
             if (k !== "id") {
                 this.attrs.push(k)
 
-                if (copy[k].isString === true) {
-                    copy[k].escape = true
+                if (this.validationSchema[k].isString === true) {
+                    this.validationSchema[k].escape = true
                 }
 
-                if (copy[k].isInt === true) {
-                    copy[k].toInt = true
+                if (this.validationSchema[k].isInt === true) {
+                    this.validationSchema[k].toInt = true
                 }
 
-                if (copy[k].isDecimal === true) {
-                    copy[k].customSanitizer = {
+                if (this.validationSchema[k].isDecimal === true) {
+                    this.validationSchema[k].customSanitizer = {
                         options: value => parseFloat(value)
                     }
                 }
 
-                if (copy[k].notNull === true) {
-                    this.attrNotNull.push(k)
-                    delete copy[k].notNull
+                if (this.validationSchema[k].notNull === true) {
+                    this.attrsNotNull.push(k)
+                    delete this.validationSchema[k].notNull
                 }
 
-                if (copy[k].fk) {
-                    this.fkSchema[k] = copy[k].fk
-                    delete copy[k].fk
-                    copy[k].isInt = {
+                if (this.validationSchema[k].fk) {
+                    this.fkSchema[k] = this.validationSchema[k].fk
+                    delete this.validationSchema[k].fk
+                    this.validationSchema[k].isInt = {
                         options: {
                             min: 1
                         }
                     }
-                    copy[k].errorMessage = `O valor de ${k} deve ser inteiro maior que 0.`
+                    this.validationSchema[k].errorMessage = `O valor de ${k} deve ser inteiro maior que 0.`
                 }
 
-                copy[k].optional = {
+                this.validationSchema[k].optional = {
                     options: {
                         nullable: true
                     }
                 }
 
-                copy[k].in = ["body"]
+                this.validationSchema[k].in = ["body"]
 
-                copy[`${k}.$eq`] = {}
-                Object.assign(copy[`${k}.$eq`], copy[k])
-                copy[`${k}.$eq`].in = ["query"]
+                this.validationSchemaArray[`*.${k}`] = {}
+                Object.assign(this.validationSchemaArray, this.validationSchema[k])
+
+                this.validationSchema[`${k}.$eq`] = {}
+                Object.assign(this.validationSchema[`${k}.$eq`], this.validationSchema[k])
+                this.validationSchema[`${k}.$eq`].in = ["query"]
             } else {
-                copy[`${k}.$eq`] = {
+                this.validationSchema[`${k}.$eq`] = {
                     in: ["query"],
                     isInt: {
                         options: {
@@ -107,25 +112,25 @@ module.exports = class Controller {
                 }
             }
 
-            copy[`${k}.$dif`] = {}
-            Object.assign(copy[`${k}.$dif`], copy[`${k}.$eq`])
+            this.validationSchema[`${k}.$dif`] = {}
+            Object.assign(this.validationSchema[`${k}.$dif`], this.validationSchema[`${k}.$eq`])
 
-            copy[`${k}.$ls`] = {}
-            Object.assign(copy[`${k}.$ls`], copy[`${k}.$eq`])
+            this.validationSchema[`${k}.$ls`] = {}
+            Object.assign(this.validationSchema[`${k}.$ls`], this.validationSchema[`${k}.$eq`])
 
-            copy[`${k}.$lse`] = {}
-            Object.assign(copy[`${k}.$lse`], copy[`${k}.$eq`])
+            this.validationSchema[`${k}.$lse`] = {}
+            Object.assign(this.validationSchema[`${k}.$lse`], this.validationSchema[`${k}.$eq`])
 
-            copy[`${k}.$gr`] = {}
-            Object.assign(copy[`${k}.$gr`], copy[`${k}.$eq`])
+            this.validationSchema[`${k}.$gr`] = {}
+            Object.assign(this.validationSchema[`${k}.$gr`], this.validationSchema[`${k}.$eq`])
 
-            copy[`${k}.$gre`] = {}
-            Object.assign(copy[`${k}.$gre`], copy[`${k}.$eq`])
+            this.validationSchema[`${k}.$gre`] = {}
+            Object.assign(this.validationSchema[`${k}.$gre`], this.validationSchema[`${k}.$eq`])
 
-            copy[`${k}.$in.*`] = {}
-            Object.assign(copy[`${k}.$in.*`], copy[`${k}.$eq`])
+            this.validationSchema[`${k}.$in.*`] = {}
+            Object.assign(this.validationSchema[`${k}.$in.*`], this.validationSchema[`${k}.$eq`])
 
-            copy[`${k}.$in`] = {
+            this.validationSchema[`${k}.$in`] = {
                 isString: true,
                 escape: true,
                 customSanitizer: {
@@ -140,7 +145,7 @@ module.exports = class Controller {
             }
         }
 
-        copy["sort.$by"] = {
+        this.validationSchema["sort.$by"] = {
             in: ["query"],
             custom: {
                 options: value => keys.includes(value)
@@ -153,7 +158,7 @@ module.exports = class Controller {
             errorMessage: "O valor de sort.$by deve ser um atributo válido."
         }
 
-        copy["sort.$order"] = {
+        this.validationSchema["sort.$order"] = {
             in: ["query"],
             custom: {
                 options: value => ["asc", "desc"].includes(value)
@@ -166,7 +171,7 @@ module.exports = class Controller {
             errorMessage: "O valor de sort.$order deve ser asc ou desc."
         }
 
-        copy["limit.$count"] = {
+        this.validationSchema["limit.$count"] = {
             in: ["query"],
             isInt: {
                 options: {
@@ -184,7 +189,7 @@ module.exports = class Controller {
             errorMessage: "O valor de limit.$count deve ser inteiro maior que 0."
         }
 
-        copy["limit.$offset"] = {
+        this.validationSchema["limit.$offset"] = {
             in: ["query"],
             isInt: {
                 options: {
@@ -202,7 +207,7 @@ module.exports = class Controller {
             errorMessage: "O valor de limit.$offset deve ser inteiro maior que -1."
         }
 
-        copy.except = {
+        this.validationSchema.except = {
             in: ["query"],
             isString: true,
             escape: true,
@@ -232,8 +237,6 @@ module.exports = class Controller {
         }
 
         this.attrsQuery = keys.concat(["limit", "sort", "except"])
-
-        return copy
     }
 
     async busca(req, res) {
@@ -387,11 +390,11 @@ module.exports = class Controller {
     }
 
     async gerarBodyAdd(req, res) {
-        return this.gerarJSON(req, res, "body", this.attrs, this.attrNotNull, true)
+        return this.gerarJSON(req, res, "body", this.attrs, this.attrsNotNull, true)
     }
 
     async gerarBodyUpdate(req, res) {
-        return this.gerarJSON(req, res, "body", this.attrs, this.attrNotNull, false)
+        return this.gerarJSON(req, res, "body", this.attrs, this.attrsNotNull, false)
     }
 
     async gerarQuery(req, res) {
