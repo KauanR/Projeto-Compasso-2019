@@ -86,15 +86,27 @@ module.exports = class PartyController extends Controller {
                 }
             }, res)
 
-
             resultado[i].relationships = await this.partyRelationshipsController.gerarBusca({
                 query: {
                     sourcePartyId: {
                         $eq: resultado[i].id
-                    }
+                    },
+                    except: "sourcePartyId,sourcePartyLink"
                 }
             }, res)
 
+            for(let j = 0; j < resultado[i].relationships.length; j++){
+                const linkBuff = resultado[i].relationships[j].targetPartyLink
+                delete resultado[i].relationships[j].targetPartyLink
+
+                resultado[i].relationships[j].targetPartyName = (await this.DAO.get({
+                    id: {
+                        $eq: resultado[i].relationships[j].targetPartyId
+                    }
+                }))[0].name
+
+                resultado[i].relationships[j].targetPartyLink = linkBuff
+            }
 
             resultado[i] = await this.prepareResponseJSON(resultado[i], exceptBuff)
         }
