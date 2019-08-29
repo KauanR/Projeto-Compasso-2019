@@ -30,7 +30,7 @@ module.exports = class Controller {
 
         if (!naoGerarTodasRotas) {
             this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
-            this.router.get(`/${this.nomePlural}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
+            this.router.get(`/${this.nomePlural}/${this.nomePlural}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
             this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
             this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
             this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
