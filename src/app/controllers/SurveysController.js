@@ -64,8 +64,6 @@ module.exports = class SurveysController extends Controller {
             }
         }
 
-        this.gerarBusca = this.gerarBusca.bind(this)
-
         this.gerarTodasRotas()
     }
 

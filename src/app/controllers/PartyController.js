@@ -61,8 +61,6 @@ module.exports = class PartyController extends Controller {
             }
         }
 
-        this.gerarBusca = this.gerarBusca.bind(this)
-
         this.gerarChildSchemas()
 
         this.gerarTodasRotas()
