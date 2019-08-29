@@ -51,7 +51,7 @@ module.exports = class SurveysController extends Controller {
 
         this.validationSchema.except.custom = {
             options: value => {
-                const arr = ["kpis"].concat(this.attrs)
+                const arr = ["kpiSurveys"].concat(this.attrs)
                 const arrV = value.split(",")
                 let b = true
                 for (let i = 0; i < arrV.length; i++) {
@@ -85,8 +85,13 @@ module.exports = class SurveysController extends Controller {
                 }
             })
 
-            resultado[i].kpis = []
+            resultado[i].kpiSurveys = []
             for (let j = 0; j < ks.length; j++) {
+                const k = {
+                    type: ks[j].type,
+                    kpi: {}
+                }
+
                 let r = (await this.kpi.gerarBusca({
                     query: {
                         id: {
@@ -102,7 +107,9 @@ module.exports = class SurveysController extends Controller {
                     }
                 })
 
-                resultado[i].kpis.push(r)
+                k.kpi = r
+
+                resultado[i].kpiSurveys.push(k)
             }
 
         }
