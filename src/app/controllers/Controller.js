@@ -467,7 +467,7 @@ module.exports = class Controller {
         }
 
         if (Object.keys(o).length === 0) {
-            res.status(400).json(await this.formatError(undefined, undefined, `O request ${location} está vazio ou não possue algum atributo válido.`))
+            res.status(400).json(await this.formatError(undefined, undefined, `${this.nomeSingular}: O request ${location} está vazio ou não possue algum atributo válido.`))
 
             throw new Error("Empty object.")
         }
