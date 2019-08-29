@@ -34,8 +34,13 @@ module.exports = class Controller {
     gerarTodasRotas() {
         this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
         this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
+
         this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
-        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
+        this.router.delete(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.deletaUm(req, res))
+
+        this.router.patch(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
+        this.router.patch(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.atualizaUm(req, res))
+        
         this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
     }
 
@@ -273,20 +278,20 @@ module.exports = class Controller {
 
     async buscaUm(req, res) {
         try {
-            await this.inicio(req, res, `buscando ${this.nomeSingular}...`)
+            await this.inicio(req, res, `buscando ${this.nomeSingular} com id = ${req.params.id}...`)
 
-            let query = req.query
-            query.id = {
-                $eq: req.params.id
+            const query = {
+                id: {
+                    $eq: req.params.id
+                }
             }
-
 
             const resultado = (await this.gerarBusca({
                 query
             }, res))[0]
 
             if (resultado === undefined) {
-                res.status(404).json(await this.formatError("id", req.params.id, "O objeto não foi achado.", "params"))
+                res.status(404).json(await this.formatError("id", req.params.id, `Não foi encontrada uma linha com esse id.`, "params"))
                 throw new Error("Validation Errors.")
             }
 
@@ -315,8 +320,29 @@ module.exports = class Controller {
     async deleta(req, res) {
         try {
             await this.inicio(req, res, `deletando ${this.nomePlural}...`)
-
+            
             const resultado = await this.gerarDelecao(req, res)
+            res.status(202).json(resultado)
+
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
+    }
+
+    async deletaUm(req, res) {
+        try {
+            await this.inicio(req, res, `deletando ${this.nomeSingular} com id = ${req.params.id}...`)
+
+            const query = {
+                id: {
+                    $eq: req.params.id
+                }
+            }
+
+            const resultado = await this.gerarDelecao({
+                query
+            }, res)
             res.status(202).json(resultado)
 
             this.fim(req, res)
@@ -334,6 +360,26 @@ module.exports = class Controller {
     async atualiza(req, res) {
         try {
             await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
+
+            const resultado = await this.gerarAtualizacao(req, res)
+            res.status(202).json(resultado)
+
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
+    }
+
+    async atualizaUm(req, res) {
+        try {
+            await this.inicio(req, res, `atualizando ${this.nomePlural} com id = ${req.params.id}...`)
+
+            const query = {
+                id: {
+                    $eq: req.params.id
+                }
+            }
+            req.query = query
 
             const resultado = await this.gerarAtualizacao(req, res)
             res.status(202).json(resultado)
