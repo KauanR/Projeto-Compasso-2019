@@ -192,7 +192,8 @@ module.exports = class PartyController extends Controller {
                 query: {
                     partyId: {
                         $eq: resultado[i].id
-                    }
+                    },
+                    except: "partyId"
                 }
             }, res)
 
@@ -201,7 +202,7 @@ module.exports = class PartyController extends Controller {
                     sourcePartyId: {
                         $eq: resultado[i].id
                     },
-                    except: "sourcePartyId,sourcePartyLink"
+                    except: "sourcePartyId"
                 }
             }, res)
 

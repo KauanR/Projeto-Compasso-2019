@@ -87,7 +87,7 @@ module.exports = class SurveysController extends Controller {
 
             resultado[i].kpiSurvey = []
             for (let j = 0; j < ks.length; j++) {
-                const k = {
+                let k = {
                     type: ks[j].type,
                     kpi: {}
                 }
