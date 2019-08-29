@@ -258,15 +258,15 @@ module.exports = class Controller {
         try {
             await this.inicio(req, res, `buscando ${this.nomeSingular}...`)
 
-            const resultado = (await this.gerarBusca({
-                query: {
-                    id: {
-                        $eq: req.params.id
-                    }
-                }
-            }, res))[0]
+            let query = req.query
+            query.id = {
+                $eq: req.params.id
+            }
 
-            if(resultado === undefined){
+
+            const resultado = (await this.gerarBusca({ query }, res))[0]
+
+            if (resultado === undefined) {
                 res.status(404).json(await this.formatError("id", req.params.id, "O objeto não foi achado.", "params"))
                 throw new Error("Validation Errors.")
             }
