@@ -1,7 +1,6 @@
 const Controller = require("./Controller")
-const DAO = require("../DAO")
 const _ = require("lodash")
-
+const DAO = require("../DAO")
 module.exports = class KpiSurveyController extends Controller {
     constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas) {
         super(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas)
@@ -35,8 +34,12 @@ module.exports = class KpiSurveyController extends Controller {
                             $eq: buff
                         }
                     }
+
+                    const dbO = (await this.DAOsSchema[cck].get(query))[0]
+
                     const name = cck.slice(0, -2)
-                    o[name] = (await this.DAOsSchema[cck].get(query))[0]
+                    o[name] = await this.prepareResponseJSON(dbO)
+
                 } else {
                     o[cck] = buff
                 }

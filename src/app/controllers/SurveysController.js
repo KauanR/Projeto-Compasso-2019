@@ -1,5 +1,4 @@
 const OneToManyController = require("./OneToManyController")
-
 const KpiSurveyController = require("./KpiSurveyController")
 
 module.exports = class SurveysController extends OneToManyController {
