@@ -1,8 +1,6 @@
-const Controller = require("./Controller")
+const ManyToManyController = require("./ManyToManyController")
 
-const _ = require("lodash")
-
-module.exports = class KpiSurveyController extends Controller {
+module.exports = class KpiSurveyController extends ManyToManyController {
     constructor() {
         super("kpi-survey", "kpi-surveys", "kpi_survey", {
             grupo: {
@@ -25,23 +23,5 @@ module.exports = class KpiSurveyController extends Controller {
                 fk: "kpis"
             }
         })
-    }
-
-    
-    async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {
-        let o = await super.gerarJSON(req, res, location, attrs, obligatory, allObligatory)
-
-        const re = (await this.DAO.get({
-            survey_id: { $eq: o.survey_id },
-            kpi_id: { $eq: o.kpi_id },
-            grupo: { $eq: o.grupo }
-        }))[0]
-
-        if(re !== undefined){
-            res.status(400).json(await this.formatError("[surveyId, kpiId, grupo]", [o.survey_id, o.kpi_id, o.grupo], "A combinação de atributos já está cadastrada.", "body"))
-            throw new Error("Validation Errors.")
-        }
-
-        return o
     }
 }

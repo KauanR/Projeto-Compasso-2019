@@ -1,7 +1,6 @@
-const Controller = require("./Controller")
-const _ = require("lodash")
+const ManyToManyController = require("./ManyToManyController")
 
-module.exports = class PartyRelationships extends Controller {
+module.exports = class PartyRelationships extends ManyToManyController {
     constructor() {
         super("party-relationship", "party-relationships", "party_relationships", {
             type: {
@@ -24,22 +23,5 @@ module.exports = class PartyRelationships extends Controller {
                 fk: "parties"
             }
         })
-    }
-
-    async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {
-        let o = await super.gerarJSON(req, res, location, attrs, obligatory, allObligatory)
-
-        const re = (await this.DAO.get({
-            source_party_id: { $eq: o.source_party_id },
-            target_party_id: { $eq: o.target_party_id },
-            type: { $eq: o.type }
-        }))[0]
-
-        if (re !== undefined) {
-            res.status(400).json(await this.formatError("[sourcePartyId, targetPartyId, type]", [o.source_party_id, o.target_party_id, o.type], "A combinação de atributos já está cadastrada.", "body"))
-            throw new Error("Validation Errors.")
-        }
-
-        return o
     }
 }
