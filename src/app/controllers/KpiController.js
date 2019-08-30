@@ -49,7 +49,7 @@ module.exports = class KpiController extends OneToManyController {
                 errorMessage: "O valor de name deve ser uma string e deve ter entre 1 e 255 caractéres."
             }
         }, false, {
-            kpiSurveys: {
+            surveys: {
                 controller: new KpiSurveyController(),
                 fkToThis: "kpiId"
             }

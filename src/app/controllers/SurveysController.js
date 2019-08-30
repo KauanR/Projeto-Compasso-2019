@@ -38,7 +38,7 @@ module.exports = class SurveysController extends OneToManyController {
                 errorMessage: "O valor de party_type deve ser uma string e deve ter entre 1 e 50 caractéres."
             }
         }, false, {
-            kpiSurveys: {
+            kpis: {
                 controller: new KpiSurveyController(),
                 fkToThis: "surveyId"
             }

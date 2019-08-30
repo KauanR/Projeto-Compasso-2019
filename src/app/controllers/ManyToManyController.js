@@ -9,10 +9,10 @@ module.exports = class KpiSurveyController extends Controller {
         this.DAOsSchema = this.gerarDAOsSchema()
     }
 
-    gerarDAOsSchema(){
+    gerarDAOsSchema() {
         let o = {}
         const fkKeys = Object.keys(this.fkSchema)
-        for(let i = 0; i < fkKeys.length; i++){
+        for (let i = 0; i < fkKeys.length; i++) {
             const k = fkKeys[i]
             o[k] = new DAO(this.fkSchema[k])
         }
@@ -30,11 +30,13 @@ module.exports = class KpiSurveyController extends Controller {
                 const buff = o[k]
                 delete o[k]
                 if (this.DAOsSchema[cck] !== undefined) {
-                    let query = {}
-                    query[k] = {
-                        $eq: o[cck]
+                    let query = {
+                        id: {
+                            $eq: buff
+                        }
                     }
-                    o[cck] = await this.DAOsSchema.get(query)
+                    const name = cck.slice(0, -2)
+                    o[name] = (await this.DAOsSchema[cck].get(query))[0]
                 } else {
                     o[cck] = buff
                 }

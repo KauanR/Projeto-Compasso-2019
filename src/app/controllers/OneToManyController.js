@@ -44,8 +44,9 @@ module.exports = class PartyController extends Controller {
             this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
-                    $eq: req.params[fk]
+                    $eq: req.params[fk],
                 }
+                slaveQuery.except = fk
                 slaveController.busca({
                     id: req.id,
                     query: slaveQuery
@@ -99,7 +100,8 @@ module.exports = class PartyController extends Controller {
             for (let j = 0; j < vsKeys.length; j++) {
                 const k = vsKeys[j]
                 if (vs[k].in.includes("body") && k !== fk) {
-                    r[`${name}.*.${k}`] = vs[k]
+                    r[`${name}.*.${k}`] = {}
+                    Object.assign(r[`${name}.*.${k}`], vs[k])
                 }
             }
             r[name] = {
@@ -119,7 +121,8 @@ module.exports = class PartyController extends Controller {
                 },
                 errorMessage: `O valor de ${name} deve ser um array e deve ter pelo menos 1 elemento.`
             }
-            r[fk] = this.validationSchema.id
+            r[fk] = {}
+            Object.assign(r[fk], this.validationSchema.id)
 
             Object.assign(this.validationSchema, r)
         }
@@ -180,6 +183,7 @@ module.exports = class PartyController extends Controller {
                 querySlave[fk] = {
                     $eq: resultado[i].id
                 }
+
                 resultado[i][name] = await this.controllersSchema[name].controller.gerarBusca({
                     query: querySlave
                 }, res)
