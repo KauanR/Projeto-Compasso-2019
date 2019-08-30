@@ -2,7 +2,7 @@ const ManyToManyController = require("./ManyToManyController")
 
 module.exports = class KpiSurveyController extends ManyToManyController {
     constructor() {
-        super("kpi-survey", "kpi-surveys", "kpi_survey", {
+        super("kpi-survey", "kpis-surveys", "kpi_survey", {
             grupo: {
                 isString: true,
                 isLength: {
