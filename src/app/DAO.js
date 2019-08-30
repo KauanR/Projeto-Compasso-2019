@@ -100,7 +100,7 @@ module.exports = class DAO {
                 }
             }
             
-            if(sql.length > 0){
+            if(sqls.length > 0){
                 sqlWhere = ` WHERE ${sqls.join(" AND ")}`
             }
 

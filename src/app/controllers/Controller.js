@@ -308,7 +308,6 @@ module.exports = class Controller {
         const query = await this.gerarQuery(req, res)
         const exceptBuff = query.except
         delete query.except
-
         let resultado = await this.DAO.get(query)
         for (let i = 0; i < resultado.length; i++) {
             resultado[i] = await this.prepareResponseJSON(resultado[i], exceptBuff)
@@ -545,12 +544,6 @@ module.exports = class Controller {
                     delete o[_.snakeCase(attr)]
                 }
             }
-        }
-
-        if (Object.keys(o).length === 0) {
-            res.status(400).json(await this.formatError(undefined, undefined, `O request query está vazio ou não possue algum atributo válido.`))
-
-            throw new Error("Empty object.")
         }
 
         return o
