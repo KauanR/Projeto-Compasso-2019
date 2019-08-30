@@ -36,4 +36,8 @@ const KpiSurveyController = require("../app/controllers/KpiSurveyController")
 const kpiSurveyController = new KpiSurveyController()
 app.use(kpiSurveyController.router)
 
+const SurveyItemsController = require("../app/controllers/SurveyItemsController")
+const surveyItemsController = new SurveyItemsController()
+app.use(surveyItemsController.router)
+
 module.exports = app
