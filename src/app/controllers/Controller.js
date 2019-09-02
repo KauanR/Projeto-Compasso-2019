@@ -45,7 +45,7 @@ module.exports = class Controller {
     }
 
     gerarValidationSchema(validationSchema) {
-        this.validationSchema = JSON.parse(JSON.stringify(validationSchema))
+        Object.assign(this.validationSchema, validationSchema)
 
         const keys = Object.keys(this.validationSchema)
         keys.push("id")
@@ -268,7 +268,16 @@ module.exports = class Controller {
 
             const resultado = await this.gerarBusca(req, res)
 
-            res.status(200).json(resultado)
+            if(resultado.length === 0){
+                res.status(404).json({
+                    errors: [
+                        await this.formatError(undefined, req.query, "Objeto não encontrado.", "query")
+                    ]
+                })
+            }
+            else {
+                res.status(200).json(resultado)
+            }
 
             this.fim(req, res)
         } catch (error) {
@@ -291,10 +300,15 @@ module.exports = class Controller {
             }, res))[0]
             
             if(resultado === undefined){
-                resultado = {}
+                res.status(404).json({
+                    errors: [
+                        await this.formatError("id", req.params.id, "Objeto não encontrado.", "params")
+                    ]
+                })
             }
-
-            res.status(200).json(resultado)
+            else {
+                res.status(200).json(resultado)
+            }
 
             this.fim(req, res)
         } catch (error) {
@@ -319,6 +333,7 @@ module.exports = class Controller {
             await this.inicio(req, res, `deletando ${this.nomePlural}...`)
             
             const resultado = await this.gerarDelecao(req, res)
+
             res.status(202).json(resultado)
 
             this.fim(req, res)
@@ -340,6 +355,7 @@ module.exports = class Controller {
             const resultado = await this.gerarDelecao({
                 query
             }, res)
+
             res.status(202).json(resultado)
 
             this.fim(req, res)
@@ -359,6 +375,7 @@ module.exports = class Controller {
             await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
 
             const resultado = await this.gerarAtualizacao(req, res)
+
             res.status(202).json(resultado)
 
             this.fim(req, res)
@@ -379,6 +396,7 @@ module.exports = class Controller {
             req.query = query
 
             const resultado = await this.gerarAtualizacao(req, res)
+
             res.status(202).json(resultado)
 
             this.fim(req, res)
@@ -552,7 +570,6 @@ module.exports = class Controller {
     }
 
     async errorHandler(erro, req, res) {
-        console.log(erro)
         const ok = erro.message.includes("Validation Errors.") || erro.message.includes("Empty object.") || erro.message.includes("Not Null error.")
         if (!ok) {
             if (erro.errno === 1452) {
@@ -564,6 +581,7 @@ module.exports = class Controller {
                     errors: [await this.formatError(undefined, undefined, "Erro no servidor.")]
                 })
             }
+            console.log(erro)
         }
         this.fim(req, res)
     }
