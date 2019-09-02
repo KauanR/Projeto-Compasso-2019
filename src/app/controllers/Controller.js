@@ -286,9 +286,13 @@ module.exports = class Controller {
                 }
             }
 
-            const resultado = (await this.gerarBusca({
+            let resultado = (await this.gerarBusca({
                 query
             }, res))[0]
+            
+            if(resultado === undefined){
+                resultado = {}
+            }
 
             res.status(200).json(resultado)
 
