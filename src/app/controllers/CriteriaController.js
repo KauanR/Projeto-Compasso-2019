@@ -16,7 +16,7 @@ module.exports = class CriteriaController extends Controller {
             },
             kpiId: {
                 notNull: true,
-                fk: "kpis"
+                fk: "kpis/kpi"
             },
             type: {
                 isString: true,

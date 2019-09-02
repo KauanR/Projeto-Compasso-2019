@@ -434,7 +434,7 @@ module.exports = class Controller {
                     o[nomeLink].id = buff
                     o[nomeLink].link = {
                         rel: "self",
-                        href: `/${this.fkSchema[cck]}?id[$eq]=${buff}`,
+                        href: `/${this.fkSchema[cck]}/${buff}`,
                         type: "GET"
                     }
                 }

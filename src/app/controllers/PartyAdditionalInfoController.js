@@ -27,7 +27,7 @@ module.exports = class PartyAdditionalInfoController extends Controller {
             },
             partyId: {
                 notNull: true,
-                fk: "parties"
+                fk: "parties/party"
             }
         })
     }
