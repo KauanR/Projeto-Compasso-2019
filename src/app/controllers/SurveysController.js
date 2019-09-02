@@ -54,14 +54,14 @@ module.exports = class SurveysController extends OneToManyController {
         for (let i = 0; i < resultado.length; i++) {
 
             for (let j = 0; j < resultado[i].kpisSurveys.length; j++) {
-                resultado[i].kpisSurveys[j].kpi = await this.kpiController.gerarBusca({
+                resultado[i].kpisSurveys[j].kpi = (await this.kpiController.gerarBusca({
                     query: {
                         id: {
                             $eq: resultado[i].kpisSurveys[j].kpi.id
                         },
                         except: "kpisSurveys"
                     }
-                }, res)
+                }, res))[0]
             }
 
         }
