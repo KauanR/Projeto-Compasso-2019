@@ -8,7 +8,7 @@ module.exports = class SurveyItemsController extends Controller {
                 notNull: true,
                 errorMessage: "O date deve ser uma data no formato ISO8601 (AAAA-MM-DD)."
             },
-            party_id: {
+            partyId: {
                 isInt: {
                     options: {
                         min: 1
@@ -17,7 +17,7 @@ module.exports = class SurveyItemsController extends Controller {
                 notNull: true,
                 errorMessage: "O party_id deve ser inteiro maior que 0."
             },
-            criteria_id: {
+            criteriaId: {
                 isInt: {
                     options: {
                         min: 1
@@ -26,7 +26,7 @@ module.exports = class SurveyItemsController extends Controller {
                 notNull: true,
                 errorMessage: "O criteria_id deve ser inteiro maior que 0."
             },
-            criteria_kpi_id: {
+            criteriaKpiId: {
                 isInt: {
                     options: {
                         min: 1
