@@ -1,5 +1,6 @@
 const OneToManyController = require("./OneToManyController")
 const KpiSurveyController = require("./KpiSurveyController")
+const KpiController = require("./KpiController")
 
 module.exports = class SurveysController extends OneToManyController {
     constructor() {
@@ -37,11 +38,36 @@ module.exports = class SurveysController extends OneToManyController {
                 errorMessage: "O valor de party_type deve ser uma string e deve ter entre 1 e 50 caractéres."
             }
         }, false, {
-            kpis: {
+            kpisSurveys: {
                 controller: new KpiSurveyController(),
                 fkToThis: "surveyId"
             }
         })
+
+        this.kpiController = new KpiController()
+
     }
+
+    async gerarBusca(req, res) {
+        let resultado = await super.gerarBusca(req, res)
+
+        for (let i = 0; i < resultado.length; i++) {
+
+            for (let j = 0; j < resultado[i].kpisSurveys.length; j++) {
+                resultado[i].kpisSurveys[j].kpi = await this.kpiController.gerarBusca({
+                    query: {
+                        id: {
+                            $eq: resultado[i].kpisSurveys[j].kpi.id
+                        },
+                        except: "kpisSurveys"
+                    }
+                }, res)
+            }
+
+        }
+
+        return resultado
+    }
+
 
 }

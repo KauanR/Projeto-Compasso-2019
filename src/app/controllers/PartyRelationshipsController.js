@@ -1,6 +1,6 @@
-const ManyToManyController = require("./ManyToManyController")
+const UniqueCombinationController = require("./UniqueCombinationController")
 
-module.exports = class PartyRelationships extends ManyToManyController {
+module.exports = class PartyRelationships extends UniqueCombinationController {
     constructor() {
         super("party-relationship", "party-relationships", "party_relationships", {
             type: {

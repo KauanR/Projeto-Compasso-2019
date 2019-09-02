@@ -1,6 +1,6 @@
-const UniqueCombination = require("./UniqueCombination")
+const UniqueCombinationController = require("./UniqueCombinationController")
 
-module.exports = class KpiSurveyController extends UniqueCombination {
+module.exports = class KpiSurveyController extends UniqueCombinationController {
     constructor() {
         super("kpi-survey", "kpi-surveys", "kpi_survey", {
             grupo: {

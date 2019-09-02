@@ -423,16 +423,19 @@ module.exports = class Controller {
             if (except === undefined || !except.includes(cck)) {
                 const buff = o[k]
                 delete o[k]
-                o[cck] = buff
+                
                 if (this.fkSchema[cck] !== undefined) {
                     let nomeLink = cck.slice(0, -2)
                     o[nomeLink] = {}
-                    o.id = o[cck]
-                    o.link = {
+                    o[nomeLink].id = buff
+                    o[nomeLink].link = {
                         rel: "self",
-                        href: `/${this.fkSchema[cck]}?id[$eq]=${o[cck]}`,
+                        href: `/${this.fkSchema[cck]}?id[$eq]=${buff}`,
                         type: "GET"
                     }
+                }
+                else{
+                    o[cck] = buff
                 }
             } else {
                 delete o[k]
@@ -546,7 +549,7 @@ module.exports = class Controller {
 
     async errorHandler(erro, req, res) {
         console.log(erro)
-        const ok = erro.message.includes("Validation Errors.") || erro.message.includes("Empty object.") || erro.message.includes("Not Null error.") || erro.message.includes("Not Found error.")
+        const ok = erro.message.includes("Validation Errors.") || erro.message.includes("Empty object.") || erro.message.includes("Not Null error.")
         if (!ok) {
             if (erro.errno === 1452) {
                 res.status(404).json({
@@ -581,14 +584,7 @@ module.exports = class Controller {
         }
     }
 
-    async fim(req, res, resultado) {
-        if(resultado === undefined || (resultado.length && resultado.length === 0) || (resultado.affectedRows && affectedRows === 0)){
-            res.status(404).json(await this.formatError(undefined, undefined, `Não foi encontrada uma linha.`))
-            throw new Error("Not Found error.")
-        }
-
-        res.status(202).json(resultado)
-
+    async fim(req, res) {
         res.end()
         console.log(`request id: ${req.id} -> fim`)
     }
