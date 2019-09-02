@@ -48,4 +48,26 @@ module.exports = class PartyController extends OneToManyController {
             }
         })
     }
+
+    async gerarBusca(req, res) {
+        let resultado = await super.gerarBusca(req, res)
+
+        for (let i = 0; i < resultado.length; i++) {
+
+            for (let j = 0; j < resultado[i].relationships.length; j++) {
+                resultado[i].relationships[j].targetParty = (await super.gerarBusca({
+                    query: {
+                        id: {
+                            $eq: resultado[i].relationships[j].targetParty.id
+                        },
+                        except: "relationships, additionalInfos"
+                    }
+                }, res))[0]
+            }
+
+        }
+
+        return resultado
+    }
+
 }

@@ -286,15 +286,13 @@ module.exports = class Controller {
                 }
             }
 
-            const resultado = (await this.gerarBusca({
+            let resultado = (await this.gerarBusca({
                 query
             }, res))[0]
-
-            if (resultado === undefined) {
-                res.status(404).json(await this.formatError("id", req.params.id, `Não foi encontrada uma linha com esse id.`, "params"))
-                throw new Error("Validation Errors.")
+            
+            if(resultado === undefined){
+                resultado = {}
             }
-
 
             res.status(200).json(resultado)
 
@@ -429,15 +427,19 @@ module.exports = class Controller {
             if (except === undefined || !except.includes(cck)) {
                 const buff = o[k]
                 delete o[k]
-                o[cck] = buff
+                
                 if (this.fkSchema[cck] !== undefined) {
-                    let nomeLink = k.slice(0, -3)
-                    nomeLink = `${_.camelCase(k.slice(0, -3))}Link`
-                    o[nomeLink] = {
+                    let nomeLink = cck.slice(0, -2)
+                    o[nomeLink] = {}
+                    o[nomeLink].id = buff
+                    o[nomeLink].link = {
                         rel: "self",
-                        href: `/${this.fkSchema[cck]}?id[$eq]=${o[cck]}`,
+                        href: `/${this.fkSchema[cck]}/${buff}`,
                         type: "GET"
                     }
+                }
+                else{
+                    o[cck] = buff
                 }
             } else {
                 delete o[k]

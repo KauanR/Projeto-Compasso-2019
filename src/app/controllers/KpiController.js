@@ -1,6 +1,8 @@
-const Controller = require("./Controller")
+const OneToManyController = require("./OneToManyController")
+const KpiSurveyController = require("./KpiSurveyController")
+const CriteriaController = require("./CriteriaController")
 
-module.exports = class KpiController extends Controller {
+module.exports = class KpiController extends OneToManyController {
     constructor() {
         super("kpi", "kpis", "kpis", {
             category: {
@@ -45,6 +47,15 @@ module.exports = class KpiController extends Controller {
                 },
                 notNull: true,
                 errorMessage: "O valor de name deve ser uma string e deve ter entre 1 e 255 caractéres."
+            }
+        }, false, {
+            KpisSurveys: {
+                controller: new KpiSurveyController(),
+                fkToThis: "kpiId"
+            },
+            criterias:{
+                controller: new CriteriaController(),
+                fkToThis: "kpiId"
             }
         })
 
