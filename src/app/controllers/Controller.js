@@ -290,12 +290,6 @@ module.exports = class Controller {
                 query
             }, res))[0]
 
-            if (resultado === undefined) {
-                res.status(404).json(await this.formatError("id", req.params.id, `Não foi encontrada uma linha com esse id.`, "params"))
-                throw new Error("Validation Errors.")
-            }
-
-
             res.status(200).json(resultado)
 
             this.fim(req, res)
@@ -552,7 +546,7 @@ module.exports = class Controller {
 
     async errorHandler(erro, req, res) {
         console.log(erro)
-        const ok = erro.message.includes("Validation Errors.") || erro.message.includes("Empty object.") || erro.message.includes("Not Null error.")
+        const ok = erro.message.includes("Validation Errors.") || erro.message.includes("Empty object.") || erro.message.includes("Not Null error.") || erro.message.includes("Not Found error.")
         if (!ok) {
             if (erro.errno === 1452) {
                 res.status(404).json({
@@ -587,7 +581,14 @@ module.exports = class Controller {
         }
     }
 
-    async fim(req, res) {
+    async fim(req, res, resultado) {
+        if(resultado === undefined || (resultado.length && resultado.length === 0) || (resultado.affectedRows && affectedRows === 0)){
+            res.status(404).json(await this.formatError(undefined, undefined, `Não foi encontrada uma linha.`))
+            throw new Error("Not Found error.")
+        }
+
+        res.status(202).json(resultado)
+
         res.end()
         console.log(`request id: ${req.id} -> fim`)
     }
