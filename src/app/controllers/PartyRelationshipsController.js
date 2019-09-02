@@ -16,11 +16,11 @@ module.exports = class PartyRelationships extends ManyToManyController {
             },
             sourcePartyId: {
                 notNull: true,
-                fk: "party"
+                fk: "parties"
             },
             targetPartyId: {
                 notNull: true,
-                fk: "party"
+                fk: "parties"
             }
         })
     }

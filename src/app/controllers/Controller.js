@@ -431,9 +431,10 @@ module.exports = class Controller {
                 delete o[k]
                 o[cck] = buff
                 if (this.fkSchema[cck] !== undefined) {
-                    let nomeLink = k.slice(0, -3)
-                    nomeLink = `${_.camelCase(k.slice(0, -3))}Link`
-                    o[nomeLink] = {
+                    let nomeLink = cck.slice(0, -2)
+                    o[nomeLink] = {}
+                    o.id = o[cck]
+                    o.link = {
                         rel: "self",
                         href: `/${this.fkSchema[cck]}?id[$eq]=${o[cck]}`,
                         type: "GET"

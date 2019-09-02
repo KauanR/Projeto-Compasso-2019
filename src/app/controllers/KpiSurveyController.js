@@ -1,8 +1,8 @@
-const ManyToManyController = require("./ManyToManyController")
+const UniqueCombination = require("./UniqueCombination")
 
-module.exports = class KpiSurveyController extends ManyToManyController {
+module.exports = class KpiSurveyController extends UniqueCombination {
     constructor() {
-        super("kpi-survey", "kpis-surveys", "kpi_survey", {
+        super("kpi-survey", "kpi-surveys", "kpi_survey", {
             grupo: {
                 isString: true,
                 isLength: {
