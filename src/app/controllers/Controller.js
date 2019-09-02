@@ -32,16 +32,17 @@ module.exports = class Controller {
     }
 
     gerarTodasRotas() {
-        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.busca(req, res))
-        this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.buscaUm(req, res))
+        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.busca(req, res))
+        this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), async (req, res) => this.buscaUm(req, res))
 
-        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.deleta(req, res))
-        this.router.delete(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.deletaUm(req, res))
+        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.deleta(req, res))
+        this.router.delete(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), async (req, res) => this.deletaUm(req, res))
 
-        this.router.patch(`/${this.nomePlural}`, checkSchema(this.validationSchema), (req, res) => this.atualiza(req, res))
-        this.router.patch(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), (req, res) => this.atualizaUm(req, res))
-        
-        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), (req, res) => this.adicionaUm(req, res))
+        this.router.patch(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.atualiza(req, res))
+        this.router.patch(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), async (req, res) => this.atualizaUm(req, res))
+
+        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.adiciona(req, res))
+        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), async (req, res) => this.adicionaUm(req, res))
     }
 
     gerarValidationSchema(validationSchema) {
@@ -93,6 +94,27 @@ module.exports = class Controller {
                 }
 
                 this.validationSchema[k].in = ["body"]
+
+                this.validationSchema.list = {
+                    in: ["body"],
+                    isInt: {
+                        options: {
+                            min: 1
+                        }
+                    },
+                    custom: {
+                        options: value => value instanceof Array
+                    },
+                    optional: {
+                        options: {
+                            nullable: true
+                        }
+                    },
+                    errorMessage: "O valor de list deve ser um array."
+                }
+
+                this.validationSchema[`list.*.${k}`] = {}
+                Object.assign(this.validationSchema[`list.*.${k}`], this.validationSchema[k])
 
                 this.validationSchema[`${k}.$eq`] = {}
                 Object.assign(this.validationSchema[`${k}.$eq`], this.validationSchema[k])
@@ -268,15 +290,16 @@ module.exports = class Controller {
 
             const resultado = await this.gerarBusca(req, res)
 
-            if(resultado.length === 0){
+            if (resultado.length === 0) {
                 res.status(404).json({
                     errors: [
                         await this.formatError(undefined, req.query, "Objeto não encontrado.", "query")
                     ]
                 })
-            }
-            else {
-                res.status(200).json(resultado)
+            } else {
+                res.status(200).json({
+                    list: resultado
+                })
             }
 
             this.fim(req, res)
@@ -298,15 +321,14 @@ module.exports = class Controller {
             let resultado = (await this.gerarBusca({
                 query
             }, res))[0]
-            
-            if(resultado === undefined){
+
+            if (resultado === undefined) {
                 res.status(404).json({
                     errors: [
                         await this.formatError("id", req.params.id, "Objeto não encontrado.", "params")
                     ]
                 })
-            }
-            else {
+            } else {
                 res.status(200).json(resultado)
             }
 
@@ -331,7 +353,7 @@ module.exports = class Controller {
     async deleta(req, res) {
         try {
             await this.inicio(req, res, `deletando ${this.nomePlural}...`)
-            
+
             const resultado = await this.gerarDelecao(req, res)
 
             res.status(202).json(resultado)
@@ -430,6 +452,28 @@ module.exports = class Controller {
         }
     }
 
+    async adiciona(req, res) {
+        try {
+            await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
+
+            let resultado = []
+            for(let i = 0; i < req.body.list.length; i++){
+                const r = await this.gerarAdicao({
+                    body: req.body.list[i]
+                }, res)
+                resultado.push(r)
+            }
+
+            res.status(201).json({
+                list: resultado
+            })
+
+            this.fim(req, res)
+        } catch (error) {
+            this.errorHandler(error, req, res)
+        }
+    }
+
     async gerarAdicao(req, res) {
         const body = await this.gerarBodyAdd(req, res)
         return this.DAO.add(body)
@@ -445,7 +489,7 @@ module.exports = class Controller {
             if (except === undefined || !except.includes(cck)) {
                 const buff = o[k]
                 delete o[k]
-                
+
                 if (this.fkSchema[cck] !== undefined) {
                     let nomeLink = cck.slice(0, -2)
                     o[nomeLink] = {}
@@ -455,8 +499,7 @@ module.exports = class Controller {
                         href: `/${this.fkSchema[cck]}/${buff}`,
                         type: "GET"
                     }
-                }
-                else{
+                } else {
                     o[cck] = buff
                 }
             } else {

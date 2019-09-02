@@ -41,7 +41,7 @@ module.exports = class PartyController extends Controller {
             const slaveController = this.controllersSchema[name].controller
             const fk = this.controllersSchema[name].fkToThis
 
-            this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), (req, res) => {
+            this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
                     $eq: req.params[fk],
@@ -53,21 +53,20 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.delete(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), (req, res) => {
+            this.router.delete(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
-                    id: req.id,
                     $eq: req.params[fk]
                 }
                 slaveController.deleta({
+                    id: req.id,
                     query: slaveQuery
                 }, res)
             })
 
-            this.router.patch(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), (req, res) => {
+            this.router.patch(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
-                    id: req.id,
                     $eq: req.params[fk]
                 }
                 slaveController.atualiza({
@@ -77,7 +76,17 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.post(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}/${slaveController.nomeSingular}`, checkSchema(slaveController.validationSchema), (req, res) => {
+            this.router.post(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+                req.body.list = req.body.list.map(i => {
+                    let buff = {}
+                    Object.assign(buff, i)
+                    buff[fk] = req.params[fk]
+                    return buff
+                })
+                slaveController.adicionaUm(req, res)
+            })
+
+            this.router.post(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}/${slaveController.nomeSingular}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveBody = req.body
                 slaveBody[fk] = req.params[fk]
                 slaveController.adicionaUm({
@@ -99,7 +108,7 @@ module.exports = class PartyController extends Controller {
             const vsKeys = Object.keys(vs)
             for (let j = 0; j < vsKeys.length; j++) {
                 const k = vsKeys[j]
-                if (vs[k].in.includes("body") && k !== fk) {
+                if ( vs[k].in.includes("body") && k !== fk && k !== "list" && !( k.includes("list.*") ) ) {
                     r[`${name}.*.${k}`] = {}
                     Object.assign(r[`${name}.*.${k}`], vs[k])
                 }
