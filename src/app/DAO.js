@@ -35,7 +35,7 @@ module.exports = class DAO {
             delete queryCopy.sort
         }
 
-        let sqlLimit = "LIMIT 100"
+        let sqlLimit = ""
         if (queryCopy.limit !== undefined && queryCopy.limit.$count !== undefined) {
             valuesBuff.push(queryCopy.limit.$count)
             sqlLimit = "LIMIT ?"
@@ -83,8 +83,6 @@ module.exports = class DAO {
         if (limitBuff !== undefined && limitBuff.$count !== undefined) {
             q.sql = `${q.sql} LIMIT ?`
             q.values.push(limitBuff.$count)
-        } else {
-            q.sql = `${q.sql} LIMIT 100`
         }
 
         return this.run(q.sql, q.values)
