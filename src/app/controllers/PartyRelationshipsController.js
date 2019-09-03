@@ -16,11 +16,11 @@ module.exports = class PartyRelationships extends UniqueCombinationController {
             },
             sourcePartyId: {
                 notNull: true,
-                fk: "parties/party"
+                fk: "party"
             },
             targetPartyId: {
                 notNull: true,
-                fk: "parties/party"
+                fk: "party"
             }
         })
     }

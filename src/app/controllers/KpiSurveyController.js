@@ -16,11 +16,11 @@ module.exports = class KpiSurveyController extends UniqueCombinationController {
             },
             surveyId: {
                 notNull: true,
-                fk: "surveys/survey"
+                fk: "surveys"
             },
             kpiId: {
                 notNull: true,
-                fk: "kpis/kpi"
+                fk: "kpis"
             }
         })
     }

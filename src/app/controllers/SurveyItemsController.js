@@ -11,15 +11,15 @@ module.exports = class SurveyItemsController extends Controller {
             },
             partyId: {
                 notNull: true,
-                fk: "parties/party"
+                fk: "party"
             },
             criteriaId: {
                 notNull: true,
-                fk: "criterias/criteria"
+                fk: "criteria"
             },
             criteriaKpiId: {
                 notNull: true,
-                fk: "kpis/kpi"
+                fk: "kpis"
             }
         })
 
