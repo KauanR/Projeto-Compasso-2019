@@ -39,7 +39,13 @@
         "description" : "Busca todas as kpis cadastradas no banco de dados",
         "operationId" : "getKpis",
         "produces" : [ "application/json" ],
-        "parameters" : [ ],
+        "parameters" : [ {
+          "name" : "limit[$count]",
+          "in" : "query",
+          "description" : "Quantas linhas vão ser buscadas na tabela.",
+          "required" : true,
+          "type" : "string"
+        } ],
         "responses" : {
           "200" : {
             "description" : "busca feita com sucesso"
@@ -47,14 +53,8 @@
           "400" : {
             "description" : "problema na busca"
           }
-        },
-        "externalDocs" : {
-          "description" : "Sobre como utilizar queries diretamente na url, consulte",
-          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
         }
-      }
-    },
-    "/kpis/kpi" : {
+      },
       "post" : {
         "tags" : [ "kpis" ],
         "summary" : "Adiciona uma kpi",
@@ -67,7 +67,7 @@
           "description" : "Insira os dados da kpi",
           "required" : true,
           "schema" : {
-            "$ref" : "#/definitions/kpi"
+            "$ref" : "#/definitions/kpis"
           }
         } ],
         "responses" : {
@@ -80,7 +80,7 @@
         }
       }
     },
-    "/kpis/kpi/{id}" : {
+    "/kpis/{id}" : {
       "get" : {
         "tags" : [ "kpis" ],
         "summary" : "Busca uma kpi pelo id",
@@ -122,10 +122,6 @@
           "400" : {
             "description" : "Problema ao remover"
           }
-        },
-        "externalDocs" : {
-          "description" : "Sobre como utilizar queries diretamente na url, consulte",
-          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
         }
       },
       "patch" : {
@@ -148,16 +144,15 @@
           "400" : {
             "description" : "Problema ao atualizar"
           }
-        },
-        "externalDocs" : {
-          "description" : "Sobre como utilizar queries diretamente na url, consulte",
-          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
         }
       }
     }
   },
   "definitions" : {
-    "kpi" : {
+    "query" : {
+      "type" : "object"
+    },
+    "kpis" : {
       "type" : "object",
       "required" : [ "description", "details", "name" ],
       "properties" : {
@@ -169,15 +164,12 @@
         },
         "details" : {
           "type" : "string"
-        },
-        "data" : {
-          "type" : "string"
         }
       }
     },
     "surveys" : {
       "type" : "object",
-      "required" : [ "description", "name", "party-type" ],
+      "required" : [ "description", "name", "partyType" ],
       "properties" : {
         "name" : {
           "type" : "string"
@@ -185,14 +177,14 @@
         "description" : {
           "type" : "string"
         },
-        "party-type" : {
+        "partyType" : {
           "type" : "string"
         }
       }
     },
     "criteria" : {
       "type" : "object",
-      "required" : [ "description", "type", "value" ],
+      "required" : [ "description", "kpiId", "type", "value" ],
       "properties" : {
         "type" : {
           "type" : "string"
@@ -208,7 +200,7 @@
         }
       }
     },
-    "surveyItems" : {
+    "survey_items" : {
       "type" : "object",
       "required" : [ "criteriaId", "criteriaKpiId", "date", "partyId" ],
       "properties" : {
@@ -229,7 +221,7 @@
     },
     "party" : {
       "type" : "object",
-      "required" : [ "lastAssessment", "name", "observations", "relationships", "type" ],
+      "required" : [ "additionalInfos", "lastAssessment", "name", "observations", "relationships", "type" ],
       "properties" : {
         "name" : {
           "type" : "string"
@@ -244,10 +236,55 @@
         "observations" : {
           "type" : "string"
         },
-        "additionalInfo" : {
+        "additionalInfos" : {
           "type" : "integer"
         },
         "relationships" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "KpiSurvey" : {
+      "type" : "object",
+      "required" : [ "grupo", "kpiId", "surveyId" ],
+      "properties" : {
+        "grupo" : {
+          "type" : "string"
+        },
+        "surveyId" : {
+          "type" : "integer"
+        },
+        "kpiId" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "PartyAdditionalInfo" : {
+      "type" : "object",
+      "required" : [ "info", "partyId", "type" ],
+      "properties" : {
+        "info" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "partyId" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "party_relationships" : {
+      "type" : "object",
+      "required" : [ "sourcePartyId", "targetPartyId", "type" ],
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "sourcePartyId" : {
+          "type" : "integer"
+        },
+        "targetPartyId" : {
           "type" : "integer"
         }
       }
