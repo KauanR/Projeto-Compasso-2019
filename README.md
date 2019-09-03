@@ -181,7 +181,7 @@ Exemplo prático:
 }
 ```
 # Como usar a classe OneToManyController
-Essa classe serve para usar controllers dentro de outros controllers, o objetivo dela é representar a relação one-to-many do banco de dados. Para usar ela é preciso fazer as mesmas coisas que se faz com a classe Controller, mas passando também um controllers schema, o nome de cada atributo no controllers schema vai determinar o nome do atributo do array de JSONs "escravos". Exemplo:
+Essa classe serve para usar controllers dentro de outros controllers, o objetivo dela é representar a relação one-to-many do banco de dados. Para usar ela é preciso fazer as mesmas coisas que se faz com a classe Controller, mas passando também um controllers schema, o nome de cada atributo no controllers schema vai determinar o nome do atributo do array de JSONs "filhos". Exemplo:
 ```Javascript
 module.exports = class KpiController extends OneToManyController {
     constructor() {
@@ -275,7 +275,7 @@ Exemplo de JSOn para adicionar uma kpi:
     ]
 }
 ```
-A validação dos JSONs "escravos" é mesma do Controller "escravo". Não é necessário informar o valor do "fkToThis", no caso do criterias é "kpiId", pois ele é preenchido com o valor que for informado nos params da rota. Exemplos de rotas geradas pelo OneToManyController:
+A validação dos JSONs "filhos" é mesma do Controller "filho". Não é necessário informar o valor do "fkToThis", no caso do criterias é "kpiId", pois ele é preenchido com o valor que for informado nos params da rota. Exemplos de rotas geradas pelo OneToManyController para o controller "filho" CriteriaController:
 ```
 -> "GET /kpis/:id/criterias?type[$eq]=igor": Pega dados das criterias, que tem o kpiId igual ao id dos params, com base na query;
 
@@ -286,5 +286,5 @@ A validação dos JSONs "escravos" é mesma do Controller "escravo". Não é nec
 -> "POST /kpis/:id/criterias/multiple": Adiciona várias linhas para a tabela "criteria" do banco com base no array de JSONs enviado dentro do atributo "list", o "kpiId" é automaticamente preenchido com o id dos params".
 -> "POST /kpis/:id/criterias": Adiciona uma linha para a tabela "criteria" do banco com base no JSON enviado, o "kpiId é automaticamente preenchido com o id dos params, o "kpiId" é automaticamente preenchido com o id dos params".
 ```
-
+A mesma coisa para o controller "filho" KpiSurveyController. O nome da rota do "filho" ("/kpis/:id/${nomeDoEscravo}") é definido pelo atributo nome desse controller "filho".
 
