@@ -111,6 +111,9 @@ module.exports = class PartyController extends Controller {
                 if ( vs[k].in.includes("body") && k !== fk && k !== "list" && !( k.includes("list.*") ) ) {
                     r[`${name}.*.${k}`] = {}
                     Object.assign(r[`${name}.*.${k}`], vs[k])
+
+                    r[`list.*.${name}.*.${k}`] = {}
+                    Object.assign(r[`list.*.${name}.*.${k}`], vs[k])
                 }
             }
             r[name] = {
@@ -137,7 +140,7 @@ module.exports = class PartyController extends Controller {
         }
     }
 
-    async gerarAdicao(req, res) {
+    async gerarAdicao(req, res, addInfo) {
         let resultado = {}
 
         let buff = {}
@@ -148,10 +151,15 @@ module.exports = class PartyController extends Controller {
             delete req.body[name]
         }
 
-        const body = await this.gerarBodyAdd(req, res)
+        const body = await this.gerarBodyAdd(req, res, addInfo)
         const resultMaster = await this.DAO.add(body)
 
         Object.assign(resultado, resultMaster)
+
+        let a = ""
+        if(addInfo !== undefined){
+            a = `${addInfo}.`
+        }
 
         for (let i = 0; i < this.controllersNames.length; i++) {
             const name = this.controllersNames[i]
@@ -164,7 +172,7 @@ module.exports = class PartyController extends Controller {
 
                     slaveResults.push(await this.controllersSchema[name].controller.gerarAdicao({
                         body: buff[name][j]
-                    }, res, `${name}[${j}]`))
+                    }, res, `${a}${name}[${j}]`))
                 }
                 resultado[`${name}Results`] = slaveResults
             }

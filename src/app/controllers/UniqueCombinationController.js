@@ -5,8 +5,8 @@ module.exports = class UniqueCombinationController extends Controller {
         super(tabela, validationSchema, naoGerarTodasRotas)
     }
 
-    async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {
-        let o = await super.gerarJSON(req, res, location, attrs, obligatory, allObligatory)
+    async gerarJSON(req, res, location, attrs, obligatory, allObligatory, addInfo) {
+        let o = await super.gerarJSON(req, res, location, attrs, obligatory, allObligatory, addInfo)
 
         let query = {}
 
@@ -21,7 +21,7 @@ module.exports = class UniqueCombinationController extends Controller {
         const re = (await this.DAO.get(query))[0]
 
         if (re !== undefined) {
-            res.status(400).json(await this.formatError(JSON.stringify(keys), Object.values(o), "A combinação de atributos com os valores informados já está cadastrada.", "body"))
+            res.status(400).json(await this.formatError(keys, Object.values(o), "A combinação de atributos com os valores informados já está cadastrada.", "body"))
             throw new Error("Validation Errors.")
         }
 

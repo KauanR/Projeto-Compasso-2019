@@ -96,7 +96,7 @@ module.exports = class Controller {
 
                 this.validationSchema.list = {
                     in: ["body"],
-                    isInt: {
+                    isLength: {
                         options: {
                             min: 1
                         }
@@ -516,7 +516,7 @@ module.exports = class Controller {
 
         let addInfoDots = ""
         if(addInfo !== undefined){
-            addInfoDots = `${addInfo}: `
+            addInfoDots = `${addInfo}.`
         }
 
         for (let i = 0; i < attrs.length; i++) {
@@ -547,7 +547,7 @@ module.exports = class Controller {
         return o
     }
 
-    async gerarBodyAdd(req, res) {
+    async gerarBodyAdd(req, res, addInfo) {
         return this.gerarJSON(req, res, "body", this.attrs, this.attrsNotNull, true, addInfo)
     }
 
