@@ -97,6 +97,7 @@ Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exe
 -> "PATCH /parties?id[$eq]=1": Atualiza dados com base na query e no JSON enviado;
 -> "PATCH /parties/party/:id": Atualiza dados com base no id e no JSON enviado;
 
+-> "POST /parties": Adiciona várias linhas para a tabela do banco com base nos JSONs enviados dentro do atributo "list".
 -> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
 
