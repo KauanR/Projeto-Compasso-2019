@@ -10,7 +10,7 @@ PORT=6663
 Não bote aspas ao redor do DBPASSWORD. É necessário também rodar o comando "npm install".
 
 # Como usar a classe Controller
-Deve ser informado o nome singular da rota, o nome plural da rota, o nome da tabela do banco de dados e o schema de validação para validar os dados que vão ser registrados nessa tabela, o schema de validação usado é um JSON que contém as validações do do express-validator, documentação: https://express-validator.github.io/docs/schema-validation.html. Para validar atributos que são NOT NULL deve ser colocado no schema de validação um atributo com o nome de "notNull" com o valor "true", exemplo:
+Deve ser informado o nome da tabela do banco de dados e o schema de validação para validar os dados que vão ser registrados nessa tabela, o schema de validação usado é um JSON que contém as validações do do express-validator, documentação: https://express-validator.github.io/docs/schema-validation.html. Para validar atributos que são NOT NULL deve ser colocado no schema de validação um atributo com o nome de "notNull" com o valor "true", exemplo:
 ```javascript
 {
     notNull: true
@@ -22,7 +22,7 @@ const Controller = require("./Controller")
 
 module.exports = class PartyController extends Controller {
     constructor() {
-        super("party", "parties", "party", {
+        super("party", {
             name: {
                 isString: true,
                 isLength: {
@@ -88,17 +88,17 @@ app.use(partyController.router)
 ```
 Novas rotas vão ser criadas usando os nomes em plural e singular da classe. Exemplos:
 ```
--> "GET /parties?id[$eq]=1": Pega dados com base na query;
--> "GET /parties/party/:id: Pega dados com base no id;
+-> "GET /party?id[$eq]=1": Pega dados com base na query;
+-> "GET /party/:id: Pega dados com base no id;
 
--> "DELETE /parties?id[$eq]=1": Apaga dados com base na query;
--> "DELETE /parties/party/:id": Apaga dados com base no id;
+-> "DELETE /party?id[$eq]=1": Apaga dados com base na query;
+-> "DELETE /party/:id": Apaga dados com base no id;
 
--> "PATCH /parties?id[$eq]=1": Atualiza dados com base na query e no JSON enviado;
--> "PATCH /parties/party/:id": Atualiza dados com base no id e no JSON enviado;
+-> "PATCH /party?id[$eq]=1": Atualiza dados com base na query e no JSON enviado;
+-> "PATCH /party/:id": Atualiza dados com base no id e no JSON enviado;
 
--> "POST /parties": Adiciona várias linhas para a tabela do banco com base nos JSONs enviados dentro do atributo "list".
--> "POST /parties/party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
+-> "POST /party/multiple": Adiciona várias linhas para a tabela do banco com base nos JSONs enviados dentro do atributo "list".
+-> "POST /party": Adiciona uma linha para a tabela do banco com base no JSON enviado.
 ```
 
 # Query em JSON
