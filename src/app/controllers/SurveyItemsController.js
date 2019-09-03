@@ -32,13 +32,16 @@ module.exports = class SurveyItemsController extends Controller {
 
             let resultado = undefined
 
-            req.body.date = new Date()
+            let reqCopy = {}
+            Object.assign(reqCopy, req)
 
-            if (req.body.criterias !== undefined && req.body.criterias instanceof Array) {
+            reqCopy.body.date = new Date()
+
+            if (reqCopy.body.criterias !== undefined && reqCopy.body.criterias instanceof Array) {
                 resultado = []
 
-                const criterias = req.body.criterias
-                delete req.body.criterias
+                const criterias = reqCopy.body.criterias
+                delete reqCopy.body.criterias
 
                 for (let i = 0; i < criterias.length; i++) {
                     const criteria = (await this.criteriaController.gerarBusca({
@@ -50,20 +53,20 @@ module.exports = class SurveyItemsController extends Controller {
                         }
                     }, res))[0]
 
-                    req.body.criteriaId = criteria.id
-                    req.body.criteriaKpiId = criteria.kpi.id
+                    reqCopy.body.criteriaId = criteria.id
+                    reqCopy.body.criteriaKpiId = criteria.kpi.id
 
-                    resultado.push(await this.gerarAdicao(req, res, `criterias[${i}]`))
+                    resultado.push(await this.gerarAdicao(reqCopy, res, `criterias[${i}]`))
                 }
 
                 res.status(201).json({results: resultado})
             }
             else {
-                resultado = await this.gerarAdicao(req, res)
+                resultado = await this.gerarAdicao(reqCopy, res)
                 res.status(201).json(resultado)
             }
 
-            this.fim(req, res)
+            this.fim(reqCopy, res)
         } catch (error) {
             this.errorHandler(error, req, res)
         }

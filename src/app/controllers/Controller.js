@@ -414,9 +414,11 @@ module.exports = class Controller {
                     $eq: req.params.id
                 }
             }
-            req.query = query
 
-            const resultado = await this.gerarAtualizacao(req, res)
+            const resultado = await this.gerarAtualizacao({
+                body: req.body,
+                query: query
+            }, res)
 
             res.status(202).json(resultado)
 

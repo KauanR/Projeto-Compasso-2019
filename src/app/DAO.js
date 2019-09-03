@@ -91,7 +91,7 @@ module.exports = class DAO {
 
                         if (libOps[k] === "IN") {
                             values = values.concat(attr[k])
-                            sqls.push(`${attrName} IN (${attr[k].map(v => "?").join(",")})`)
+                            sqls.push(`${attrName} IN (${attr[k].map(() => "?").join(",")})`)
                         } else {
                             values.push(attr[k])
                             sqls.push(`${attrName} ${libOps[k]} ?`)
