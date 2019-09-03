@@ -4,7 +4,7 @@ const CriteriaController = require("./CriteriaController")
 
 module.exports = class KpiController extends OneToManyController {
     constructor() {
-        super("kpi", "kpis", "kpis", {
+        super("kpis", {
             category: {
                 isString: true,
                 isLength: {

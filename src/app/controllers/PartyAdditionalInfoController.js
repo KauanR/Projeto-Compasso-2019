@@ -2,7 +2,7 @@ const Controller = require("./Controller")
 
 module.exports = class PartyAdditionalInfoController extends Controller {
     constructor() {
-        super("party-additional-info", "party-additional-infos", "party_additional_info", {
+        super("party_additional_info", {
             info: {
                 isString: true,
                 isLength: {

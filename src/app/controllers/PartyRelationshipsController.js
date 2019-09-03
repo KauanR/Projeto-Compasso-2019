@@ -2,7 +2,7 @@ const UniqueCombinationController = require("./UniqueCombinationController")
 
 module.exports = class PartyRelationships extends UniqueCombinationController {
     constructor() {
-        super("party-relationship", "party-relationships", "party_relationships", {
+        super("party_relationships", {
             type: {
                 isString: true,
                 isLength: {

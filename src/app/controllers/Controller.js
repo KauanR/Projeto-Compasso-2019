@@ -7,11 +7,10 @@ const {
 
 const _ = require("lodash")
 module.exports = class Controller {
-    constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas) {
+    constructor(tabela, validationSchema, naoGerarTodasRotas) {
         this.router = express.Router()
 
-        this.nomeSingular = nomeSingular
-        this.nomePlural = nomePlural
+        this.nome = _.kebabCase(tabela)
         this.DAO = new DAO(tabela)
 
         this.attrs = []
@@ -32,17 +31,17 @@ module.exports = class Controller {
     }
 
     gerarTodasRotas() {
-        this.router.get(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.busca(req, res))
-        this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), async (req, res) => this.buscaUm(req, res))
+        this.router.get(`/${this.nome}`, checkSchema(this.validationSchema), async (req, res) => this.busca(req, res))
+        this.router.get(`/${this.nome}/:id`, checkSchema(this.validationSchema), async (req, res) => this.buscaUm(req, res))
 
-        this.router.delete(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.deleta(req, res))
-        this.router.delete(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), async (req, res) => this.deletaUm(req, res))
+        this.router.delete(`/${this.nome}`, checkSchema(this.validationSchema), async (req, res) => this.deleta(req, res))
+        this.router.delete(`/${this.nome}/:id`, checkSchema(this.validationSchema), async (req, res) => this.deletaUm(req, res))
 
-        this.router.patch(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.atualiza(req, res))
-        this.router.patch(`/${this.nomePlural}/${this.nomeSingular}/:id`, checkSchema(this.validationSchema), async (req, res) => this.atualizaUm(req, res))
+        this.router.patch(`/${this.nome}`, checkSchema(this.validationSchema), async (req, res) => this.atualiza(req, res))
+        this.router.patch(`/${this.nome}/:id`, checkSchema(this.validationSchema), async (req, res) => this.atualizaUm(req, res))
 
-        this.router.post(`/${this.nomePlural}`, checkSchema(this.validationSchema), async (req, res) => this.adiciona(req, res))
-        this.router.post(`/${this.nomePlural}/${this.nomeSingular}`, checkSchema(this.validationSchema), async (req, res) => this.adicionaUm(req, res))
+        this.router.post(`/${this.nome}/multiple`, checkSchema(this.validationSchema), async (req, res) => this.adiciona(req, res))
+        this.router.post(`/${this.nome}`, checkSchema(this.validationSchema), async (req, res) => this.adicionaUm(req, res))
     }
 
     gerarValidationSchema(validationSchema) {
@@ -286,7 +285,7 @@ module.exports = class Controller {
 
     async busca(req, res) {
         try {
-            await this.inicio(req, res, `buscando ${this.nomePlural}...`)
+            await this.inicio(req, res, `buscando ${this.nome}...`)
 
             const resultado = await this.gerarBusca(req, res)
 
@@ -310,7 +309,7 @@ module.exports = class Controller {
 
     async buscaUm(req, res) {
         try {
-            await this.inicio(req, res, `buscando ${this.nomeSingular} com id = ${req.params.id}...`)
+            await this.inicio(req, res, `buscando ${this.nome} com id = ${req.params.id}...`)
 
             const query = {
                 id: {
@@ -352,7 +351,7 @@ module.exports = class Controller {
 
     async deleta(req, res) {
         try {
-            await this.inicio(req, res, `deletando ${this.nomePlural}...`)
+            await this.inicio(req, res, `deletando ${this.nome}...`)
 
             const resultado = await this.gerarDelecao(req, res)
 
@@ -366,7 +365,7 @@ module.exports = class Controller {
 
     async deletaUm(req, res) {
         try {
-            await this.inicio(req, res, `deletando ${this.nomeSingular} com id = ${req.params.id}...`)
+            await this.inicio(req, res, `deletando ${this.nome} com id = ${req.params.id}...`)
 
             const query = {
                 id: {
@@ -394,7 +393,7 @@ module.exports = class Controller {
 
     async atualiza(req, res) {
         try {
-            await this.inicio(req, res, `atualizando ${this.nomePlural}...`)
+            await this.inicio(req, res, `atualizando ${this.nome}...`)
 
             const resultado = await this.gerarAtualizacao(req, res)
 
@@ -408,7 +407,7 @@ module.exports = class Controller {
 
     async atualizaUm(req, res) {
         try {
-            await this.inicio(req, res, `atualizando ${this.nomePlural} com id = ${req.params.id}...`)
+            await this.inicio(req, res, `atualizando ${this.nome} com id = ${req.params.id}...`)
 
             const query = {
                 id: {
@@ -441,7 +440,7 @@ module.exports = class Controller {
 
     async adicionaUm(req, res) {
         try {
-            await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
+            await this.inicio(req, res, `adicionando ${this.nome}...`)
 
             const resultado = await this.gerarAdicao(req, res)
             res.status(201).json(resultado)
@@ -454,7 +453,7 @@ module.exports = class Controller {
 
     async adiciona(req, res) {
         try {
-            await this.inicio(req, res, `adicionando ${this.nomeSingular}...`)
+            await this.inicio(req, res, `adicionando ${this.nome}...`)
 
             let resultado = []
             for(let i = 0; i < req.body.list.length; i++){

@@ -2,7 +2,7 @@ const Controller = require("./Controller")
 
 module.exports = class CriteriaController extends Controller {
     constructor() {
-        super("criteria", "criterias", "criteria", {
+        super("criteria", {
             description: {
                 isString: true,
                 isLength: {

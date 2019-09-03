@@ -4,7 +4,7 @@ const KpiController = require("./KpiController")
 
 module.exports = class SurveysController extends OneToManyController {
     constructor() {
-        super("survey", "surveys", "surveys", {
+        super("surveys", {
             name: {
                 isString: true,
                 isLength: {

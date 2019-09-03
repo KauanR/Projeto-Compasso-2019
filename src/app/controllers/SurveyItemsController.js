@@ -3,7 +3,7 @@ const CriteriaController = require("./CriteriaController")
 
 module.exports = class SurveyItemsController extends Controller {
     constructor() {
-        super("survey-item", "survey-items", "survey_items", {
+        super("survey_items", {
             date: {
                 isISO8601: true,
                 notNull: true,

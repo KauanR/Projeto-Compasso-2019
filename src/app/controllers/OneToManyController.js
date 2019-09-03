@@ -5,8 +5,8 @@ const {
 } = require('express-validator')
 
 module.exports = class PartyController extends Controller {
-    constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas, controllersSchema) {
-        super(nomeSingular, nomePlural, tabela, validationSchema, true)
+    constructor(tabela, validationSchema, naoGerarTodasRotas, controllersSchema) {
+        super(tabela, validationSchema, true)
 
         this.controllersSchema = controllersSchema
         this.controllersNames = Object.keys(controllersSchema)
@@ -41,7 +41,7 @@ module.exports = class PartyController extends Controller {
             const slaveController = this.controllersSchema[name].controller
             const fk = this.controllersSchema[name].fkToThis
 
-            this.router.get(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.get(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
                     $eq: req.params[fk],
@@ -53,7 +53,7 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.delete(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.delete(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
                     $eq: req.params[fk]
@@ -64,7 +64,7 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.patch(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.patch(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
                     $eq: req.params[fk]
@@ -76,7 +76,7 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.post(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}}/multiple`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 req.body.list = req.body.list.map(i => {
                     let buff = {}
                     Object.assign(buff, i)
@@ -86,7 +86,7 @@ module.exports = class PartyController extends Controller {
                 slaveController.adicionaUm(req, res)
             })
 
-            this.router.post(`/${this.nomePlural}/${this.nomeSingular}/:${fk}/${slaveController.nomePlural}/${slaveController.nomeSingular}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
                 let slaveBody = req.body
                 slaveBody[fk] = req.params[fk]
                 slaveController.adicionaUm({

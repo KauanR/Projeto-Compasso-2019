@@ -1,8 +1,8 @@
 const Controller = require("./Controller")
 
 module.exports = class UniqueCombinationController extends Controller {
-    constructor(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas) {
-        super(nomeSingular, nomePlural, tabela, validationSchema, naoGerarTodasRotas)
+    constructor(tabela, validationSchema, naoGerarTodasRotas) {
+        super(tabela, validationSchema, naoGerarTodasRotas)
     }
 
     async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {

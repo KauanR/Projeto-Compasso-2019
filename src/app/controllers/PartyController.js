@@ -4,7 +4,7 @@ const PartyAdditionalInfoController = require("./PartyAdditionalInfoController")
 
 module.exports = class PartyController extends OneToManyController {
     constructor() {
-        super("party", "parties", "party", {
+        super("party", {
             name: {
                 isString: true,
                 isLength: {
