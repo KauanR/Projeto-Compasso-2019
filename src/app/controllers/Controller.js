@@ -298,7 +298,7 @@ module.exports = class Controller {
                 })
             } else {
                 res.status(200).json({
-                    list: resultado
+                    results: resultado
                 })
             }
 
@@ -465,7 +465,7 @@ module.exports = class Controller {
             }
 
             res.status(201).json({
-                list: resultado
+                results: resultado
             })
 
             this.fim(req, res)
