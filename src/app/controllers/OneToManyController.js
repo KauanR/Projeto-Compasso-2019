@@ -162,10 +162,9 @@ module.exports = class PartyController extends Controller {
                 for (let j = 0; j < buff[name].length; j++) {
                     buff[name][j][fk] = resultMaster.insertId
 
-                    const bodySlave = await this.controllersSchema[name].controller.gerarBodyAdd({
+                    slaveResults.push(await this.controllersSchema[name].controller.gerarAdicao({
                         body: buff[name][j]
-                    }, res)
-                    slaveResults.push(await this.controllersSchema[name].controller.DAO.add(bodySlave))
+                    }, res, `${name}[${j}]`))
                 }
                 resultado[`${name}Results`] = slaveResults
             }

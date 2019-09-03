@@ -459,7 +459,7 @@ module.exports = class Controller {
             for(let i = 0; i < req.body.list.length; i++){
                 const r = await this.gerarAdicao({
                     body: req.body.list[i]
-                }, res)
+                }, res, `list[${i}]`)
                 resultado.push(r)
             }
 
@@ -473,8 +473,8 @@ module.exports = class Controller {
         }
     }
 
-    async gerarAdicao(req, res) {
-        const body = await this.gerarBodyAdd(req, res)
+    async gerarAdicao(req, res, addInfo) {
+        const body = await this.gerarBodyAdd(req, res, addInfo)
         return this.DAO.add(body)
     }
 
@@ -509,26 +509,31 @@ module.exports = class Controller {
         return o
     }
 
-    async gerarJSON(req, res, location, attrs, obligatory, allObligatory) {
+    async gerarJSON(req, res, location, attrs, obligatory, allObligatory, addInfo) {
         let o = {}
 
         let errors = []
+
+        let addInfoDots = ""
+        if(addInfo !== undefined){
+            addInfoDots = `${addInfo}: `
+        }
 
         for (let i = 0; i < attrs.length; i++) {
             const attr = attrs[i]
             const value = req[location][attr]
 
             if (value === undefined && allObligatory) {
-                errors.push(await this.formatError(attr, value, "O valor deve ser informado.", location))
+                errors.push(await this.formatError(attr, value, "O valor deve ser informado.", `${addInfoDots}${location}`))
             } else if (value === null && obligatory && obligatory.includes(attr)) {
-                errors.push(await this.formatError(attr, value, "O valor não pode ser nulo.", location))
+                errors.push(await this.formatError(attr, value, "O valor não pode ser nulo.", `${addInfoDots}${location}`))
             } else if (value !== undefined) {
                 o[_.snakeCase(attr)] = value
             }
         }
 
         if (Object.keys(o).length === 0) {
-            res.status(400).json(await this.formatError(undefined, undefined, `O request ${location} está vazio ou não possue algum atributo válido.`))
+            res.status(400).json(await this.formatError(undefined, undefined, `O request ${location} está vazio ou não possue algum atributo válido.`, addInfo))
 
             throw new Error("Empty object.")
         }
@@ -543,7 +548,7 @@ module.exports = class Controller {
     }
 
     async gerarBodyAdd(req, res) {
-        return this.gerarJSON(req, res, "body", this.attrs, this.attrsNotNull, true)
+        return this.gerarJSON(req, res, "body", this.attrs, this.attrsNotNull, true, addInfo)
     }
 
     async gerarBodyUpdate(req, res) {

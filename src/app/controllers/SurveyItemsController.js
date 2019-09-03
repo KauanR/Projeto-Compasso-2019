@@ -53,7 +53,7 @@ module.exports = class SurveyItemsController extends Controller {
                     req.body.criteriaId = criteria.id
                     req.body.criteriaKpiId = criteria.kpi.id
 
-                    resultado.push(await this.gerarAdicao(req, res))
+                    resultado.push(await this.gerarAdicao(req, res, `criterias[${i}]`))
                 }
 
                 res.status(201).json({results: resultado})
