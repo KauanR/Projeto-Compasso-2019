@@ -286,5 +286,5 @@ A validação dos JSONs "filhos" é mesma do Controller "filho". Não é necess�
 -> "POST /kpis/:id/criteria/multiple": Adiciona várias linhas para a tabela "criteria" do banco com base no array de JSONs enviado dentro do atributo "list", o "kpiId" é automaticamente preenchido com o id dos params".
 -> "POST /kpis/:id/criteria": Adiciona uma linha para a tabela "criteria" do banco com base no JSON enviado, o "kpiId é automaticamente preenchido com o id dos params, o "kpiId" é automaticamente preenchido com o id dos params".
 ```
-A mesma coisa para o controller "filho" KpiSurveyController. O nome da rota do "filho" ("/kpis/:id/${nomeDoEscravo}") é definido pelo atributo nome desse controller "filho".
+A mesma coisa para o controller "filho" KpiSurveyController. O nome da rota do "filho" ("/kpis/:id/${nomeDoFilho}") é definido pelo atributo nome desse controller "filho".
 
