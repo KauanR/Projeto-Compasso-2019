@@ -77,13 +77,19 @@ module.exports = class PartyController extends Controller {
             })
 
             this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}}/multiple`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                req.body.list = req.body.list.map(i => {
+                let reqCopy = {}
+                Object.assign(reqCopy, req)
+
+                reqCopy.body.list = reqCopy.body.list.map(i => {
                     let buff = {}
                     Object.assign(buff, i)
-                    buff[fk] = req.params[fk]
+                    buff[fk] = reqCopy.params[fk]
                     return buff
                 })
-                slaveController.adicionaUm(req, res)
+                slaveController.adicionaUm({
+                    id: reqCopy.id,
+                    body: reqCopy.body
+                }, res)
             })
 
             this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
