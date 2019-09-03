@@ -1,0 +1,256 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Projeto de treinamento, elaborado pelo conjunto de URI e Compasso",
+    "version" : "1.0.0",
+    "title" : "Projeto Compasso 2019",
+    "license" : {
+      "name" : "https://github.com/KauanR/Projeto-Compasso-2019",
+      "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/KauanR/Projeto-Compasso-2019/1.0.0",
+  "tags" : [ {
+    "name" : "kpis"
+  }, {
+    "name" : "kpi_surveys"
+  }, {
+    "name" : "surveys"
+  }, {
+    "name" : "criterias"
+  }, {
+    "name" : "survey_itens"
+  }, {
+    "name" : "partys"
+  }, {
+    "name" : "party_relationships"
+  }, {
+    "name" : "survey_history"
+  }, {
+    "name" : "party_aditional_info"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/kpis" : {
+      "get" : {
+        "tags" : [ "kpis" ],
+        "summary" : "Busca todas as kpis",
+        "description" : "Busca todas as kpis cadastradas no banco de dados",
+        "operationId" : "getKpis",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busca"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Sobre como utilizar queries diretamente na url, consulte",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      }
+    },
+    "/kpis/kpi" : {
+      "post" : {
+        "tags" : [ "kpis" ],
+        "summary" : "Adiciona uma kpi",
+        "description" : "Adiciona uma kpi no banco de dados",
+        "operationId" : "postKpis",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da kpi",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/kpi"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/kpis/kpi/{id}" : {
+      "get" : {
+        "tags" : [ "kpis" ],
+        "summary" : "Busca uma kpi pelo id",
+        "description" : "Busca uma kpi pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma kpi",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "kpis" ],
+        "summary" : "Remove uma kpi",
+        "description" : "Remove uma kpi do banco de dados",
+        "operationId" : "deleteKpi",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma kpi",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Sobre como utilizar queries diretamente na url, consulte",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "patch" : {
+        "tags" : [ "kpis" ],
+        "summary" : "Atualiza uma kpi",
+        "description" : "Atualiza uma kpi do banco de dados",
+        "operationId" : "patchKpi",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma kpi",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Sobre como utilizar queries diretamente na url, consulte",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "kpi" : {
+      "type" : "object",
+      "required" : [ "description", "details", "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "details" : {
+          "type" : "string"
+        },
+        "data" : {
+          "type" : "string"
+        }
+      }
+    },
+    "surveys" : {
+      "type" : "object",
+      "required" : [ "description", "name", "party-type" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "party-type" : {
+          "type" : "string"
+        }
+      }
+    },
+    "criteria" : {
+      "type" : "object",
+      "required" : [ "description", "type", "value" ],
+      "properties" : {
+        "type" : {
+          "type" : "string"
+        },
+        "value" : {
+          "type" : "integer"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "kpiId" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "surveyItems" : {
+      "type" : "object",
+      "required" : [ "criteriaId", "criteriaKpiId", "date", "partyId" ],
+      "properties" : {
+        "date" : {
+          "type" : "string",
+          "format" : "AAAA-MM-DD"
+        },
+        "partyId" : {
+          "type" : "integer"
+        },
+        "criteriaId" : {
+          "type" : "integer"
+        },
+        "criteriaKpiId" : {
+          "type" : "integer"
+        }
+      }
+    },
+    "party" : {
+      "type" : "object",
+      "required" : [ "lastAssessment", "name", "observations", "relationships", "type" ],
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "type" : {
+          "type" : "string"
+        },
+        "lastAssessment" : {
+          "type" : "string",
+          "format" : "AAAA-MM-DD"
+        },
+        "observations" : {
+          "type" : "string"
+        },
+        "additionalInfo" : {
+          "type" : "integer"
+        },
+        "relationships" : {
+          "type" : "integer"
+        }
+      }
+    }
+  }
+}
