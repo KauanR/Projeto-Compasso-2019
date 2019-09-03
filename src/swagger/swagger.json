@@ -43,7 +43,13 @@
           "name" : "limit[$count]",
           "in" : "query",
           "description" : "Quantas linhas vão ser buscadas na tabela.",
-          "required" : true,
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "limit[$offset]",
+          "in" : "query",
+          "description" : "Quantas linhas vão pular entre um resultado e outro",
+          "required" : false,
           "type" : "string"
         } ],
         "responses" : {
