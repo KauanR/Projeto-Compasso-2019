@@ -190,7 +190,6 @@ module.exports = class PartyController extends Controller {
     async gerarBusca(req, res) {
         const query = await this.gerarQuery(req, res)
         const exceptBuff = query.except
-        delete query.except
 
         let resultado = await this.DAO.get(query)
         for (let i = 0; i < resultado.length; i++) {

@@ -385,7 +385,10 @@ module.exports = class Controller {
     }
 
     async gerarDelecao(req, res) {
-        const query = await this.gerarQuery(req, res)
+        const reqCopy = JSON.parse(JSON.stringify(req))
+        delete reqCopy.query.sort
+
+        const query = await this.gerarQuery(reqCopy, res)
         return this.DAO.delete(query)
     }
 
