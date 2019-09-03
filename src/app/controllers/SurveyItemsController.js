@@ -55,12 +55,13 @@ module.exports = class SurveyItemsController extends Controller {
 
                     resultado.push(await this.gerarAdicao(req, res))
                 }
+
+                res.status(201).json({list: resultado})
             }
             else {
                 resultado = await this.gerarAdicao(req, res)
+                res.status(201).json(resultado)
             }
-
-            res.status(201).json({list: resultado})
 
             this.fim(req, res)
         } catch (error) {
