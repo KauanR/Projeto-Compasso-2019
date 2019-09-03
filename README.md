@@ -277,14 +277,14 @@ Exemplo de JSOn para adicionar uma kpi:
 ```
 A validação dos JSONs "filhos" é mesma do Controller "filho". Não é necessário informar o valor do "fkToThis", no caso do criterias é "kpiId", pois ele é preenchido com o valor que for informado nos params da rota. Exemplos de rotas geradas pelo OneToManyController para o controller "filho" CriteriaController:
 ```
--> "GET /kpis/:id/criterias?type[$eq]=igor": Pega dados das criterias, que tem o kpiId igual ao id dos params, com base na query;
+-> "GET /kpis/:id/criteria?type[$eq]=igor": Pega dados das criterias, que tem o kpiId igual ao id dos params, com base na query;
 
--> "DELETE /kpis/:id/criterias?type[$eq]=igor": Apaga dados das criterias, que tem o kpiId igual ao id dos params, com base na query;
+-> "DELETE /kpis/:id/criteria?type[$eq]=igor": Apaga dados das criterias, que tem o kpiId igual ao id dos params, com base na query;
 
--> "PATCH /kpis/:id/criterias?type[$eq]=igor": Atualiza dados das criterias, que tem o kpiId igual ao id dos params, com base na query e no JSON enviado;
+-> "PATCH /kpis/:id/criteria?type[$eq]=igor": Atualiza dados das criterias, que tem o kpiId igual ao id dos params, com base na query e no JSON enviado;
 
--> "POST /kpis/:id/criterias/multiple": Adiciona várias linhas para a tabela "criteria" do banco com base no array de JSONs enviado dentro do atributo "list", o "kpiId" é automaticamente preenchido com o id dos params".
--> "POST /kpis/:id/criterias": Adiciona uma linha para a tabela "criteria" do banco com base no JSON enviado, o "kpiId é automaticamente preenchido com o id dos params, o "kpiId" é automaticamente preenchido com o id dos params".
+-> "POST /kpis/:id/criteria/multiple": Adiciona várias linhas para a tabela "criteria" do banco com base no array de JSONs enviado dentro do atributo "list", o "kpiId" é automaticamente preenchido com o id dos params".
+-> "POST /kpis/:id/criteria": Adiciona uma linha para a tabela "criteria" do banco com base no JSON enviado, o "kpiId é automaticamente preenchido com o id dos params, o "kpiId" é automaticamente preenchido com o id dos params".
 ```
 A mesma coisa para o controller "filho" KpiSurveyController. O nome da rota do "filho" ("/kpis/:id/${nomeDoEscravo}") é definido pelo atributo nome desse controller "filho".
 
