@@ -118,7 +118,7 @@ A query precisa informar um atributo válido da tabela do banco de dados, a oper
 }
 ``` 
 executa a operação em todas as linhas que tiverem o atributo "nome" igual ao valor "igor". A estrutura da query em JSON é basicamente:
-```JSON
+```Javascript
 {
 
     "limit": {
