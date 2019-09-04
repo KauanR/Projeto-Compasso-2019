@@ -26,6 +26,8 @@ module.exports = class PartyController extends Controller {
             }
         }
 
+        this.validationSlaveSchemas = {}
+
         this.gerarSlaveSchemas()
 
         if (!naoGerarTodasRotas) {
@@ -41,10 +43,10 @@ module.exports = class PartyController extends Controller {
             const slaveController = this.controllersSchema[name].controller
             const fk = this.controllersSchema[name].fkToThis
 
-            this.router.get(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.get(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
-                    $eq: req.params[fk],
+                    $eq: req.params.id,
                 }
                 slaveQuery.except = fk
                 slaveController.busca({
@@ -53,10 +55,10 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.delete(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.delete(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
-                    $eq: req.params[fk]
+                    $eq: req.params.id
                 }
                 slaveController.deleta({
                     id: req.id,
@@ -64,10 +66,10 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.patch(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.patch(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
                 let slaveQuery = req.query
                 slaveQuery[fk] = {
-                    $eq: req.params[fk]
+                    $eq: req.params.id
                 }
                 slaveController.atualiza({
                     id: req.id,
@@ -76,28 +78,22 @@ module.exports = class PartyController extends Controller {
                 }, res)
             })
 
-            this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}}/multiple`, checkSchema(slaveController.validationSchema), async (req, res) => {
+            this.router.post(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
                 let reqCopy = {}
-                Object.assign(reqCopy, req)
+                Object.assign(reqCopy, req) 
 
-                reqCopy.body.list = reqCopy.body.list.map(i => {
-                    let buff = {}
-                    Object.assign(buff, i)
-                    buff[fk] = reqCopy.params[fk]
-                    return buff
-                })
-                slaveController.adicionaUm({
+                if(reqCopy.body.list !== undefined){
+                    reqCopy.body.list = reqCopy.body.list.map(i => {
+                        let buff = {}
+                        Object.assign(buff, i)
+                        buff[fk] = reqCopy.params.id
+                        return buff
+                    })
+                }
+
+                slaveController.adiciona({
                     id: reqCopy.id,
                     body: reqCopy.body
-                }, res)
-            })
-
-            this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                let slaveBody = req.body
-                slaveBody[fk] = req.params[fk]
-                slaveController.adicionaUm({
-                    id: req.id,
-                    body: slaveBody
                 }, res)
             })
         }
@@ -107,7 +103,13 @@ module.exports = class PartyController extends Controller {
         for (let i = 0; i < this.controllersNames.length; i++) {
             const name = this.controllersNames[i]
             const vs = this.controllersSchema[name].controller.validationSchema
+
+            this.validationSlaveSchemas[name] = {}
+            Object.assign(this.validationSlaveSchemas[name], vs)
+
             const fk = this.controllersSchema[name].fkToThis
+            this.validationSlaveSchemas[name][fk] = {}
+            Object.assign(this.validationSlaveSchemas[name][fk], this.validationSchema.id)
 
             let r = {}
 
@@ -139,8 +141,6 @@ module.exports = class PartyController extends Controller {
                 },
                 errorMessage: `O valor de ${name} deve ser um array e deve ter pelo menos 1 elemento.`
             }
-            r[fk] = {}
-            Object.assign(r[fk], this.validationSchema.id)
 
             Object.assign(this.validationSchema, r)
         }

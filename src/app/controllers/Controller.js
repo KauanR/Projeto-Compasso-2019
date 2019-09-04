@@ -146,11 +146,6 @@ module.exports = class Controller {
                     customSanitizer: {
                         options: value => parseInt(value)
                     },
-                    optional: {
-                        options: {
-                            nullable: true
-                        }
-                    },
                     errorMessage: "O valor de id deve ser inteiro maior que 0."
                 }
             }
@@ -457,17 +452,27 @@ module.exports = class Controller {
         try {
             await this.inicio(req, res, `adicionando ${this.nome}...`)
 
-            let resultado = []
-            for (let i = 0; i < req.body.list.length; i++) {
-                const r = await this.gerarAdicao({
-                    body: req.body.list[i]
-                }, res, `list[${i}]`)
-                resultado.push(r)
-            }
+            if (req.body.list !== undefined) {
+                let resultado = []
+                for (let i = 0; i < req.body.list.length; i++) {
+                    console.log(req.body.list[i])
+                    const r = await this.gerarAdicao({
+                        body: req.body.list[i]
+                    }, res, `list[${i}]`)
+                    resultado.push(r)
+                }
 
-            res.status(201).json({
-                results: resultado
-            })
+                res.status(201).json({
+                    results: resultado
+                })
+            }
+            else {
+                res.status(400).json({
+                    errors:[
+                        await this.formatError("list", undefined, "O atributo list deve ser informado.", "body")
+                    ]
+                })
+            }
 
             this.fim(req, res)
         } catch (error) {

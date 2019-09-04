@@ -2,7 +2,7 @@ const UniqueCombinationController = require("./UniqueCombinationController")
 
 module.exports = class KpiSurveyController extends UniqueCombinationController {
     constructor() {
-        super("kpis_survey", {
+        super("kpi_survey", {
             grupo: {
                 isString: true,
                 isLength: {

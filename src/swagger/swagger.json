@@ -9,8 +9,8 @@
       "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
     }
   },
-  "host" : "virtserver.swaggerhub.com",
-  "basePath" : "/KauanR/Projeto-Compasso-2019/1.0.0",
+  "host" : "localhost:6663",
+  "basePath" : "/",
   "tags" : [ {
     "name" : "kpis"
   }, {
