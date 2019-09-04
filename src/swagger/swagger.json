@@ -7,10 +7,10 @@
       "name" : "https://github.com/KauanR/Projeto-Compasso-2019",
       "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
     },
-    "version" : "1.0.0-functional"
+    "version" : "1.0.0-oas3"
   },
   "servers" : [ {
-    "url" : "http://localhost:6663"
+    "url" : "htttp://localhost:6663"
   } ],
   "tags" : [ {
     "name" : "kpis"
@@ -33,7 +33,7 @@
     "/kpis" : {
       "get" : {
         "tags" : [ "kpis" ],
-        "summary" : "Busca todas as kpis",
+        "summary" : "Busca todas as Kpis",
         "description" : "Busca todas as kpis cadastradas no banco de dados",
         "externalDocs" : {
           "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
@@ -51,7 +51,7 @@
       },
       "post" : {
         "tags" : [ "kpis" ],
-        "summary" : "Adiciona uma kpi",
+        "summary" : "Adiciona uma Kpi",
         "description" : "Adiciona uma kpi no banco de dados",
         "operationId" : "postKpis",
         "requestBody" : {
@@ -70,7 +70,7 @@
     "/kpis/multiple" : {
       "post" : {
         "tags" : [ "kpis" ],
-        "summary" : "Adiciona várias kpis em apenas uma requisição",
+        "summary" : "Adiciona várias Kpis em apenas uma requisição",
         "description" : "Adiciona várias kpis em apenas uma requisição no banco de dados",
         "requestBody" : {
           "description" : "Insira os dados da kpi",
@@ -96,7 +96,7 @@
     "/kpis/{id}" : {
       "get" : {
         "tags" : [ "kpis" ],
-        "summary" : "Busca uma kpi pelo id",
+        "summary" : "Busca uma Kpi pelo id",
         "description" : "Busca uma kpi pelo id no banco de dados",
         "parameters" : [ {
           "name" : "id",
@@ -120,8 +120,8 @@
       },
       "delete" : {
         "tags" : [ "kpis" ],
-        "summary" : "Remove uma kpi",
-        "description" : "Remove uma kpi do banco de dados",
+        "summary" : "Remove uma Kpi pelo id",
+        "description" : "Remove uma kpi através do id no banco de dados",
         "operationId" : "deleteKpi",
         "parameters" : [ {
           "name" : "id",
@@ -145,8 +145,8 @@
       },
       "patch" : {
         "tags" : [ "kpis" ],
-        "summary" : "Atualiza uma kpi",
-        "description" : "Atualiza uma kpi do banco de dados",
+        "summary" : "Atualiza uma Kpi pelo id",
+        "description" : "Atualiza uma kpi através do id no banco de dados",
         "operationId" : "patchKpi",
         "parameters" : [ {
           "name" : "id",
@@ -172,7 +172,7 @@
         }
       }
     },
-    "/kpi_surveys" : {
+    "/kpi-surveys" : {
       "get" : {
         "tags" : [ "kpi_survey" ],
         "summary" : "Busca todas as Kpis Surveys",
@@ -217,7 +217,7 @@
         }
       }
     },
-    "/kpis_surveys/multiple" : {
+    "/kpis-surveys/multiple" : {
       "post" : {
         "tags" : [ "kpi_survey" ],
         "summary" : "Adiciona várias Kpis Surveys em apenas uma requisição",
@@ -243,7 +243,7 @@
         }
       }
     },
-    "/kpis_surveys/{id}" : {
+    "/kpis-surveys/{id}" : {
       "get" : {
         "tags" : [ "kpi_survey" ],
         "summary" : "Busca uma Kpis Surveys pelo id",
@@ -270,8 +270,8 @@
       },
       "delete" : {
         "tags" : [ "kpi_survey" ],
-        "summary" : "Remove uma Kpis Surveys",
-        "description" : "Remove uma kpis_surveys do banco de dados",
+        "summary" : "Remove uma Kpis Survey pelo id",
+        "description" : "Remove uma kpi_survey através do id no banco de dados",
         "operationId" : "deleteKpis_surveys",
         "parameters" : [ {
           "name" : "id",
@@ -295,8 +295,8 @@
       },
       "patch" : {
         "tags" : [ "kpi_survey" ],
-        "summary" : "Atualiza uma Kpis Surveys",
-        "description" : "Atualiza uma kpis_surveys do banco de dados",
+        "summary" : "Atualiza uma Kpis Surveys pelo id",
+        "description" : "Atualiza uma kpis_surveys através do id no banco de dados",
         "operationId" : "patchKpis_surveys",
         "parameters" : [ {
           "name" : "id",
@@ -428,8 +428,8 @@
       },
       "delete" : {
         "tags" : [ "surveys" ],
-        "summary" : "Remove uma surveys",
-        "description" : "Remove uma surveys do banco de dados",
+        "summary" : "Remove uma surveys pelo id",
+        "description" : "Remove uma surveys através do id no banco de dados",
         "operationId" : "deleteSurveys",
         "parameters" : [ {
           "name" : "id",
@@ -453,8 +453,8 @@
       },
       "patch" : {
         "tags" : [ "surveys" ],
-        "summary" : "Atualiza uma Surveys",
-        "description" : "Atualiza uma surveys do banco de dados",
+        "summary" : "Atualiza uma Survey pelo id",
+        "description" : "Atualiza uma surveys através do id no banco de dados",
         "operationId" : "patchSurveys",
         "parameters" : [ {
           "name" : "id",
@@ -578,8 +578,8 @@
       },
       "delete" : {
         "tags" : [ "criteria" ],
-        "summary" : "Remove uma criteria",
-        "description" : "Remove uma criteria do banco de dados",
+        "summary" : "Remove uma criteria pelo id",
+        "description" : "Remove uma criteria através do id no banco de dados",
         "operationId" : "deleteCriteria",
         "parameters" : [ {
           "name" : "id",
@@ -603,8 +603,8 @@
       },
       "patch" : {
         "tags" : [ "criteria" ],
-        "summary" : "Atualiza uma criteria",
-        "description" : "Atualiza uma criteria do banco de dados",
+        "summary" : "Atualiza uma criteria pelo id",
+        "description" : "Atualiza uma criteria através do id no banco de dados",
         "operationId" : "patchCriteria",
         "parameters" : [ {
           "name" : "id",
@@ -720,8 +720,8 @@
       },
       "delete" : {
         "tags" : [ "party" ],
-        "summary" : "Remove uma Partys",
-        "description" : "Remove uma kpi do banco de dados",
+        "summary" : "Remove uma Partys pelo id",
+        "description" : "Remove uma kpi através do id no banco de dados",
         "operationId" : "deletepartys",
         "parameters" : [ {
           "name" : "id",
@@ -745,8 +745,8 @@
       },
       "patch" : {
         "tags" : [ "party" ],
-        "summary" : "Atualiza uma Partys",
-        "description" : "Atualiza uma partys do banco de dados",
+        "summary" : "Atualiza uma Partys pelo id",
+        "description" : "Atualiza uma partys através do id no banco de dados",
         "operationId" : "patchpartys",
         "parameters" : [ {
           "name" : "id",
@@ -772,7 +772,7 @@
         }
       }
     },
-    "/survey_items" : {
+    "/survey-items" : {
       "get" : {
         "tags" : [ "survey_items" ],
         "summary" : "Busca todas as Survey Items",
@@ -809,7 +809,7 @@
         }
       }
     },
-    "/survey_items/multiple" : {
+    "/survey-items/multiple" : {
       "post" : {
         "tags" : [ "survey_items" ],
         "summary" : "Adiciona várias Survey Items em apenas uma requisição",
@@ -835,7 +835,7 @@
         }
       }
     },
-    "/survey_items/{id}" : {
+    "/survey-items/{id}" : {
       "get" : {
         "tags" : [ "survey_items" ],
         "summary" : "Busca uma Survey Items pelo id",
@@ -862,8 +862,8 @@
       },
       "delete" : {
         "tags" : [ "survey_items" ],
-        "summary" : "Remove uma Survey Items",
-        "description" : "Remove uma kpi do banco de dados",
+        "summary" : "Remove uma Survey Items pelo id",
+        "description" : "Remove uma kpi através do id no banco de dados",
         "operationId" : "deleteSurvey_items",
         "parameters" : [ {
           "name" : "id",
@@ -887,8 +887,8 @@
       },
       "patch" : {
         "tags" : [ "survey_items" ],
-        "summary" : "Atualiza uma Survey Items",
-        "description" : "Atualiza uma survey_items do banco de dados",
+        "summary" : "Atualiza uma Survey Items pelo id",
+        "description" : "Atualiza uma survey_items através do id no banco de dados",
         "operationId" : "patchSurvey_items",
         "parameters" : [ {
           "name" : "id",
@@ -914,7 +914,7 @@
         }
       }
     },
-    "/party_relationships" : {
+    "/party-relationships" : {
       "get" : {
         "tags" : [ "party_relationships" ],
         "summary" : "Busca todas as Party Relationships",
@@ -951,7 +951,7 @@
         }
       }
     },
-    "/party_relationships/multiple" : {
+    "/party-relationships/multiple" : {
       "post" : {
         "tags" : [ "party_relationships" ],
         "summary" : "Adiciona várias Party Relationshipss em apenas uma requisição",
@@ -977,7 +977,7 @@
         }
       }
     },
-    "/party_relationships/{id}" : {
+    "/party-relationships/{id}" : {
       "get" : {
         "tags" : [ "party_relationships" ],
         "summary" : "Busca uma Party Relationships pelo id",
@@ -1004,8 +1004,8 @@
       },
       "delete" : {
         "tags" : [ "party_relationships" ],
-        "summary" : "Remove uma Party Relationships",
-        "description" : "Remove uma kpi do banco de dados",
+        "summary" : "Remove uma Party Relationships pelo id",
+        "description" : "Remove uma kpi através do id no banco de dados",
         "operationId" : "deleteParty_relationships",
         "parameters" : [ {
           "name" : "id",
@@ -1029,8 +1029,8 @@
       },
       "patch" : {
         "tags" : [ "party_relationships" ],
-        "summary" : "Atualiza uma Party Relationships",
-        "description" : "Atualiza uma party_relationships do banco de dados",
+        "summary" : "Atualiza uma Party Relationships pelo id",
+        "description" : "Atualiza uma party_relationships através do id no banco de dados",
         "operationId" : "patchParty_relationships",
         "parameters" : [ {
           "name" : "id",
@@ -1056,7 +1056,7 @@
         }
       }
     },
-    "/party_additional_info" : {
+    "/party-additional-info" : {
       "get" : {
         "tags" : [ "party_additional_info" ],
         "summary" : "Busca todas as Party Aditional Info",
@@ -1093,7 +1093,7 @@
         }
       }
     },
-    "/party_additional_info/multiple" : {
+    "/party-additional-info/multiple" : {
       "post" : {
         "tags" : [ "party_additional_info" ],
         "summary" : "Adiciona várias Party Aditional Infos em apenas uma requisição",
@@ -1119,7 +1119,7 @@
         }
       }
     },
-    "/party_additional_info/{id}" : {
+    "/party-additional-info/{id}" : {
       "get" : {
         "tags" : [ "party_additional_info" ],
         "summary" : "Busca uma Party Aditional Info pelo id",
@@ -1146,8 +1146,8 @@
       },
       "delete" : {
         "tags" : [ "party_additional_info" ],
-        "summary" : "Remove uma Party Aditional Info",
-        "description" : "Remove uma kpi do banco de dados",
+        "summary" : "Remove uma Party Aditional Info pelo id",
+        "description" : "Remove uma party_additional_info através do id no banco de dados",
         "operationId" : "deleteParty_additional_info",
         "parameters" : [ {
           "name" : "id",
@@ -1172,7 +1172,7 @@
       "patch" : {
         "tags" : [ "party_additional_info" ],
         "summary" : "Atualiza uma Party Aditional Info",
-        "description" : "Atualiza uma party_additional_info do banco de dados",
+        "description" : "Atualiza uma party_additional_info através do id no banco de dados",
         "operationId" : "patchParty_additional_info",
         "parameters" : [ {
           "name" : "id",
@@ -1212,6 +1212,9 @@
             "type" : "string"
           },
           "details" : {
+            "type" : "string"
+          },
+          "category" : {
             "type" : "string"
           }
         }
@@ -1317,7 +1320,7 @@
         }
       },
       "partys" : {
-        "required" : [ "additionalInfos", "lastAssessment", "name", "observations", "relationships", "type" ],
+        "required" : [ "lastAssessment", "name", "observations", "type" ],
         "type" : "object",
         "properties" : {
           "name" : {
@@ -1332,12 +1335,6 @@
           },
           "observations" : {
             "type" : "string"
-          },
-          "additionalInfos" : {
-            "type" : "integer"
-          },
-          "relationships" : {
-            "type" : "integer"
           }
         }
       },
@@ -1348,7 +1345,7 @@
             "minItems" : 2,
             "type" : "array",
             "items" : {
-              "$ref" : "#/components/schemas/partysM"
+              "$ref" : "#/components/schemas/partys"
             }
           }
         }
