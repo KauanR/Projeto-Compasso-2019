@@ -1,9 +1,5 @@
 const Controller = require("./Controller")
 
-const {
-    checkSchema
-} = require('express-validator')
-
 module.exports = class PartyController extends Controller {
     constructor(tabela, validationSchema, naoGerarTodasRotas, controllersSchema) {
         super(tabela, validationSchema, true)
@@ -33,80 +29,11 @@ module.exports = class PartyController extends Controller {
         }
     }
 
-    gerarTodasRotas() {
-        super.gerarTodasRotas()
-
-        for (let i = 0; i < this.controllersNames.length; i++) {
-            const name = this.controllersNames[i]
-            const slaveController = this.controllersSchema[name].controller
-            const fk = this.controllersSchema[name].fkToThis
-
-            this.router.get(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                let slaveQuery = req.query
-                slaveQuery[fk] = {
-                    $eq: req.params[fk],
-                }
-                slaveQuery.except = fk
-                slaveController.busca({
-                    id: req.id,
-                    query: slaveQuery
-                }, res)
-            })
-
-            this.router.delete(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                let slaveQuery = req.query
-                slaveQuery[fk] = {
-                    $eq: req.params[fk]
-                }
-                slaveController.deleta({
-                    id: req.id,
-                    query: slaveQuery
-                }, res)
-            })
-
-            this.router.patch(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                let slaveQuery = req.query
-                slaveQuery[fk] = {
-                    $eq: req.params[fk]
-                }
-                slaveController.atualiza({
-                    id: req.id,
-                    query: slaveQuery,
-                    body: req.body
-                }, res)
-            })
-
-            this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}}/multiple`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                let reqCopy = {}
-                Object.assign(reqCopy, req)
-
-                reqCopy.body.list = reqCopy.body.list.map(i => {
-                    let buff = {}
-                    Object.assign(buff, i)
-                    buff[fk] = reqCopy.params[fk]
-                    return buff
-                })
-                slaveController.adicionaUm({
-                    id: reqCopy.id,
-                    body: reqCopy.body
-                }, res)
-            })
-
-            this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                let slaveBody = req.body
-                slaveBody[fk] = req.params[fk]
-                slaveController.adicionaUm({
-                    id: req.id,
-                    body: slaveBody
-                }, res)
-            })
-        }
-    }
-
     async gerarSlaveSchemas() {
         for (let i = 0; i < this.controllersNames.length; i++) {
             const name = this.controllersNames[i]
             const vs = this.controllersSchema[name].controller.validationSchema
+
             const fk = this.controllersSchema[name].fkToThis
 
             let r = {}
@@ -139,8 +66,6 @@ module.exports = class PartyController extends Controller {
                 },
                 errorMessage: `O valor de ${name} deve ser um array e deve ter pelo menos 1 elemento.`
             }
-            r[fk] = {}
-            Object.assign(r[fk], this.validationSchema.id)
 
             Object.assign(this.validationSchema, r)
         }
