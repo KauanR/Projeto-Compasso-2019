@@ -1,9 +1,5 @@
 const Controller = require("./Controller")
 
-const {
-    checkSchema
-} = require('express-validator')
-
 module.exports = class PartyController extends Controller {
     constructor(tabela, validationSchema, naoGerarTodasRotas, controllersSchema) {
         super(tabela, validationSchema, true)
@@ -26,76 +22,10 @@ module.exports = class PartyController extends Controller {
             }
         }
 
-        this.validationSlaveSchemas = {}
-
         this.gerarSlaveSchemas()
 
         if (!naoGerarTodasRotas) {
             this.gerarTodasRotas()
-        }
-    }
-
-    gerarTodasRotas() {
-        super.gerarTodasRotas()
-
-        for (let i = 0; i < this.controllersNames.length; i++) {
-            const name = this.controllersNames[i]
-            const slaveController = this.controllersSchema[name].controller
-            const fk = this.controllersSchema[name].fkToThis
-
-            this.router.get(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
-                let slaveQuery = req.query
-                slaveQuery[fk] = {
-                    $eq: req.params.id,
-                }
-                slaveQuery.except = fk
-                slaveController.busca({
-                    id: req.id,
-                    query: slaveQuery
-                }, res)
-            })
-
-            this.router.delete(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
-                let slaveQuery = req.query
-                slaveQuery[fk] = {
-                    $eq: req.params.id
-                }
-                slaveController.deleta({
-                    id: req.id,
-                    query: slaveQuery
-                }, res)
-            })
-
-            this.router.patch(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
-                let slaveQuery = req.query
-                slaveQuery[fk] = {
-                    $eq: req.params.id
-                }
-                slaveController.atualiza({
-                    id: req.id,
-                    query: slaveQuery,
-                    body: req.body
-                }, res)
-            })
-
-            this.router.post(`/${this.nome}/:${fk}/${name}`, checkSchema(this.validationSlaveSchemas[name]), async (req, res) => {
-                let reqCopy = {}
-                Object.assign(reqCopy, req) 
-
-                if(reqCopy.body.list !== undefined){
-                    reqCopy.body.list = reqCopy.body.list.map(i => {
-                        let buff = {}
-                        Object.assign(buff, i)
-                        buff[fk] = reqCopy.params.id
-                        return buff
-                    })
-                }
-
-                slaveController.adiciona({
-                    id: reqCopy.id,
-                    body: reqCopy.body
-                }, res)
-            })
         }
     }
 
@@ -104,12 +34,7 @@ module.exports = class PartyController extends Controller {
             const name = this.controllersNames[i]
             const vs = this.controllersSchema[name].controller.validationSchema
 
-            this.validationSlaveSchemas[name] = {}
-            Object.assign(this.validationSlaveSchemas[name], vs)
-
             const fk = this.controllersSchema[name].fkToThis
-            this.validationSlaveSchemas[name][fk] = {}
-            Object.assign(this.validationSlaveSchemas[name][fk], this.validationSchema.id)
 
             let r = {}
 
