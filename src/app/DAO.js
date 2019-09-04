@@ -42,7 +42,7 @@ module.exports = class DAO {
 
             if (queryCopy.limit.$offset !== undefined) {
                 valuesBuff.push(queryCopy.limit.$offset)
-                sqlLimit = "LIMIT ?, ?"
+                sqlLimit = "LIMIT ? OFFSET ?"
             }
 
             delete queryCopy.limit

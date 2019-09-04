@@ -1,12 +1,14 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const expressRequestId = require('express-request-id')
+const cors = require('cors')
 
 // BODY PARSER - receber JSON
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 app.use(expressRequestId())
+app.use(cors())
 
 const PartyController = require("../app/controllers/PartyController")
 const partyController = new PartyController()
