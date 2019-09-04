@@ -77,13 +77,19 @@ module.exports = class PartyController extends Controller {
             })
 
             this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}}/multiple`, checkSchema(slaveController.validationSchema), async (req, res) => {
-                req.body.list = req.body.list.map(i => {
+                let reqCopy = {}
+                Object.assign(reqCopy, req)
+
+                reqCopy.body.list = reqCopy.body.list.map(i => {
                     let buff = {}
                     Object.assign(buff, i)
-                    buff[fk] = req.params[fk]
+                    buff[fk] = reqCopy.params[fk]
                     return buff
                 })
-                slaveController.adicionaUm(req, res)
+                slaveController.adicionaUm({
+                    id: reqCopy.id,
+                    body: reqCopy.body
+                }, res)
             })
 
             this.router.post(`/${this.nome}/:${fk}/${slaveController.nome}`, checkSchema(slaveController.validationSchema), async (req, res) => {
@@ -111,6 +117,9 @@ module.exports = class PartyController extends Controller {
                 if ( vs[k].in.includes("body") && k !== fk && k !== "list" && !( k.includes("list.*") ) ) {
                     r[`${name}.*.${k}`] = {}
                     Object.assign(r[`${name}.*.${k}`], vs[k])
+
+                    r[`list.*.${name}.*.${k}`] = {}
+                    Object.assign(r[`list.*.${name}.*.${k}`], vs[k])
                 }
             }
             r[name] = {
@@ -137,7 +146,7 @@ module.exports = class PartyController extends Controller {
         }
     }
 
-    async gerarAdicao(req, res) {
+    async gerarAdicao(req, res, addInfo) {
         let resultado = {}
 
         let buff = {}
@@ -148,10 +157,15 @@ module.exports = class PartyController extends Controller {
             delete req.body[name]
         }
 
-        const body = await this.gerarBodyAdd(req, res)
+        const body = await this.gerarBodyAdd(req, res, addInfo)
         const resultMaster = await this.DAO.add(body)
 
         Object.assign(resultado, resultMaster)
+
+        let a = ""
+        if(addInfo !== undefined){
+            a = `${addInfo}.`
+        }
 
         for (let i = 0; i < this.controllersNames.length; i++) {
             const name = this.controllersNames[i]
@@ -164,7 +178,7 @@ module.exports = class PartyController extends Controller {
 
                     slaveResults.push(await this.controllersSchema[name].controller.gerarAdicao({
                         body: buff[name][j]
-                    }, res, `${name}[${j}]`))
+                    }, res, `${a}${name}[${j}]`))
                 }
                 resultado[`${name}Results`] = slaveResults
             }
@@ -176,7 +190,6 @@ module.exports = class PartyController extends Controller {
     async gerarBusca(req, res) {
         const query = await this.gerarQuery(req, res)
         const exceptBuff = query.except
-        delete query.except
 
         let resultado = await this.DAO.get(query)
         for (let i = 0; i < resultado.length; i++) {

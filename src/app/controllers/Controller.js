@@ -96,7 +96,7 @@ module.exports = class Controller {
 
                 this.validationSchema.list = {
                     in: ["body"],
-                    isInt: {
+                    isLength: {
                         options: {
                             min: 1
                         }
@@ -270,7 +270,7 @@ module.exports = class Controller {
                 }
             },
             customSanitizer: {
-                options: value => value.split(",")
+                options: value => value.split(",").map(v => _.snakeCase(v))
             },
             optional: {
                 options: {
@@ -340,7 +340,6 @@ module.exports = class Controller {
     async gerarBusca(req, res) {
         const query = await this.gerarQuery(req, res)
         const exceptBuff = query.except
-        delete query.except
         let resultado = await this.DAO.get(query)
         for (let i = 0; i < resultado.length; i++) {
             resultado[i] = await this.prepareResponseJSON(resultado[i], exceptBuff)
@@ -386,8 +385,10 @@ module.exports = class Controller {
     }
 
     async gerarDelecao(req, res) {
-        const query = await this.gerarQuery(req, res)
-        delete query.except
+        const reqCopy = JSON.parse(JSON.stringify(req))
+        delete reqCopy.query.sort
+
+        const query = await this.gerarQuery(reqCopy, res)
         return this.DAO.delete(query)
     }
 
@@ -414,9 +415,11 @@ module.exports = class Controller {
                     $eq: req.params.id
                 }
             }
-            req.query = query
 
-            const resultado = await this.gerarAtualizacao(req, res)
+            const resultado = await this.gerarAtualizacao({
+                body: req.body,
+                query: query
+            }, res)
 
             res.status(202).json(resultado)
 
@@ -434,7 +437,6 @@ module.exports = class Controller {
         const body = await this.gerarBodyUpdate(reqCopy, res)
         let query = await this.gerarQuery(reqCopy, res)
 
-        delete query.except
         return this.DAO.update(body, query)
     }
 
@@ -456,7 +458,7 @@ module.exports = class Controller {
             await this.inicio(req, res, `adicionando ${this.nome}...`)
 
             let resultado = []
-            for(let i = 0; i < req.body.list.length; i++){
+            for (let i = 0; i < req.body.list.length; i++) {
                 const r = await this.gerarAdicao({
                     body: req.body.list[i]
                 }, res, `list[${i}]`)
@@ -479,15 +481,24 @@ module.exports = class Controller {
     }
 
     async prepareResponseJSON(json, except) {
-        const o = JSON.parse(JSON.stringify(json))
+        let o = JSON.parse(JSON.stringify(json))
+
+        let exc = undefined
+        if (except !== undefined) {
+            if (!(except instanceof Array)) {
+                exc = except.split(",").map(v => _.camelCase(v))
+            } else {
+                exc = except.map(v => _.camelCase(v))
+            }
+        }
 
         const keys = Object.keys(o)
         for (let i = 0; i < keys.length; i++) {
             const k = keys[i]
             const cck = _.camelCase(k)
-            if (except === undefined || !except.includes(cck)) {
+
+            if (exc === undefined || !exc.includes(cck)) {
                 const buff = o[k]
-                delete o[k]
 
                 if (this.fkSchema[cck] !== undefined) {
                     let nomeLink = cck.slice(0, -2)
@@ -501,9 +512,14 @@ module.exports = class Controller {
                 } else {
                     o[cck] = buff
                 }
+
+                if (k !== cck) {
+                    delete o[k]
+                }
             } else {
                 delete o[k]
             }
+
         }
 
         return o
@@ -515,8 +531,8 @@ module.exports = class Controller {
         let errors = []
 
         let addInfoDots = ""
-        if(addInfo !== undefined){
-            addInfoDots = `${addInfo}: `
+        if (addInfo !== undefined) {
+            addInfoDots = `${addInfo}.`
         }
 
         for (let i = 0; i < attrs.length; i++) {
@@ -547,7 +563,7 @@ module.exports = class Controller {
         return o
     }
 
-    async gerarBodyAdd(req, res) {
+    async gerarBodyAdd(req, res, addInfo) {
         return this.gerarJSON(req, res, "body", this.attrs, this.attrsNotNull, true, addInfo)
     }
 
@@ -574,8 +590,6 @@ module.exports = class Controller {
         if (req.query.limit) {
             if (req.query.limit.$count === undefined) {
                 errors.push(await this.formatError("$count", undefined, "O valor deve ser informado.", "query.limit"))
-            } else if (req.query.limit.$offset === undefined) {
-                errors.push(await this.formatError("$offset", undefined, "O valor deve ser informado.", "query.limit"))
             } else {
                 o.limit = {}
                 Object.assign(o.limit, req.query.limit)

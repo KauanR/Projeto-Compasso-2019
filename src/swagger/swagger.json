@@ -14,19 +14,17 @@
   "tags" : [ {
     "name" : "kpis"
   }, {
-    "name" : "kpi_surveys"
+    "name" : "kpi_survey"
   }, {
     "name" : "surveys"
   }, {
-    "name" : "criterias"
+    "name" : "criteria"
   }, {
-    "name" : "survey_itens"
+    "name" : "survey_items"
   }, {
-    "name" : "partys"
+    "name" : "party"
   }, {
     "name" : "party_relationships"
-  }, {
-    "name" : "survey_history"
   }, {
     "name" : "party_aditional_info"
   } ],
@@ -39,19 +37,7 @@
         "description" : "Busca todas as kpis cadastradas no banco de dados",
         "operationId" : "getKpis",
         "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "limit[$count]",
-          "in" : "query",
-          "description" : "Quantas linhas vão ser buscadas na tabela.",
-          "required" : false,
-          "type" : "string"
-        }, {
-          "name" : "limit[$offset]",
-          "in" : "query",
-          "description" : "Quantas linhas vão pular entre um resultado e outro",
-          "required" : false,
-          "type" : "string"
-        } ],
+        "parameters" : [ ],
         "responses" : {
           "200" : {
             "description" : "busca feita com sucesso"
@@ -59,6 +45,10 @@
           "400" : {
             "description" : "problema na busca"
           }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
         }
       },
       "post" : {
@@ -74,6 +64,31 @@
           "required" : true,
           "schema" : {
             "$ref" : "#/definitions/kpis"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/kpis/multiple" : {
+      "post" : {
+        "tags" : [ "kpis" ],
+        "summary" : "Adiciona várias kpis em apenas uma requisição",
+        "description" : "Adiciona várias kpis em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da kpi",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/kpisM"
           }
         } ],
         "responses" : {
@@ -152,12 +167,975 @@
           }
         }
       }
+    },
+    "/kpi_surveys" : {
+      "get" : {
+        "tags" : [ "kpi_survey" ],
+        "summary" : "Busca todas as Kpis Surveys",
+        "description" : "Busca todas as kpis_surveys cadastradas no banco de dados",
+        "operationId" : "getKpis_surveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busca"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "post" : {
+        "tags" : [ "kpi_survey" ],
+        "summary" : "Adiciona uma Kpis Surveys",
+        "description" : "Adiciona uma kpis_surveys no banco de dados",
+        "operationId" : "postKpis_surveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da kpi_surveys",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/kpi_survey"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/kpis_surveys/multiple" : {
+      "post" : {
+        "tags" : [ "kpi_survey" ],
+        "summary" : "Adiciona várias Kpis Surveys em apenas uma requisição",
+        "description" : "Adiciona várias kpis_surveys em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da kpis_surveys",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/kpi_surveyM"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/kpis_surveys/{id}" : {
+      "get" : {
+        "tags" : [ "kpi_survey" ],
+        "summary" : "Busca uma Kpis Surveys pelo id",
+        "description" : "Busca uma kpis_surveys pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma kpis_surveys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "kpi_survey" ],
+        "summary" : "Remove uma Kpis Surveys",
+        "description" : "Remove uma kpis_surveys do banco de dados",
+        "operationId" : "deleteKpis_surveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma kpis_surveys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "kpi_survey" ],
+        "summary" : "Atualiza uma Kpis Surveys",
+        "description" : "Atualiza uma kpis_surveys do banco de dados",
+        "operationId" : "patchKpis_surveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma kpis_surveys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        }
+      }
+    },
+    "/surveys" : {
+      "get" : {
+        "tags" : [ "surveys" ],
+        "summary" : "Busca todas as  Surveys",
+        "description" : "Busca todas as surveys cadastradas no banco de dados",
+        "operationId" : "getSurveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busc"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "post" : {
+        "tags" : [ "surveys" ],
+        "summary" : "Adiciona uma Surveys",
+        "description" : "Adiciona uma surveys no banco de dados",
+        "operationId" : "postSurveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da Surveys",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/surveys"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/surveys/multiple" : {
+      "post" : {
+        "tags" : [ "surveys" ],
+        "summary" : "Adiciona várias Surveys em apenas uma requisição",
+        "description" : "Adiciona várias surveys em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da surveys",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/surveysM"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/surveys/{id}" : {
+      "get" : {
+        "tags" : [ "surveys" ],
+        "summary" : "Busca uma Surveys pelo id",
+        "description" : "Busca uma surveys pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma surveys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "surveys" ],
+        "summary" : "Remove uma surveys",
+        "description" : "Remove uma surveys do banco de dados",
+        "operationId" : "deleteSurveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma surveys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "surveys" ],
+        "summary" : "Atualiza uma Surveys",
+        "description" : "Atualiza uma surveys do banco de dados",
+        "operationId" : "patchSurveys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma surveys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        }
+      }
+    },
+    "/criteria" : {
+      "get" : {
+        "tags" : [ "criteria" ],
+        "summary" : "Busca todas as criteria",
+        "description" : "Busca todas as criteria cadastradas no banco de dados",
+        "operationId" : "getCriteria",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busca"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "post" : {
+        "tags" : [ "criteria" ],
+        "summary" : "Adiciona uma criteria",
+        "description" : "Adiciona uma criteria no banco de dados",
+        "operationId" : "postCriteria",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da criteria",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/criteria"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/criteria/multiple" : {
+      "post" : {
+        "tags" : [ "criteria" ],
+        "summary" : "Adiciona várias criterias em apenas uma requisição",
+        "description" : "Adiciona várias criterias em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da criteria",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/criteriaM"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/criteria/{id}" : {
+      "get" : {
+        "tags" : [ "criteria" ],
+        "summary" : "Busca uma criteria pelo id",
+        "description" : "Busca uma criteria pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma criteria",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "criteria" ],
+        "summary" : "Remove uma criteria",
+        "description" : "Remove uma criteria do banco de dados",
+        "operationId" : "deleteCriteria",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma criteria",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "criteria" ],
+        "summary" : "Atualiza uma criteria",
+        "description" : "Atualiza uma criteria do banco de dados",
+        "operationId" : "patchCriteria",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma criteria",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        }
+      }
+    },
+    "/partys" : {
+      "get" : {
+        "tags" : [ "party" ],
+        "summary" : "Busca todas as Partys",
+        "description" : "Busca todas as partys cadastradas no banco de dados",
+        "operationId" : "getpartys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busca"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "post" : {
+        "tags" : [ "party" ],
+        "summary" : "Adiciona uma Partys",
+        "description" : "Adiciona uma partys no banco de dados",
+        "operationId" : "postpartys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da partys",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/partys"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/partys/multiple" : {
+      "post" : {
+        "tags" : [ "party" ],
+        "summary" : "Adiciona várias Partys em apenas uma requisição",
+        "description" : "Adiciona várias partys em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da partys",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/partysM"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/partys/{id}" : {
+      "get" : {
+        "tags" : [ "party" ],
+        "summary" : "Busca uma Partys pelo id",
+        "description" : "Busca uma partys pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma partys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "party" ],
+        "summary" : "Remove uma Partys",
+        "description" : "Remove uma kpi do banco de dados",
+        "operationId" : "deletepartys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma partys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "party" ],
+        "summary" : "Atualiza uma Partys",
+        "description" : "Atualiza uma partys do banco de dados",
+        "operationId" : "patchpartys",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma partys",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        }
+      }
+    },
+    "/survey_items" : {
+      "get" : {
+        "tags" : [ "survey_items" ],
+        "summary" : "Busca todas as Survey Items",
+        "description" : "Busca todas as survey_items cadastradas no banco de dados",
+        "operationId" : "getSurvey_items",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busca"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "post" : {
+        "tags" : [ "survey_items" ],
+        "summary" : "Adiciona uma Survey Item",
+        "description" : "Adiciona uma survey_items no banco de dados",
+        "operationId" : "postSurvey_items",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da survey_items",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/survey_items"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/survey_items/multiple" : {
+      "post" : {
+        "tags" : [ "survey_items" ],
+        "summary" : "Adiciona várias Survey Items em apenas uma requisição",
+        "description" : "Adiciona várias survey_items em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da survey_items",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/survey_itemsM"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/survey_items/{id}" : {
+      "get" : {
+        "tags" : [ "survey_items" ],
+        "summary" : "Busca uma Survey Items pelo id",
+        "description" : "Busca uma survey_items pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma survey_items",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "survey_items" ],
+        "summary" : "Remove uma Survey Items",
+        "description" : "Remove uma kpi do banco de dados",
+        "operationId" : "deleteSurvey_items",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma survey_items",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "survey_items" ],
+        "summary" : "Atualiza uma Survey Items",
+        "description" : "Atualiza uma survey_items do banco de dados",
+        "operationId" : "patchSurvey_items",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma survey_items",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        }
+      }
+    },
+    "/party_relationships" : {
+      "get" : {
+        "tags" : [ "party_relationships" ],
+        "summary" : "Busca todas as Party Relationships",
+        "description" : "Busca todas as party_relationships cadastradas no banco de dados",
+        "operationId" : "getParty_relationships",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busca"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "post" : {
+        "tags" : [ "party_relationships" ],
+        "summary" : "Adiciona uma Party Relationships",
+        "description" : "Adiciona uma party_relationships no banco de dados",
+        "operationId" : "postParty_relationships",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da party_relationships",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/party_relationships"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/party_relationships/multiple" : {
+      "post" : {
+        "tags" : [ "party_relationships" ],
+        "summary" : "Adiciona várias Party Relationshipss em apenas uma requisição",
+        "description" : "Adiciona várias party_relationships em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da party_relationships",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/party_relationshipsM"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/party_relationships/{id}" : {
+      "get" : {
+        "tags" : [ "party_relationships" ],
+        "summary" : "Busca uma Party Relationships pelo id",
+        "description" : "Busca uma party_relationships pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma party_relationships",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "party_relationships" ],
+        "summary" : "Remove uma Party Relationships",
+        "description" : "Remove uma kpi do banco de dados",
+        "operationId" : "deleteParty_relationships",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma party_relationships",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "party_relationships" ],
+        "summary" : "Atualiza uma Party Relationships",
+        "description" : "Atualiza uma party_relationships do banco de dados",
+        "operationId" : "patchParty_relationships",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma party_relationships",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        }
+      }
+    },
+    "/party_aditional_info" : {
+      "get" : {
+        "tags" : [ "party_aditional_info" ],
+        "summary" : "Busca todas as Party Aditional Info",
+        "description" : "Busca todas as party_aditional_info cadastradas no banco de dados",
+        "operationId" : "getPartyAditionalInfo",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "busca feita com sucesso"
+          },
+          "400" : {
+            "description" : "problema na busca"
+          }
+        },
+        "externalDocs" : {
+          "description" : "Mais detalhes sobre como utilizar queries diretamente na url, consulte o repositório git",
+          "url" : "https://github.com/KauanR/Projeto-Compasso-2019"
+        }
+      },
+      "post" : {
+        "tags" : [ "party_aditional_info" ],
+        "summary" : "Adiciona uma Party Aditional Info",
+        "description" : "Adiciona uma party_aditional_info no banco de dados",
+        "operationId" : "postParty_aditional_info",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da party_aditional_info",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/party_additional_info"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/party_aditional_info/multiple" : {
+      "post" : {
+        "tags" : [ "party_aditional_info" ],
+        "summary" : "Adiciona várias Party Aditional Infos em apenas uma requisição",
+        "description" : "Adiciona várias party_aditional_info em apenas uma requisição no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Insira os dados da party_aditional_info",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/party_additional_infoM"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Inserido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao inserir"
+          }
+        }
+      }
+    },
+    "/party_aditional_info/{id}" : {
+      "get" : {
+        "tags" : [ "party_aditional_info" ],
+        "summary" : "Busca uma Party Aditional Info pelo id",
+        "description" : "Busca uma party_aditional_info pelo id no banco de dados",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma party_aditional_info",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Busca realizada com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao buscar"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "party_aditional_info" ],
+        "summary" : "Remove uma Party Aditional Info",
+        "description" : "Remove uma kpi do banco de dados",
+        "operationId" : "deleteParty_aditional_info",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma party_aditional_info",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Removido com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao remover"
+          }
+        }
+      },
+      "patch" : {
+        "tags" : [ "party_aditional_info" ],
+        "summary" : "Atualiza uma Party Aditional Info",
+        "description" : "Atualiza uma party_aditional_info do banco de dados",
+        "operationId" : "patchParty_aditional_info",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id de uma party_aditional_info",
+          "required" : true,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Atualizado com sucesso"
+          },
+          "400" : {
+            "description" : "Problema ao atualizar"
+          }
+        }
+      }
     }
   },
   "definitions" : {
-    "query" : {
-      "type" : "object"
-    },
     "kpis" : {
       "type" : "object",
       "required" : [ "description", "details", "name" ],
@@ -170,6 +1148,18 @@
         },
         "details" : {
           "type" : "string"
+        }
+      }
+    },
+    "kpisM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/kpis"
+          },
+          "minItems" : 2
         }
       }
     },
@@ -188,6 +1178,18 @@
         }
       }
     },
+    "surveysM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/surveys"
+          },
+          "minItems" : 2
+        }
+      }
+    },
     "criteria" : {
       "type" : "object",
       "required" : [ "description", "kpiId", "type", "value" ],
@@ -203,6 +1205,18 @@
         },
         "kpiId" : {
           "type" : "integer"
+        }
+      }
+    },
+    "criteriaM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/criteria"
+          },
+          "minItems" : 2
         }
       }
     },
@@ -225,7 +1239,19 @@
         }
       }
     },
-    "party" : {
+    "survey_itemsM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/survey_items"
+          },
+          "minItems" : 2
+        }
+      }
+    },
+    "partys" : {
       "type" : "object",
       "required" : [ "additionalInfos", "lastAssessment", "name", "observations", "relationships", "type" ],
       "properties" : {
@@ -250,7 +1276,19 @@
         }
       }
     },
-    "KpiSurvey" : {
+    "partysM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/partysM"
+          },
+          "minItems" : 2
+        }
+      }
+    },
+    "kpi_survey" : {
       "type" : "object",
       "required" : [ "grupo", "kpiId", "surveyId" ],
       "properties" : {
@@ -265,7 +1303,19 @@
         }
       }
     },
-    "PartyAdditionalInfo" : {
+    "kpi_surveyM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/kpi_survey"
+          },
+          "minItems" : 2
+        }
+      }
+    },
+    "party_additional_info" : {
       "type" : "object",
       "required" : [ "info", "partyId", "type" ],
       "properties" : {
@@ -277,6 +1327,18 @@
         },
         "partyId" : {
           "type" : "integer"
+        }
+      }
+    },
+    "party_additional_infoM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/party_additional_info"
+          },
+          "minItems" : 2
         }
       }
     },
@@ -292,6 +1354,18 @@
         },
         "targetPartyId" : {
           "type" : "integer"
+        }
+      }
+    },
+    "party_relationshipsM" : {
+      "type" : "object",
+      "properties" : {
+        "list" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/party_relationships"
+          },
+          "minItems" : 2
         }
       }
     }
