@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "jest"
+    "test": "jest --verbose --env=jsdom"
   },
   "repository": {
     "type": "git",
