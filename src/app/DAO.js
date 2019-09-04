@@ -13,7 +13,6 @@ module.exports = class DAO {
     }
 
     async run(sql, values) {
-        console.log(sql)
         return new Promise((resolve, reject) => {
             this.db.query(sql, values, (error, results) => {
                 if (error) {

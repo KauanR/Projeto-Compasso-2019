@@ -146,6 +146,11 @@ module.exports = class Controller {
                     customSanitizer: {
                         options: value => parseInt(value)
                     },
+                    optional: {
+                        options: {
+                            nullable: true
+                        }
+                    },
                     errorMessage: "O valor de id deve ser inteiro maior que 0."
                 }
             }
