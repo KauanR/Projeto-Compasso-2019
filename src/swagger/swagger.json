@@ -10,7 +10,7 @@
     "version" : "1.0.0-oas3"
   },
   "servers" : [ {
-    "url" : "htttp://localhost:6663"
+    "url" : "http://localhost:6663"
   } ],
   "tags" : [ {
     "name" : "kpis"
