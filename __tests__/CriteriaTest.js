@@ -1,13 +1,10 @@
 const request = require('supertest')
 const app = require('../src/config/custom-express')
+const Controller = require('../config/controller')
 
-describe('GET criterias', () => {
-  it('Buscando as criterias', async () => {
-    const res = await request(app)
-    .get('/criteria')
-    expect(res.statusCode).toEqual(200)
-  })
-})
+const controller = new Controller(app, request)
+controller.getAll('criteria')
+
 
 describe('POST criteria', () => {
   it('Postando uma criteria', async () => {
