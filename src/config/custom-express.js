@@ -43,8 +43,8 @@ const surveyItemsController = new SurveyItemsController()
 app.use(surveyItemsController.router)
 
 const swaggerUi = require('swagger-ui-express')
-const swaggerDocument = require('../swagger/swagger.json')
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+const swaggerTeste = require('../swagger/swagger.json')
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerTeste))
 
 
 module.exports = app
