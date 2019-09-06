@@ -140,7 +140,7 @@ executa a operação em todas as linhas que tiverem o atributo "nome" igual ao v
 
 }
 ```
-A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery". A opção "limit" define quantas linhas vão ser buscadas e a opção "sort" define o ordenamento das linhas buscadas, essas opções não podem ser usadas na operação "update" por causa de limitações do mysql. O except define quais atributos não vão ser retornados, só pode ser usado nas rotas de GET. O significados em SQL dos outros atributos são:
+A conversão de JSON para SQL acontece na classe DAO no método "gerarQuery". A opção "limit" define quantas linhas vão ser buscadas, a opção "sort" define o ordenamento das linhas buscadas e a opção "except" define quais colunas não vão ser buscadas, essas opções não podem ser usadas na operação "update" e só a opção "limit" pode ser usada com a operação "delete", por causa de limitações do mysql. O except define quais atributos não vão ser retornados, só pode ser usado nas rotas de GET. O significados em SQL dos outros atributos são:
 ```Javascript
 {
     $eq: "=",
@@ -180,6 +180,22 @@ Exemplo prático:
 
 }
 ```
+Exemplo prático da query na URL:
+```
+"?limit[$count]=1
+&limit[$offset]=0
+&sort[$by]=id
+&sort[$order]=desc
+&execpt=name,type
+&value[$eq]=1
+&value[$dif]=9
+&value[$ls]=2
+&value[$lse]=1
+&value[$gr]=0
+&value[$gre]=1
+&value[$in]=1,2,3,4,5,6,7,8,9,10"
+```
+
 # Como usar a classe OneToManyController
 Essa classe serve para usar controllers dentro de outros controllers, o objetivo dela é representar a relação one-to-many do banco de dados. Para usar ela é preciso fazer as mesmas coisas que se faz com a classe Controller, mas passando também um controllers schema, o nome de cada atributo no controllers schema vai determinar o nome do atributo do array de JSONs "filhos". Exemplo:
 ```Javascript
