@@ -19,6 +19,9 @@ module.exports = class UniqueCombinationController extends Controller {
             query[k] = {
                 $eq: o[k]
             }
+            query.limit = {
+                $count: 1
+            }
         }
 
         const re = (await this.DAO.get(query))[0]

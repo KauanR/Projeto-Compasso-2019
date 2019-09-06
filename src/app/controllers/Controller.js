@@ -76,7 +76,7 @@ module.exports = class Controller {
                 }
 
                 if (this.validationSchema[k].fk) {
-                    this.fkSchema[k] = this.validationSchema[k].fk
+                    this.fkSchema[k] = _.kebabCase(this.validationSchema[k].fk)
                     delete this.validationSchema[k].fk
                     this.validationSchema[k].isInt = {
                         options: {
@@ -470,10 +470,9 @@ module.exports = class Controller {
                 res.status(201).json({
                     results: resultado
                 })
-            }
-            else {
+            } else {
                 res.status(400).json({
-                    errors:[
+                    errors: [
                         await this.formatError("list", undefined, "O atributo list deve ser informado.", "body")
                     ]
                 })
@@ -490,43 +489,29 @@ module.exports = class Controller {
         return this.DAO.add(body)
     }
 
-    async prepareResponseJSON(json, except) {
+    async prepareResponseJSON(json) {
         let o = JSON.parse(JSON.stringify(json))
-
-        let exc = undefined
-        if (except !== undefined) {
-            if (!(except instanceof Array)) {
-                exc = except.split(",").map(v => _.camelCase(v))
-            } else {
-                exc = except.map(v => _.camelCase(v))
-            }
-        }
 
         const keys = Object.keys(o)
         for (let i = 0; i < keys.length; i++) {
             const k = keys[i]
             const cck = _.camelCase(k)
+            const buff = o[k]
 
-            if (exc === undefined || !exc.includes(cck)) {
-                const buff = o[k]
-
-                if (this.fkSchema[cck] !== undefined) {
-                    let nomeLink = cck.slice(0, -2)
-                    o[nomeLink] = {}
-                    o[nomeLink].id = buff
-                    o[nomeLink].link = {
-                        rel: "self",
-                        href: `/${this.fkSchema[cck]}/${buff}`,
-                        type: "GET"
-                    }
-                } else {
-                    o[cck] = buff
-                }
-
-                if (k !== cck) {
-                    delete o[k]
+            if (this.fkSchema[cck] !== undefined) {
+                let nomeLink = cck.slice(0, -2)
+                o[nomeLink] = {}
+                o[nomeLink].id = buff
+                o[nomeLink].link = {
+                    rel: "self",
+                    href: `/${this.fkSchema[cck]}/${buff}`,
+                    type: "GET"
                 }
             } else {
+                o[cck] = buff
+            }
+
+            if (k !== cck) {
                 delete o[k]
             }
 

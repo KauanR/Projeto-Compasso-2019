@@ -1,6 +1,6 @@
 const Controller = require("./Controller")
 
-module.exports = class PartyController extends Controller {
+module.exports = class OneToManyController extends Controller {
     constructor(tabela, validationSchema, naoGerarTodasRotas, controllersSchema) {
         super(tabela, validationSchema, true)
 
@@ -41,7 +41,7 @@ module.exports = class PartyController extends Controller {
             const vsKeys = Object.keys(vs)
             for (let j = 0; j < vsKeys.length; j++) {
                 const k = vsKeys[j]
-                if ( vs[k].in.includes("body") && k !== fk && k !== "list" && !( k.includes("list.*") ) ) {
+                if (vs[k].in.includes("body") && k !== fk && k !== "list" && !(k.includes("list.*"))) {
                     r[`${name}.*.${k}`] = {}
                     Object.assign(r[`${name}.*.${k}`], vs[k])
 
@@ -88,7 +88,7 @@ module.exports = class PartyController extends Controller {
         Object.assign(resultado, resultMaster)
 
         let a = ""
-        if(addInfo !== undefined){
+        if (addInfo !== undefined) {
             a = `${addInfo}.`
         }
 
@@ -114,25 +114,26 @@ module.exports = class PartyController extends Controller {
 
     async gerarBusca(req, res) {
         const query = await this.gerarQuery(req, res)
-        const exceptBuff = query.except
 
         let resultado = await this.DAO.get(query)
         for (let i = 0; i < resultado.length; i++) {
 
             for (let l = 0; l < this.controllersNames.length; l++) {
                 const name = this.controllersNames[l]
-                const fk = this.controllersSchema[name].fkToThis
+                if (!query.except.includes(name)) {
+                    const fk = this.controllersSchema[name].fkToThis
 
-                let querySlave = {
-                    except: fk
-                }
-                querySlave[fk] = {
-                    $eq: resultado[i].id
-                }
+                    let querySlave = {
+                        except: fk
+                    }
+                    querySlave[fk] = {
+                        $eq: resultado[i].id
+                    }
 
-                resultado[i][name] = await this.controllersSchema[name].controller.gerarBusca({
-                    query: querySlave
-                }, res)
+                    resultado[i][name] = await this.controllersSchema[name].controller.gerarBusca({
+                        query: querySlave
+                    }, res)
+                }
             }
 
             resultado[i] = await this.prepareResponseJSON(resultado[i], exceptBuff)
