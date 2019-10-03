@@ -1,1 +1,0 @@
-O intuito disso é o git criar e manter a pasta migrations

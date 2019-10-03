@@ -46,5 +46,4 @@ const swaggerUi = require('swagger-ui-express')
 const swaggerTeste = require('../swagger/swagger.json')
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerTeste))
 
-
 module.exports = app
